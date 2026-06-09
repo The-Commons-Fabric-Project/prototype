@@ -1,4 +1,13 @@
 /* src/styles/rbc-overrides.css */
+
+/* This file contains custom styles to override the default styles of react-big-calendar.
+   I believe ideally all css should go directly in the elements as in the style of tailwind,
+   but for overrides of react-big-calendar's built-in components, 
+   we need to do it this way as we can't change the code of the components directly.
+   In the future we will probably remove this file anyway as we reimplement all of react-big-calendar's
+   components ourselves with custom layouts.
+*/
+
 /* @layer components {
   .rbc-calendar {
     @apply font-sans text-gray-800;
