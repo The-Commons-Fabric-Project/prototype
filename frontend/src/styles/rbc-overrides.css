@@ -1,5 +1,5 @@
 /* src/styles/rbc-overrides.css */
-@layer components {
+/* @layer components {
   .rbc-calendar {
     @apply font-sans text-gray-800;
   }
@@ -12,8 +12,14 @@
   .rbc-header {
     @apply py-2 font-medium text-sm text-gray-600 border-gray-200;
   }
-  .rbc-day-bg + .rbc-day-bg,
-  .rbc-month-row + .rbc-month-row {
-    @apply border-gray-200;
+  .rbc-day-bg {
+    @apply bg-white;
   }
-}
+  .rbc-month-view {
+    @apply flex-grow;
+  }
+  .rbc-month-row {
+    @apply border-gray-200;
+    @apply flex-grow;
+  }
+}*/
