@@ -1,26 +1,8 @@
+import type { Event } from '../../types/events'
 import EventCard from './EventCard'
 
-type Tag = {
-  label: string;
-  color: string;
-  background: string;
-};
-
-type EventCardData = {
-  id: string | number;
-  month: string;
-  day: number;
-  title: string;
-  organization: string;
-  description: string;
-  time: string;
-  location: string;
-  tags?: Tag[];
-  thumbnailUrl?: string;
-};
-
 type EventCardGridProps = {
-  events: EventCardData[];
+  events: Event[];
 };
 
 export default function EventCardGrid({ events }: EventCardGridProps) {

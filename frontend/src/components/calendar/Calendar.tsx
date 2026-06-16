@@ -1,90 +1,108 @@
+import { useState } from 'react'
+import type { Event } from '../../types/events'
 
-import { Calendar as BigCalendar } from 'react-big-calendar'
+type CalendarProps = {
+  events: Event[];
+};
 
-import { ToolbarComponent } from './CalendarToolbar'
+const MONTH_ABBR = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DAY_HEADERS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-import { localizer } from './localizer'
+function formatTimeShort(time: string): string {
+  const match = time.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
+  if (!match) return time;
+  const [, h, m, period] = match;
+  return m === '00' ? `${h} ${period.toUpperCase()}` : `${h}:${m} ${period.toUpperCase()}`;
+}
 
-/* node_modules/@types/react-big-calendar/index.d.ts/CalendarProps
+export function Calendar({ events }: CalendarProps) {
+  const now = new Date();
+  const [year, setYear] = useState(now.getFullYear());
+  const [monthIndex, setMonthIndex] = useState(now.getMonth());
 
-interface CalendarProps<TEvent extends object = Event, TResource extends object = object>
-    extends React.RefAttributes<Calendar<TEvent, TResource>>
-{
-    children?: React.ReactNode;
-    localizer: DateLocalizer;
+  const goToPrev = () => {
+    if (monthIndex === 0) { setMonthIndex(11); setYear(y => y - 1); }
+    else { setMonthIndex(m => m - 1); }
+  };
 
-    date?: stringOrDate | undefined;
-    getNow?: () => stringOrDate | undefined;
-    view?: View | undefined;
-    events?: TEvent[] | undefined;
-    backgroundEvents?: TEvent[] | undefined;
-    handleDragStart?: ((event: TEvent) => void) | undefined;
-    onNavigate?: ((newDate: Date, view: View, action: NavigateAction) => void) | undefined;
-    onView?: ((view: View) => void) | undefined;
-    onDrillDown?: ((date: Date, view: View) => void) | undefined;
-    onSelectSlot?: ((slotInfo: SlotInfo) => void) | undefined;
-    onDoubleClickEvent?: ((event: TEvent, e: React.SyntheticEvent<HTMLElement>) => void) | undefined;
-    onSelectEvent?: ((event: TEvent, e: React.SyntheticEvent<HTMLElement>) => void) | undefined;
-    onKeyPressEvent?: ((event: TEvent, e: React.SyntheticEvent<HTMLElement>) => void) | undefined;
-    onSelecting?: (range: { start: Date; end: Date }) => boolean | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-    onRangeChange?: (range: Date[] | { start: Date; end: Date }, view?: View) => void | undefined;
-    showAllEvents?: boolean | undefined;
-    selected?: any;
-    views?: ViewsProps<TEvent, TResource> | undefined;
-    doShowMoreDrillDown?: boolean | undefined;
-    drilldownView?: View | null | undefined;
-    getDrilldownView?:
-        | ((targetDate: Date, currentViewName: View, configuredViewNames: View[]) => void)
-        | null
-        | undefined;
-    length?: number | undefined;
-    toolbar?: boolean | undefined;
-    popup?: boolean | undefined;
-    popupOffset?: number | { x: number; y: number } | undefined;
-    selectable?: boolean | "ignoreEvents" | undefined;
-    longPressThreshold?: number | undefined;
-    step?: number | undefined;
-    timeslots?: number | undefined;
-    rtl?: boolean | undefined;
-    eventPropGetter?: EventPropGetter<TEvent> | undefined;
-    slotPropGetter?: SlotPropGetter | undefined;
-    slotGroupPropGetter?: SlotGroupPropGetter | undefined;
-    dayPropGetter?: DayPropGetter | undefined;
-    showMultiDayTimes?: boolean | undefined;
-    allDayMaxRows?: number | undefined;
-    min?: Date | undefined;
-    max?: Date | undefined;
-    scrollToTime?: Date | undefined;
-    enableAutoScroll?: boolean | undefined;
-    culture?: Culture | undefined;
-    formats?: Formats | undefined;
-    components?: Components<TEvent, TResource> | undefined;
-    messages?: Messages<TEvent> | undefined;
-    dayLayoutAlgorithm?: DayLayoutAlgorithm | DayLayoutFunction<TEvent> | undefined;
-    titleAccessor?: keyof TEvent | ((event: TEvent) => string) | undefined;
-    tooltipAccessor?: keyof TEvent | ((event: TEvent) => string) | null | undefined;
-    allDayAccessor?: keyof TEvent | ((event: TEvent) => boolean) | undefined;
-    startAccessor?: keyof TEvent | ((event: TEvent) => Date) | undefined;
-    endAccessor?: keyof TEvent | ((event: TEvent) => Date) | undefined;
-    resourceAccessor?: keyof TEvent | ((event: TEvent) => any) | undefined;
-    resources?: TResource[] | undefined;
-    resourceIdAccessor?: keyof TResource | ((resource: TResource) => any) | undefined;
-    resourceTitleAccessor?: keyof TResource | ((resource: TResource) => any) | undefined;
-    resourceGroupingLayout?: boolean | undefined;
-    defaultView?: View | undefined;
-    defaultDate?: stringOrDate | undefined;
-    className?: string | undefined;
-    elementProps?: React.HTMLAttributes<HTMLElement> | undefined;
-    style?: React.CSSProperties | undefined;
-    onShowMore?: ((events: TEvent[], date: Date) => void) | undefined;
-} */
+  const goToNext = () => {
+    if (monthIndex === 11) { setMonthIndex(0); setYear(y => y + 1); }
+    else { setMonthIndex(m => m + 1); }
+  };
 
-export function DemoCalendar() {
-    return (
-        <BigCalendar
-            localizer={localizer}
-            components={{ toolbar: ToolbarComponent }}
-        />
-    );
+  const firstDay = new Date(year, monthIndex, 1).getDay();
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+
+  const currentMonthAbbr = MONTH_ABBR[monthIndex];
+  const monthEvents: Record<number, Event[]> = {};
+  for (const event of events) {
+    if (event.month.toUpperCase() === currentMonthAbbr) {
+      if (!monthEvents[event.day]) monthEvents[event.day] = [];
+      monthEvents[event.day].push(event);
+    }
+  }
+
+  const cells: (number | null)[] = [
+    ...Array(firstDay).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+
+  return (
+    <div className="bg-white border border-sage-border rounded-[16px] p-[18px]">
+      <div className="flex justify-between items-center mb-[14px]">
+        <h3 className="font-fraunces text-[20px] font-semibold text-forest m-0">
+          {MONTH_NAMES[monthIndex]} {year}
+        </h3>
+        <div className="flex gap-2">
+          <button
+            className="cf-press font-semibold text-[14px] px-3 py-[6px] rounded-[10px] cursor-pointer border border-sage-border leading-[1.1] tracking-[0.1px] bg-transparent text-teal"
+            onClick={goToPrev}
+          >
+            ‹
+          </button>
+          <button
+            className="cf-press font-semibold text-[14px] px-3 py-[6px] rounded-[10px] cursor-pointer border border-sage-border leading-[1.1] tracking-[0.1px] bg-transparent text-teal"
+            onClick={goToNext}
+          >
+            ›
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-7 gap-[6px]">
+        {DAY_HEADERS.map(d => (
+          <div key={d} className="text-center text-[11px] font-bold text-sage-muted tracking-[0.5px] pb-1">
+            {d}
+          </div>
+        ))}
+
+        {cells.map((day, i) => (
+          <div
+            key={i}
+            className={`min-h-[76px] min-w-0 rounded-[10px] p-[6px] border ${
+              day === null
+                ? 'border-transparent bg-transparent'
+                : 'border-sage-border bg-cream'
+            }`}
+          >
+            {day !== null && (
+              <>
+                <div className="text-xs font-semibold text-sage-muted mb-1">{day}</div>
+                {(monthEvents[day] ?? []).map(event => (
+                  <div
+                    key={event.id}
+                    className="cf-press bg-teal text-white text-[10.5px] font-semibold rounded-[6px] px-[6px] py-[3px] mb-[3px] cursor-pointer truncate max-w-full"
+                    title={`${event.time} ${event.title}`}
+                  >
+                    {formatTimeShort(event.time)} {event.title}
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

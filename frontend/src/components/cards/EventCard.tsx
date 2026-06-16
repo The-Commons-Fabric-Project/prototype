@@ -1,17 +1,13 @@
-type Tag = {
-  label: string;
-  color: string;
-  background: string;
-};
+import type { Tag } from '../../types/events'
 
 type EventCardProps = {
   month: string;
   day: number;
   title: string;
-  organization: string;
-  description: string;
+  organization?: string;
+  description?: string;
   time: string;
-  location: string;
+  location?: string;
   tags?: Tag[];
   thumbnailUrl?: string;
 };
