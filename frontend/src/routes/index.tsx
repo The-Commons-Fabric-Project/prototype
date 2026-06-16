@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
 import EventCardGrid from '../components/cards/EventCardGrid'
+import { DemoCalendar } from '../components/calendar/Calendar'
 
 const EXAMPLE_EVENTS = [
   {
@@ -86,6 +88,8 @@ const EXAMPLE_EVENTS = [
 ]
 
 function Index() {
+  const [view, setView] = useState<'cards' | 'calendar'>('cards')
+
   return (
     <div className="flex flex-col items-start justify-start w-full max-w-[1040px] pt-[36px] px-[24px] pb-[80px]">
       <h1 className="font-fraunces text-forest font-semibold" style={{ fontSize: "clamp(30px, 5vw, 44px)" }}>What's happening at the Hub</h1>
@@ -93,8 +97,29 @@ function Index() {
         One shared place to discover and share events across the Rideau Community Hub network.
       </p>
 
+      <div className="inline-flex mt-6 bg-white border border-sage-border p-[3px]" style={{ borderRadius: '10px' }}>
+        <button
+          onClick={() => setView('cards')}
+          className={`text-[13px] font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? 'bg-teal text-white' : 'bg-transparent text-sage-muted'}`}
+          style={{ borderRadius: '8px' }}
+        >
+          Card grid
+        </button>
+        <button
+          onClick={() => setView('calendar')}
+          className={`text-[13px] font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? 'bg-teal text-white' : 'bg-transparent text-sage-muted'}`}
+          style={{ borderRadius: '8px' }}
+        >
+          Calendar
+        </button>
+      </div>
+
       <div className="w-full pt-10">
-        <EventCardGrid events={EXAMPLE_EVENTS} />
+        {view === 'cards' ? (
+          <EventCardGrid events={EXAMPLE_EVENTS} />
+        ) : (
+          <DemoCalendar />
+        )}
       </div>
     </div>
   )
