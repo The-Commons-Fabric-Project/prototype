@@ -1,3 +1,7 @@
 @import "react-big-calendar/lib/css/react-big-calendar.css";
 @import "tailwindcss";
 @import "rbc-overrides.css";
+
+@theme {
+    --color-cream: rgb(246, 244, 238);
+}
