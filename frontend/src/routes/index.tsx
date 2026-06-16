@@ -87,16 +87,14 @@ const EXAMPLE_EVENTS = [
 
 function Index() {
   return (
-    <div className="flex flex-col min-h-dvh w-dvw items-center ">
-      <div className="flex flex-col items-start justify-start w-full max-w-[1040px] pt-[36px] px-[24px] pb-[80px]">
-        <h1 className="font-fraunces text-forest font-semibold" style={{ fontSize: "clamp(30px, 5vw, 44px)" }}>What's happening at the Hub</h1>
-        <p className="font-fraunces text-sage-muted">
-          One shared place to discover and share events across the Rideau Community Hub network.
-        </p>
+    <div className="flex flex-col items-start justify-start w-full max-w-[1040px] pt-[36px] px-[24px] pb-[80px]">
+      <h1 className="font-fraunces text-forest font-semibold" style={{ fontSize: "clamp(30px, 5vw, 44px)" }}>What's happening at the Hub</h1>
+      <p className="font-fraunces text-sage-muted">
+        One shared place to discover and share events across the Rideau Community Hub network.
+      </p>
 
-        <div className="w-full pt-10">
-          <EventCardGrid events={EXAMPLE_EVENTS} />
-        </div>
+      <div className="w-full pt-10">
+        <EventCardGrid events={EXAMPLE_EVENTS} />
       </div>
     </div>
   )

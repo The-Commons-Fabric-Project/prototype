@@ -28,7 +28,10 @@ export default function EventCard({
   thumbnailUrl,
 }: EventCardProps) {
   return (
-    <div className="flex flex-col rounded-2xl overflow-hidden border border-sage-border bg-white shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
+    <div
+      className="flex flex-col rounded-2xl overflow-hidden border border-sage-border bg-white shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:-translate-y-[1px] hover:shadow-[0_6px_18px_rgba(0,0,0,0.10)] cursor-pointer"
+      style={{ transition: "transform .18s ease, box-shadow .18s ease" }}
+    >
       {/* Thumbnail */}
       <div className="relative w-full aspect-[16/10] bg-sage-light shrink-0">
         {thumbnailUrl ? (
