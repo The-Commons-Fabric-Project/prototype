@@ -28,9 +28,9 @@ export default function EventCard({
   thumbnailUrl,
 }: EventCardProps) {
   return (
-    <div className="flex flex-col rounded-2xl overflow-hidden border border-[rgb(216,226,222)] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
+    <div className="flex flex-col rounded-2xl overflow-hidden border border-sage-border bg-white shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
       {/* Thumbnail */}
-      <div className="relative w-full aspect-[16/10] bg-[rgb(227,240,236)] shrink-0">
+      <div className="relative w-full aspect-[16/10] bg-sage-light shrink-0">
         {thumbnailUrl ? (
           <img
             src={thumbnailUrl}
@@ -39,7 +39,7 @@ export default function EventCard({
           />
         ) : (
           <div
-            className="absolute inset-0 flex items-center justify-center text-[rgb(107,124,119)] text-[12.5px] font-semibold font-['Public_Sans',sans-serif]"
+            className="absolute inset-0 flex items-center justify-center text-sage-muted text-[12.5px] font-semibold font-['Public_Sans',sans-serif]"
             style={{
               background:
                 "repeating-linear-gradient(135deg, transparent, transparent 14px, rgba(15, 110, 92, 0.04) 14px, rgba(15, 110, 92, 0.04) 28px)",
@@ -69,32 +69,32 @@ export default function EventCard({
       <div className="p-[18px] flex flex-col gap-[10px] flex-1">
         {/* Date + title row */}
         <div className="flex gap-[14px] items-start">
-          <div className="flex flex-col items-center justify-center size-[52px] rounded-xl bg-white border border-[rgb(216,226,222)] shrink-0">
-            <span className="text-[10px] font-bold text-[rgb(200,133,43)] tracking-[0.6px] font-['Public_Sans',sans-serif]">
+          <div className="flex flex-col items-center justify-center size-[52px] rounded-xl bg-white border border-sage-border shrink-0">
+            <span className="text-[10px] font-bold text-amber tracking-[0.6px] font-['Public_Sans',sans-serif]">
               {month.toUpperCase()}
             </span>
-            <span className="font-['Fraunces',serif] text-[22px] font-semibold text-[rgb(28,43,39)] leading-none">
+            <span className="font-['Fraunces',serif] text-[22px] font-semibold text-forest leading-none">
               {day}
             </span>
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className="font-['Fraunces',serif] text-lg font-semibold text-[rgb(28,43,39)] m-0 leading-[1.2]">
+            <h3 className="font-['Fraunces',serif] text-lg font-semibold text-forest m-0 leading-[1.2]">
               {title}
             </h3>
-            <p className="text-[12.5px] text-[rgb(15,110,92)] font-semibold mt-1 mb-0 font-['Public_Sans',sans-serif]">
+            <p className="text-[12.5px] text-teal font-semibold mt-1 mb-0 font-['Public_Sans',sans-serif]">
               {organization}
             </p>
           </div>
         </div>
 
         {/* Description */}
-        <p className="text-[13.5px] text-[rgb(107,124,119)] leading-[1.5] m-0 line-clamp-2 font-['Public_Sans',sans-serif]">
+        <p className="text-[13.5px] text-sage-muted leading-[1.5] m-0 line-clamp-2 font-['Public_Sans',sans-serif]">
           {description}
         </p>
 
         {/* Footer */}
-        <div className="flex gap-[14px] text-[12.5px] text-[rgb(107,124,119)] border-t border-[rgb(216,226,222)] pt-[10px] mt-auto font-['Public_Sans',sans-serif]">
+        <div className="flex gap-[14px] text-[12.5px] text-sage-muted border-t border-sage-border pt-[10px] mt-auto font-['Public_Sans',sans-serif]">
           <span>🕓 {time}</span>
           <span>📍 {location}</span>
         </div>

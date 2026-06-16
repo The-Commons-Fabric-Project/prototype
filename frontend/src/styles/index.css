@@ -1,7 +1,15 @@
 @import "react-big-calendar/lib/css/react-big-calendar.css";
 @import "tailwindcss";
 @import "rbc-overrides.css";
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap");
 
 @theme {
+    --font-fraunces: "Fraunces", serif;
     --color-cream: rgb(246, 244, 238);
+    --color-forest: rgb(28, 43, 39);
+    --color-teal: rgb(15, 110, 92);
+    --color-amber: rgb(200, 133, 43);
+    --color-sage-light: rgb(227, 240, 236);
+    --color-sage-muted: rgb(107, 124, 119);
+    --color-sage-border: rgb(216, 226, 222);
 }
