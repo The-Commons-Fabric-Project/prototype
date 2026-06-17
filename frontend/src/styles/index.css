@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import "react-big-calendar/lib/css/react-big-calendar.css";
-@import "rbc-overrides.css";
 
 body {
     background-color: rgb(246, 244, 238);
