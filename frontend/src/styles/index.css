@@ -4,6 +4,16 @@ body {
     background-color: rgb(246, 244, 238);
 }
 
+@keyframes cf-stagger {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cf-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
 /* tailwind color scheme for consistent theming */
 @theme {
     --font-fraunces: "Fraunces", serif;
