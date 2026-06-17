@@ -1,5 +1,14 @@
+/**
+I used the html provided by the design team to create this. 
+It was easier to create the calendar from scratch vs. using react-big-calendar for the themeing
+
+Still unsure whether this is the right direction however, one of the pros of using AI is that you don't have to rely on dependencies as much.
+This might be more of an issue once we have to integrate with Google Calendar/Outlook but for the demo it's probably fine.
+**/
+
 import { useState } from 'react'
 import type { Event } from '../../types/events'
+import EventDescription from '../popup/EventDescription'
 
 type CalendarProps = {
   events: Event[];
@@ -20,6 +29,7 @@ export function Calendar({ events }: CalendarProps) {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [monthIndex, setMonthIndex] = useState(now.getMonth());
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const goToPrev = () => {
     if (monthIndex === 0) { setMonthIndex(11); setYear(y => y - 1); }
@@ -49,6 +59,7 @@ export function Calendar({ events }: CalendarProps) {
   ];
 
   return (
+    <>
     <div className="bg-white border border-sage-border rounded-[16px] p-[18px]">
       <div className="flex justify-between items-center mb-[14px]">
         <h3 className="font-fraunces text-[20px] font-semibold text-forest m-0">
@@ -94,6 +105,7 @@ export function Calendar({ events }: CalendarProps) {
                     key={event.id}
                     className="cf-press bg-teal text-white text-[10.5px] font-semibold rounded-[6px] px-[6px] py-[3px] mb-[3px] cursor-pointer truncate max-w-full"
                     title={`${event.time} ${event.title}`}
+                    onClick={() => setSelectedEvent(event)}
                   >
                     {formatTimeShort(event.time)} {event.title}
                   </div>
@@ -104,5 +116,13 @@ export function Calendar({ events }: CalendarProps) {
         ))}
       </div>
     </div>
+
+    {selectedEvent && (
+      <EventDescription
+        event={selectedEvent}
+        onClose={() => setSelectedEvent(null)}
+      />
+    )}
+    </>
   );
 }

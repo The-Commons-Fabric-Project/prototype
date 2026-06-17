@@ -10,6 +10,7 @@ type EventCardProps = {
   location?: string;
   tags?: Tag[];
   thumbnailUrl?: string;
+  onClick?: () => void;
 };
 
 export default function EventCard({
@@ -22,11 +23,13 @@ export default function EventCard({
   location,
   tags = [],
   thumbnailUrl,
+  onClick,
 }: EventCardProps) {
   return (
     <div
       className="flex flex-col rounded-2xl overflow-hidden border border-sage-border bg-white shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:-translate-y-[1px] hover:shadow-[0_6px_18px_rgba(0,0,0,0.10)] cursor-pointer"
       style={{ transition: "transform .18s ease, box-shadow .18s ease" }}
+      onClick={onClick}
     >
       {/* Thumbnail */}
       <div className="relative w-full aspect-[16/10] bg-sage-light shrink-0">

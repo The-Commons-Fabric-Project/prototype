@@ -8,6 +8,7 @@ export type Event = {
   id: string | number;
   month: string;
   day: number;
+  year: number;
   title: string;
   time: string;
   organization?: string;
@@ -15,4 +16,6 @@ export type Event = {
   location?: string;
   tags?: Tag[];
   thumbnailUrl?: string;
+  registrationInfo?: string;
+  registerUrl?: string;
 };

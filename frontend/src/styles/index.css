@@ -1,12 +1,12 @@
-@import "react-big-calendar/lib/css/react-big-calendar.css";
 @import "tailwindcss";
+@import "react-big-calendar/lib/css/react-big-calendar.css";
 @import "rbc-overrides.css";
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap");
 
 body {
     background-color: rgb(246, 244, 238);
 }
 
+/* tailwind color scheme for consistent theming */
 @theme {
     --font-fraunces: "Fraunces", serif;
     --color-cream: rgb(246, 244, 238);
