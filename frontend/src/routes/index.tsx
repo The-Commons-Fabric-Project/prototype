@@ -10,21 +10,21 @@ function Index() {
 
   return (
     <div className="flex flex-col items-start justify-start w-full max-w-[1040px] pt-[36px] px-[24px] pb-[80px]">
-      <h1 className="font-fraunces text-forest font-semibold" style={{ fontSize: "clamp(30px, 5vw, 44px)" }}>What's happening at the Hub</h1>
-      <p className="font-fraunces text-sage-muted">
+      <h1 className="font-display text-ink font-semibold" style={{ fontSize: "clamp(30px, 5vw, 44px)" }}>What's happening at the Hub</h1>
+      <p className="font-display text-muted">
         One shared place to discover and share events across the Rideau Community Hub network.
       </p>
 
-      <div className="inline-flex mt-6 bg-white border border-sage-border p-[5px] rounded-[10px]">
+      <div className="inline-flex mt-6 bg-white border border-line p-[5px] rounded-[10px]">
         <button
           onClick={() => setView('cards')}
-          className={`text-[13px] rounded-[8px] font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? 'bg-teal text-white' : 'bg-transparent text-sage-muted'}`}
+          className={`text-[13px] rounded-[8px] font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
         >
           Card grid
         </button>
         <button
           onClick={() => setView('calendar')}
-          className={`text-[13px] rounded-[8px] font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? 'bg-teal text-white' : 'bg-transparent text-sage-muted'}`}
+          className={`text-[13px] rounded-[8px] font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
         >
           Calendar
         </button>

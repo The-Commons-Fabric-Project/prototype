@@ -60,20 +60,20 @@ export function Calendar({ events }: CalendarProps) {
 
   return (
     <>
-    <div className="bg-white border border-sage-border rounded-[16px] p-[18px]">
+    <div className="bg-white border border-line rounded-[16px] p-[18px]">
       <div className="flex justify-between items-center mb-[14px]">
-        <h3 className="font-fraunces text-[20px] font-semibold text-forest m-0">
+        <h3 className="font-display text-[20px] font-semibold text-ink m-0">
           {MONTH_NAMES[monthIndex]} {year}
         </h3>
         <div className="flex gap-2">
           <button
-            className="cf-press font-semibold text-[14px] px-3 py-[6px] rounded-[10px] cursor-pointer border border-sage-border leading-[1.1] tracking-[0.1px] bg-transparent text-teal"
+            className="cf-press font-semibold text-[14px] px-3 py-[6px] rounded-[10px] cursor-pointer border border-line leading-[1.1] tracking-[0.1px] bg-transparent text-primary"
             onClick={goToPrev}
           >
             ‹
           </button>
           <button
-            className="cf-press font-semibold text-[14px] px-3 py-[6px] rounded-[10px] cursor-pointer border border-sage-border leading-[1.1] tracking-[0.1px] bg-transparent text-teal"
+            className="cf-press font-semibold text-[14px] px-3 py-[6px] rounded-[10px] cursor-pointer border border-line leading-[1.1] tracking-[0.1px] bg-transparent text-primary"
             onClick={goToNext}
           >
             ›
@@ -83,7 +83,7 @@ export function Calendar({ events }: CalendarProps) {
 
       <div className="grid grid-cols-7 gap-[6px]">
         {DAY_HEADERS.map(d => (
-          <div key={d} className="text-center text-[11px] font-bold text-sage-muted tracking-[0.5px] pb-1">
+          <div key={d} className="text-center text-[11px] font-bold text-muted tracking-[0.5px] pb-1">
             {d}
           </div>
         ))}
@@ -94,16 +94,16 @@ export function Calendar({ events }: CalendarProps) {
             className={`min-h-[76px] min-w-0 rounded-[10px] p-[6px] border ${
               day === null
                 ? 'border-transparent bg-transparent'
-                : 'border-sage-border bg-cream'
+                : 'border-line bg-paper'
             }`}
           >
             {day !== null && (
               <>
-                <div className="text-xs font-semibold text-sage-muted mb-1">{day}</div>
+                <div className="text-xs font-semibold text-muted mb-1">{day}</div>
                 {(monthEvents[day] ?? []).map(event => (
                   <div
                     key={event.id}
-                    className="cf-press bg-teal text-white text-[10.5px] font-semibold rounded-[6px] px-[6px] py-[3px] mb-[3px] cursor-pointer truncate max-w-full"
+                    className="cf-press bg-primary text-white text-[10.5px] font-semibold rounded-[6px] px-[6px] py-[3px] mb-[3px] cursor-pointer truncate max-w-full"
                     title={`${event.time} ${event.title}`}
                     onClick={() => setSelectedEvent(event)}
                   >

@@ -1,13 +1,13 @@
 export const EVENT_TAGS = {
   "Registration": {
     label: "Registration",
-    color: "rgb(15, 110, 92)",
-    background: "rgb(227, 240, 236)",
+    color: "rgb(80, 122, 189)",
+    background: "rgb(231, 238, 247)",
   },
   "Volunteers wanted": {
     label: "Volunteers wanted",
-    color: "rgb(200, 133, 43)",
-    background: "rgba(200, 133, 43, 0.14)",
+    color: "rgb(242, 165, 65)",
+    background: "rgba(242, 165, 65, 0.14)",
   },
 } as const
 

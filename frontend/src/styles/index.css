@@ -1,7 +1,28 @@
 @import "tailwindcss";
 
 body {
-    background-color: rgb(246, 244, 238);
+    background-color: rgb(247, 248, 250);
+    font-family: "Inter", Arial, sans-serif;
+    color: rgb(65, 65, 66);
+}
+
+/* Commons Fabric brand theme — see Brandguide 2026 */
+@theme {
+    /* Typography: Sofia (headers/titles) + Inter (body), Arial fallback */
+    --font-display: "Sofia Sans", "Inter", Arial, sans-serif;
+    --font-body: "Inter", Arial, sans-serif;
+    --font-sans: "Inter", Arial, sans-serif;
+
+    /* Brand palette */
+    --color-primary: rgb(80, 122, 189);      /* Primary blue   #507ABD */
+    --color-secondary: rgb(242, 165, 65);    /* Secondary      #F2A541 */
+    --color-ink: rgb(65, 65, 66);            /* Body copy      #414142 */
+
+    /* Neutrals + tints */
+    --color-paper: rgb(247, 248, 250);       /* page background */
+    --color-surface: rgb(231, 238, 247);     /* soft primary tint */
+    --color-muted: rgb(107, 114, 128);       /* secondary text */
+    --color-line: rgb(224, 228, 235);        /* borders */
 }
 
 @keyframes cf-stagger {
@@ -12,16 +33,4 @@ body {
 @keyframes cf-fade {
     from { opacity: 0; }
     to   { opacity: 1; }
-}
-
-/* tailwind color scheme for consistent theming */
-@theme {
-    --font-fraunces: "Fraunces", serif;
-    --color-cream: rgb(246, 244, 238);
-    --color-forest: rgb(28, 43, 39);
-    --color-teal: rgb(15, 110, 92);
-    --color-amber: rgb(200, 133, 43);
-    --color-sage-light: rgb(227, 240, 236);
-    --color-sage-muted: rgb(107, 124, 119);
-    --color-sage-border: rgb(216, 226, 222);
 }
