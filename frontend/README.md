@@ -1,3 +1,17 @@
+# Installation
+
+If you're in the root folder, `cd frontend`.
+
+Make sure your Node.js version is upgraded. Vite requires Node.js version 20.19+ or 22.12+.
+
+After that, run `npm run install` then `npm run dev` and you should now be able to see your changes whenever you modify the code. 
+
+Navigate to 
+```
+http://localhost:5173/
+```
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
