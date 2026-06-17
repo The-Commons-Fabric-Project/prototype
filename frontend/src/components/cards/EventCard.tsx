@@ -1,4 +1,5 @@
-import type { Tag } from '../../types/events'
+import { EVENT_TAGS } from '../../types/events'
+import type { EventTagKey } from '../../types/events'
 
 type EventCardProps = {
   month: string;
@@ -8,7 +9,7 @@ type EventCardProps = {
   description?: string;
   time: string;
   location?: string;
-  tags?: Tag[];
+  tags?: EventTagKey[];
   thumbnailUrl?: string;
   onClick?: () => void;
 };
@@ -51,16 +52,16 @@ export default function EventCard({
           </div>
         )}
 
-        {/* Tags */}
+        {/* EventTags */}
         {tags.length > 0 && (
           <div className="absolute top-[10px] left-[10px] flex gap-[6px] flex-wrap">
-            {tags.map((tag) => (
+            {tags.map((key) => (
               <span
-                key={tag.label}
+                key={key}
                 className="inline-block py-[3px] px-[9px] rounded-full text-[10.5px] font-bold tracking-[0.8px] uppercase font-['Public_Sans',sans-serif]"
-                style={{ background: tag.background, color: tag.color }}
+                style={{ background: EVENT_TAGS[key].background, color: EVENT_TAGS[key].color }}
               >
-                {tag.label}
+                {EVENT_TAGS[key].label}
               </span>
             ))}
           </div>
