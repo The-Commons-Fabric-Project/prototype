@@ -2,6 +2,12 @@
     "name": "prototype",
     "private": true,
     "workspaces": ["frontend", "backend", "shared"],
+    "scripts": {
+        "dev": "npm run dev --workspaces --if-present",
+        "build": "npm run build --workspaces --if-present",
+        "lint": "npm run lint --workspaces --if-present",
+        "preview": "npm run preview --workspaces --if-present"
+    },
 
     "devDependencies": {
         "@types/node": "^24.12.3",
