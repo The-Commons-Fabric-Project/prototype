@@ -2,9 +2,13 @@ import { EVENT_TAGS } from '../../types/events'
 import type { EventTagKey } from '../../types/events'
 
 type EventCardProps = {
+  /** Month of the event as a string */
   month: string;
+  /** Date of the event */
   day: number;
+  /** Event title */
   title: string;
+  /** Host organization (optional) */
   organization?: string;
   description?: string;
   time: string;

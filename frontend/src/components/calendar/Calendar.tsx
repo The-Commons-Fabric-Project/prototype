@@ -11,6 +11,7 @@ import type { Event } from '../../types/events'
 import EventDescription from '../popup/EventDescription'
 
 type CalendarProps = {
+  /** List of Events to view in the calendar */
   events: Event[];
 };
 
