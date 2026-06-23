@@ -11,6 +11,13 @@ Navigate to
 http://localhost:5173/
 ```
 
+# Documentation
+
+This project is using Storybook (at least just this branch). Storybook integrates with the dev server, so if you want to work on the code with Storybook running, run `npm run storybook`. Navigate to (if it doesn't automatically open in your browser)
+
+```
+http://localhost:6006/
+```
 
 # React + TypeScript + Vite
 

@@ -2,6 +2,7 @@ import type { StorybookConfig } from '@storybook/tanstack-react';
 
 const config: StorybookConfig = {
   "stories": [
+    "../docs/**/*.mdx",
     "../src/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
