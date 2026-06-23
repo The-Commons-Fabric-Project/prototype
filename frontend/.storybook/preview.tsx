@@ -1,4 +1,6 @@
-import type { Preview } from '@storybook/tanstack-react'
+import type { Preview } from '@storybook/tanstack-react';
+
+import '../src/styles/index.css';
 
 const preview: Preview = {
   parameters: {
@@ -16,6 +18,8 @@ const preview: Preview = {
       test: 'todo'
     }
   },
+  // enable autodocs for all components - https://storybook.js.org/docs/writing-docs/autodocs/?renderer=react&ref=guide
+  tags: ['autodocs'],
 };
 
 export default preview;
