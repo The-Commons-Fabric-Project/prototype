@@ -2,7 +2,7 @@ import React from 'react';
 
 import { createFileRoute } from '@tanstack/react-router';
 
-import { Header } from './Header';
+import { Header } from './ExampleHeader';
 
 type User = {
   name: string;

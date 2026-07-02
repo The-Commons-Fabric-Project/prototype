@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import EventCard from './EventCard';
 
 const meta = {
+  title: "Components/Cards/Event Card",
   component: EventCard,
 } satisfies Meta<typeof EventCard>;
 

@@ -1,13 +1,8 @@
-import type { Event } from '../../types/events'
+import Field from '../ui/Field'
+import Modal, {ModalHeader} from '../ui/Modal';
 
-type EventDescriptionProps = {
-  event: Event;
-  onClose: () => void;
-};
-
-/** Pop-up with event details when clicked */
-export default function EventDescription({ event, onClose }: EventDescriptionProps) {
-  // should extract the HTML for popup to reuse in other modals
+/** Pop-up re: Log in button, prompts user for name/email and password */
+export default function LoginModal({ onClose }: { onClose: () => void }) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-xs"
@@ -94,3 +89,67 @@ export default function EventDescription({ event, onClose }: EventDescriptionPro
     </div>
   );
 }
+
+/*
+function LoginModal({ onClose, accounts, onLogin, toast }) {
+  const [mode, setMode] = useState("login"); // login | password | email
+  const [creds, setCreds] = useState({ email: "", password: "" });
+  const [err, setErr] = useState("");
+  const [newVal, setNewVal] = useState("");
+
+  const doLogin = () => {
+    const acct = accounts.find((a) => a.email === creds.email && a.password === creds.password);
+    if (!acct) { setErr("Email or password not recognized."); return; }
+    onLogin(acct);
+    toast(`Welcome back, ${acct.name}`);
+    onClose();
+  };
+
+  if (mode !== "login") {
+    const isPw = mode === "password";
+    return (
+      <Modal onClose={onClose} width={420}>
+        <ModalHeader title={isPw ? "Change password" : "Change email"} onClose={onClose}
+          subtitle={isPw ? undefined : "We'll send a confirmation link to the new address."} />
+        <div style={{ padding: "18px 24px 24px" }}>
+          <Field label={isPw ? "New password" : "New email"}>
+            <input type={isPw ? "password" : "text"} style={inputStyle(false)} value={newVal}
+              onChange={(e) => setNewVal(e.target.value)} placeholder={isPw ? "At least 6 characters" : "you@org.example"} />
+          </Field>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Button variant="ghost" style={{ flex: 1 }} onClick={() => { setMode("login"); setNewVal(""); }}>Back</Button>
+            <Button style={{ flex: 1 }} onClick={() => {
+              toast(isPw ? "Password updated." : "Confirmation email sent.");
+              setMode("login"); setNewVal("");
+            }}>Save</Button>
+          </div>
+        </div>
+      </Modal>
+    );
+  }
+
+  return (
+    <Modal onClose={onClose} width={420}>
+      <ModalHeader title="Log in" onClose={onClose} />
+      <div style={{ padding: "18px 24px 24px" }}>
+        <div style={{ background: C.accentSoft, borderRadius: 9, padding: "9px 12px", marginBottom: 16, fontSize: 12.5, color: C.accent }}>
+          Demo hint: use <strong>hi@ottawacivictech.example</strong> / <strong>demo123</strong>
+        </div>
+        <Field label="Email" error={err ? " " : ""}>
+          <input style={inputStyle(!!err)} value={creds.email}
+            onChange={(e) => { setCreds({ ...creds, email: e.target.value }); setErr(""); }} placeholder="you@org.example" />
+        </Field>
+        <Field label="Password" error={err}>
+          <input type="password" style={inputStyle(!!err)} value={creds.password}
+            onChange={(e) => { setCreds({ ...creds, password: e.target.value }); setErr(""); }} placeholder="Your password" />
+        </Field>
+        <Button style={{ width: "100%" }} onClick={doLogin}>Log in</Button>
+        <div style={{ display: "flex", justifyContent: "center", gap: 18, marginTop: 16 }}>
+          <button onClick={() => setMode("password")} style={linkBtn}>Change password</button>
+          <button onClick={() => setMode("email")} style={linkBtn}>Change email</button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+  */

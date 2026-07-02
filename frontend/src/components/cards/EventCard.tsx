@@ -1,9 +1,7 @@
 import { EVENT_TAGS } from '../../types/events'
 import type { EventTagKey } from '../../types/events'
 
-/** 
- * All properties that can be specified for an event
- */
+/** All properties that can be specified for an event */
 type EventCardProps = {
   /** Month of the event as a string */
   month: string;
@@ -16,11 +14,13 @@ type EventCardProps = {
   description?: string;
   time: string;
   location?: string;
+  /** array of tags for the event */
   tags?: EventTagKey[];
   thumbnailUrl?: string;
   onClick?: () => void;
 };
 
+/** Event card component */
 export default function EventCard({
   month,
   day,

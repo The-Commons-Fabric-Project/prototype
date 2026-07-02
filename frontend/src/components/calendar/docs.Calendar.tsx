@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import { Calendar } from './Calendar';
 
 const meta = {
+  title: "Calendar",
   component: Calendar,
 } satisfies Meta<typeof Calendar>;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from './Button';
+import { Button } from './ExampleButton';
 import './header.css';
 
 type User = {
@@ -14,6 +14,7 @@ export interface HeaderProps {
   onCreateAccount?: () => void;
 }
 
+/** Header example component */
 export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps) => (
   <header>
     <div className="storybook-header">

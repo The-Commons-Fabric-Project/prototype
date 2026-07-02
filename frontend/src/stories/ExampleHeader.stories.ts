@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
 import { fn } from 'storybook/test';
 
-import { Header } from './Header';
+import { Header } from './ExampleHeader';
 
 const meta = {
   title: 'Example/Header',

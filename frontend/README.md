@@ -1,6 +1,6 @@
 # Installation
 
-If you're in the root folder, `cd frontend`.
+If you're in the root folder, `cd frontend` to do anything related to the prototype.
 
 Make sure your Node.js version is upgraded. Vite requires Node.js version 20.19+ or 22.12+.
 
@@ -11,9 +11,11 @@ Navigate to
 http://localhost:5173/
 ```
 
+REMEMBER TO RUN ALL TERMINAL COMMANDS IN `./frontend`!
+
 # Documentation
 
-This project is using Storybook (at least just this branch). Storybook integrates with the dev server, so if you want to work on the code with Storybook running, run `npm run storybook`. Navigate to (if it doesn't automatically open in your browser)
+This project is using Storybook (at least for now). Storybook integrates with the dev server, so if you want to work on the code with Storybook running, run `npm run storybook`. Navigate to (if it doesn't automatically open in your browser)
 
 ```
 http://localhost:6006/
