@@ -3,6 +3,8 @@
         "ms-azuretools.vscode-containers",
         "christian-kohler.npm-intellisense",
         "dbaeumer.vscode-eslint",
-        "ms-vscode-remote.vscode-remote-extensionpack"
+        "ms-vscode-remote.vscode-remote-extensionpack",
+        "prisma.prisma",
+        "dbdiagram.dbdiagram-vscode"
     ]
 }
