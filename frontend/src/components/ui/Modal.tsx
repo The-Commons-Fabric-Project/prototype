@@ -7,6 +7,8 @@ type ModalProps = {
   width: number,
 }
 
+// this was copied from Claude's TSX, need to reconcile with the existing EventDescription component
+
 export default function Modal({ 
   children, 
   onClose, 
@@ -20,10 +22,12 @@ export default function Modal({
   return (
     <div
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-xs"
       style={{
-        position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center",
-        justifyContent: "center", padding: 20, background: "rgba(28,43,39,0.42)",
-        backdropFilter: "blur(5px)", WebkitBackdropFilter: "blur(5px)", animation: "cf-fade .18s ease",
+        background: 'rgba(65, 65, 66, 0.42)'
+      //   position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center",
+      //   justifyContent: "center", padding: 20, background: "rgba(28,43,39,0.42)",
+      //   backdropFilter: "blur(5px)", WebkitBackdropFilter: "blur(5px)", animation: "cf-fade .18s ease",
       }}
     >
       <div
@@ -35,6 +39,14 @@ export default function Modal({
           boxShadow: "0 24px 60px rgba(28,43,39,0.28)", animation: "cf-pop .2s cubic-bezier(.2,.8,.3,1)",
         }}
       >
+        {/* Close button */}
+        <button
+          aria-label="Close"
+          className="cf-press absolute top-4 right-4 z-10 w-[30px] h-[30px] rounded-[8px] border border-line bg-white cursor-pointer text-muted text-[16px] flex items-center justify-center"
+          onClick={onClose}
+        >
+          ×
+        </button>
         {children}
       </div>
     </div>

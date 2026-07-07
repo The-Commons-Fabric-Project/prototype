@@ -39,7 +39,10 @@ export default function Header() {
 
         {/* Auth buttons */}
         <div className="flex items-center gap-[10px]">
-          <button className="font-sans font-semibold text-[14px] px-[14px] py-2 rounded-[10px] cursor-pointer border border-line bg-transparent text-primary leading-[1.1] tracking-[0.1px]">
+          <button 
+            className="font-sans font-semibold text-[14px] px-[14px] py-2 rounded-[10px] cursor-pointer border border-line bg-transparent text-primary leading-[1.1] tracking-[0.1px]"
+            onClick={() => {}}
+          >
             Log in
           </button>
           <button className="font-sans font-semibold text-[14px] px-[14px] py-2 rounded-[10px] cursor-pointer border border-primary bg-primary text-white leading-[1.1] tracking-[0.1px]">
