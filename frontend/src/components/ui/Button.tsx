@@ -9,7 +9,9 @@ type ButtonProps = {
   displayText?: string;
   /** what do when button */
   onClick: () => void;
+  children?: React.ReactElement[];
 };
+
  
 // # collecting all instances of <button> element across existing components
 
@@ -57,6 +59,7 @@ const variants = {
    ghost: { background: "transparent", color: C.accent, borderColor: C.line },
    subtle: { background: C.accentSoft, color: C.accent, borderColor: "transparent" },
    danger: { background: "transparent", color: C.danger, borderColor: "rgba(178,58,72,0.3)"},
+   link: { background: "none", border: "none", color: C.muted, fontSize: 12.5, cursor: "pointer", fontFamily: "'Public Sans', sans-serif", textDecoration: "underline", padding: 0 },
 };
 
 /** Generic button component */

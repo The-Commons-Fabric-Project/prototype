@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { ReactElement } from "react";
 
-type ModalProps = {
+export type ModalProps = {
   children: ReactElement[],
   onClose: () => void,
   width: number,
@@ -9,6 +9,7 @@ type ModalProps = {
 
 // this was copied from Claude's TSX, need to reconcile with the existing EventDescription component
 
+/** Modal shell with header and blank contents */
 export default function Modal({ 
   children, 
   onClose, 
@@ -53,10 +54,10 @@ export default function Modal({
   );
 }
 
-type ModalHeaderProps = {
+export type ModalHeaderProps = {
   title: string,
   onClose: () => void,
-  subtitle: string,
+  subtitle: string | undefined,
 }
 
 export function ModalHeader({ title, onClose, subtitle }: ModalHeaderProps) {
