@@ -1,4 +1,4 @@
-import { C } from "../../types/colors";
+import { C } from "../../styles/colors";
 
 type FieldProps = {
   label: string,

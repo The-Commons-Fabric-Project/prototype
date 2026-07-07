@@ -1,4 +1,4 @@
-import { C, inputStyle } from "../../types/colors";
+import { C, inputStyle } from "../../styles/colors";
 import { useState } from "react";
 import Button from "../ui/Button";
 import Field from "../ui/Field";
@@ -23,7 +23,7 @@ export default function LoginForm({
         <input type="password" style={inputStyle(!!err)} value={creds.password}
           onChange={(e) => { setCreds({ ...creds, password: e.target.value }); setErr(""); }} placeholder="Your password" />
       </Field>
-      <Button style={{ width: "100%" }} onClick={doLogin}>Log in</Button>
+      <Button onClick={doLogin}>Log in</Button>
       <div style={{ display: "flex", justifyContent: "center", gap: 18, marginTop: 16 }}>
         <button onClick={() => setMode("password")} 
           // style={linkBtn}

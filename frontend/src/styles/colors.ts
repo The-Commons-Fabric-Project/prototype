@@ -1,7 +1,7 @@
 /** This entire file is stupid and should be refactored away */
 
 export const C = {
-  accent: "#0F6E5C",
+  accent: "#F2A541",
   accentSoft: "#E3F0EC",
   ink: "#1C2B27",
   muted: "#6B7C77",

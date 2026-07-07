@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import Modal from './Modal';
 
 const meta = {
+  title: "UI/Modal",
   component: Modal,
 } satisfies Meta<typeof Modal>;
 
