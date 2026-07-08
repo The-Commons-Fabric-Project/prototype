@@ -1,5 +1,5 @@
 import express from 'express'
-import { requestLoggingMiddleware } from './middleware/logging';
+import { requestLoggingMiddleware } from './middleware/logging.js';
 import path from 'path'
 import cors from 'cors'
 

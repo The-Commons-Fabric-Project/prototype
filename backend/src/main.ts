@@ -1,12 +1,19 @@
-import { createApp } from './app';
+import { createApp } from './app.js';
 
 async function main() {
   const app = createApp();
   const PORT = process.env.PORT || 3000;
 
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`[SERVER] Commons Fabric backend running on http://localhost:${PORT}`);
   })
+
+  const shutdown = () => {
+    server.close(() => process.exit(0));
+  };
+  
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
 }
 
 main().catch((err) => {
