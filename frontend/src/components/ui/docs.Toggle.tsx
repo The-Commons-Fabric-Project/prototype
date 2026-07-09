@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
-import LoginModal from './LoginModal';
+import Toggle from './Toggle';
 
 const meta = {
-  title: "Components/Pop-up/Log In",
-  component: LoginModal,
-} satisfies Meta<typeof LoginModal>;
+  title: "Components/UI/Toggle",
+  component: Toggle,
+} satisfies Meta<typeof Toggle>;
 
 export default meta;
 

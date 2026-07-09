@@ -7,7 +7,7 @@ export default function LoginForm({
   accounts, // this is just a placeholder for auth
   onLogin,
   onClose,
-  updateParent,
+  updateParent = () => {},
   toast
 }) {
   const [mode, setMode] = useState("login"); // login | password | email

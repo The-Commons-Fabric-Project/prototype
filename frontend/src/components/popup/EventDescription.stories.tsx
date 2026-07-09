@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import EventDescription from './EventDescription';
 
 const meta = {
-  title: 'Pop-Up/Event Description',
+  title: 'Components/Pop-Up/Event Description',
   component: EventDescription,
 } satisfies Meta<typeof EventDescription>;
 

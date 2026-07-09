@@ -21,7 +21,7 @@ export const Default: Story = {
 };
 
 export const VariantA: Story = {
-  args:{
+  args: {
     "variant": "ghost",
     "label": "You can't click me"
   }

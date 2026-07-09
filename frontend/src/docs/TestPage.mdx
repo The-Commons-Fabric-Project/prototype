@@ -1,6 +1,15 @@
-title: "Test Page"
----
+import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+import ReadmeTest from '../mocks/README.md?raw';
 
-Something here?
+<Meta title="Test Page"/>
+
+# Test Page
+
+Comprehensive guide for MDX and Storybook here: https://storybook.js.org/docs/writing-docs/mdx
 
 Make new custom pages for documentation in this folder as `.mdx` files.
+
+You can import the contents of a regular `.md` file in this repo like so:
+
+From `../mocks/README.md`:
+> <Markdown>{ReadmeTest}</Markdown>

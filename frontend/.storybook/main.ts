@@ -10,6 +10,9 @@ const config: StorybookConfig = {
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
     "../src/**/@(docs.)*.@(ts|tsx)",
   ],
+  docs: {
+    docsMode: true,
+  },
   experimental_indexers: async (existingIndexers) => {
     const customIndexer: Indexer = {
       test: /docs\..+\.[tj]sx?$/,
@@ -27,7 +30,6 @@ const config: StorybookConfig = {
     "@storybook/addon-vitest",
     "@storybook/addon-a11y",
     "@storybook/addon-docs",
-    "@storybook/addon-onboarding"
   ],
   "framework": "@storybook/tanstack-react"
 };

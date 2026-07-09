@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import EventCardGrid from './EventCardGrid';
 
 const meta = {
+  title: "Components/Cards/EventCardGrid",
   component: EventCardGrid,
 } satisfies Meta<typeof EventCardGrid>;
 

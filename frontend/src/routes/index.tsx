@@ -8,6 +8,8 @@ import { EXAMPLE_EVENTS } from '../data/events'
 function Index() {
   const [view, setView] = useState<'cards' | 'calendar'>('cards')
 
+  // TO DO: add routes for individual events, follow https://www.notanumber.in/blog/render-modal-on-a-route-with-the-parent-in-background-in-tanstack-router
+
   return (
     <div className="flex flex-col items-start justify-start w-full max-w-[1040px] pt-[36px] px-[24px] pb-[80px]">
       <h1 className="font-display text-ink font-semibold" style={{ fontSize: "clamp(30px, 5vw, 44px)" }}>What's happening at the Hub</h1>

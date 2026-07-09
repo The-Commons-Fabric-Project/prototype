@@ -16,7 +16,7 @@ export const Default: Story = {
   args: {
     "month": "June",
     "day": 23,
-    "title": "title",
+    "title": "Example",
     "time": "6/23/2026",
     description: "Add a description for your event here"
   },
