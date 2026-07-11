@@ -7,7 +7,10 @@ export default function Toggle({
   onChange 
 }) {
   return (
-    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 14, padding: "12px 14px", background: C.white, border: `1px solid ${C.line}`, borderRadius: 10, marginBottom: 14 }}>
+    <div 
+      className="bg-white border-line border" 
+      style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 14, padding: "12px 14px", border: `1px solid ${C.line}`, borderRadius: 10, marginBottom: 14 }}
+    >
       <div>
         <span style={{ display: "block", fontSize: 13, fontWeight: 600, color: C.ink, fontFamily: "'Public Sans', sans-serif" }}>{label}</span>
         {hint && <span style={{ display: "block", fontSize: 12, color: C.muted, marginTop: 2 }}>{hint}</span>}

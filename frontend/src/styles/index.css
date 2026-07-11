@@ -21,8 +21,28 @@ body {
     /* Neutrals + tints */
     --color-paper: rgb(247, 248, 250);       /* page background */
     --color-surface: rgb(231, 238, 247);     /* soft primary tint */
-    --color-muted: rgb(107, 114, 128);       /* secondary text */
+    --color-muted: rgb(107, 114, 128);       /* secondary text  #6B8D80 */
     --color-line: rgb(224, 228, 235);        /* borders */
+
+    /* Accents + UI */
+    --color-danger: #b23a48; /* errors or negative */
+    --color-accent: #f2a541;
+    --color-accent-soft: #e3f0ec;
+    --color-ink-dark: #1c2b27;
+    --color-amber: #c8852b;
+
+
+    /* C const in colors.ts
+        accent: "#F2A541",
+        accentSoft: "#E3F0EC",
+        ink: "#1C2B27",
+        muted: "#6B7C77",
+        line: "#D8E2DE",
+        paper: "#F6F4EE",
+        amber: "#C8852B",
+        white: "#FFFFFF",
+        danger: "#B23A48",
+    */
 }
 
 @keyframes cf-stagger {

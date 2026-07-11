@@ -15,7 +15,7 @@ REMEMBER TO RUN ALL TERMINAL COMMANDS IN `./frontend`!
 
 # Documentation
 
-This project is using Storybook (at least for now). Storybook integrates with the dev server, so if you want to work on the code with Storybook running, run `npm run storybook`. Navigate to (if it doesn't automatically open in your browser)
+This project is using Storybook (at least for now). Storybook runs separately from the dev server, so you have to open another terminal. If you want to work on the code with Storybook running, run `npm run storybook`. Navigate to (if it doesn't automatically open in your browser)
 
 ```
 http://localhost:6006/

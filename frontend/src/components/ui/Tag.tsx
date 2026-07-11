@@ -5,8 +5,8 @@ export default function Tag({
   tone = "soft" 
 }) {
   const tones = {
-    soft: { background: C.accentSoft, color: C.accent },
-    amber: { background: "rgba(200,133,43,0.14)", color: C.amber },
+    "soft": { background: C.accentSoft, color: C.accent },
+    "amber": { background: "rgba(200,133,43,0.14)", color: C.amber },
   };
   return (
     <span style={{

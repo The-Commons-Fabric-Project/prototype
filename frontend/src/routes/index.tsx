@@ -8,7 +8,7 @@ import { EXAMPLE_EVENTS } from '../data/events'
 function Index() {
   const [view, setView] = useState<'cards' | 'calendar'>('cards')
 
-  // TO DO: add routes for individual events, follow https://www.notanumber.in/blog/render-modal-on-a-route-with-the-parent-in-background-in-tanstack-router
+  // TODO: add routes for individual events, follow https://www.notanumber.in/blog/render-modal-on-a-route-with-the-parent-in-background-in-tanstack-router
 
   return (
     <div className="flex flex-col items-start justify-start w-full max-w-[1040px] pt-[36px] px-[24px] pb-[80px]">
@@ -20,13 +20,13 @@ function Index() {
       <div className="inline-flex mt-6 bg-white border border-line p-[5px] rounded-[10px]">
         <button
           onClick={() => setView('cards')}
-          className={`text-[13px] rounded-[8px] font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
+          className={`text-[13px] rounded-lg font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
         >
           Card grid
         </button>
         <button
           onClick={() => setView('calendar')}
-          className={`text-[13px] rounded-[8px] font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
+          className={`text-[13px] rounded-lg font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
         >
           Calendar
         </button>
