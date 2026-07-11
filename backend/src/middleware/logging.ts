@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 /**
- * Logs all requests coming in to the server
+ * Logs all requests coming into the server
 */
 export function requestLoggingMiddleware(req: Request, res: Response, next: NextFunction): void {
   const start = Date.now();
