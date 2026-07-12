@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+//
+// Source of truth for the DB structure. The human-readable diagram lives in
+// db/schema.dbml. Note the SQLite-specific translation choices vs. that DBML:
+//   - SQLite has no enum type   -> org_tags is stored as a plain String (see OrganizationTag.tag)
+//   - SQLite autoincrement is Int only -> all `bigint` PKs/FKs become Int
+//   - varchar(n) native types are not enforced by SQLite -> lengths dropped
+//   - Postgres `~*` regex CHECKs cannot run on SQLite -> those validations move
+//     to the application layer. The simple non-regex CHECKs (e.g. length(trim(x)) > 0)
+//     are added by hand in the initial migration SQL.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id             Int          @id @default(autoincrement())
+  fullname       String
+  email          String       @unique
+  password       String // stores the password hash, not plaintext
+  organizationId Int          @map("organization_id")
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  events         Event[]
+
+  @@map("users")
+}
+
+model Event {
+  id               Int      @id @default(autoincrement())
+  title            String
+  ownerId          Int      @map("owner_id")
+  startsAt         DateTime @map("starts_at")
+  endsAt           DateTime @map("ends_at")
+  location         Int
+  description      String?
+  thumbnail        String? // file path of image e.g. ./public/event_images/example.jpg
+  registrationLink String?  @map("registration_link")
+  volunteerContact String?  @map("volunteer_contact")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  owner            User     @relation(fields: [ownerId], references: [id])
+  address          Address  @relation(fields: [location], references: [id])
+
+  @@map("events")
+}
+
+model Organization {
+  id      Int                @id @default(autoincrement())
+  name    String
+  logo    String? // file path of image e.g. ./public/organization_logos/example.jpg
+  blurb   String? // short description of the organization
+  contact String?
+  website String?
+
+  users   User[]
+  tags    OrganizationTag[]
+
+  @@map("organizations")
+}
+
+// org_tags in the DBML is a Postgres enum. SQLite has no enums, so `tag` is a
+// String. Allowed values (Advocacy, Civic, Community, Culture, Education, Equity,
+// Indigenous, Makers, Policy, Research, Seniors, Settlement, Tech, Volunteer, Youth)
+// are enforced in the application layer and via a CHECK added in the migration.
+model OrganizationTag {
+  organizationId Int          @map("organization_id")
+  tag            String
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@id([organizationId, tag])
+  @@map("organizations_tags")
+}
+
+model Address {
+  id         Int     @id @default(autoincrement())
+  line1      String  @default("815 St. Laurent Blvd") // Address i.e. - 123 Example Street
+  line2      String? // Second address line - i.e. Apt 123 / Room 123
+  city       String  @default("Ottawa")
+  province   String? @default("ON")
+  postalCode String? @default("K1K3A7") @map("postal_code")
+  country    String  @default("CA") // ISO 3166-1 alpha-2, e.g. "US", "CA"
+
+  events     Event[]
+
+  @@map("addresses")
+}

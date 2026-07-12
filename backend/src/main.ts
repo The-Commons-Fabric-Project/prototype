@@ -1,4 +1,5 @@
 import { createApp } from './app.js';
+import { prisma } from './db/client.js';
 
 async function main() {
   const app = createApp();
@@ -13,7 +14,9 @@ async function main() {
   // The shutdown handler prevents this by shutting down immediately after a SIGINT or SIGTERM is detected - not waiting for tsx
   // Not needed in production since tsx will not be used but it can't hurt  
   const shutdown = () => {
-    server.close(() => process.exit(0));
+    server.close(() => {
+      prisma.$disconnect().finally(() => process.exit(0));
+    });
   };
 
   process.on('SIGINT', shutdown);

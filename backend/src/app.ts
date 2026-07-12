@@ -1,5 +1,6 @@
 import express from 'express'
 import { requestLoggingMiddleware } from './middleware/logging.js';
+import { usersRouter } from './endpoints/users.js';
 import path from 'path'
 import cors from 'cors'
 
@@ -31,7 +32,7 @@ export function createApp() {
   }
 
   // route assignment
-
+  app.use('/users', usersRouter);
 
   return app;
 }
