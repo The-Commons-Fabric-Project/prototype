@@ -31,20 +31,13 @@ export function parseCommonsFabricUser(body: unknown): CommonsFabricUser {
 }
 
 /**
- * Creates a user if the email is new, or updates the existing user with that
- * email otherwise.
+ * Creates a new user. Fails (Prisma P2002) if the email is already taken.
  */
-export function dbUpsertCommonsFabricUser(user: CommonsFabricUser) {
-  return prisma.user.upsert({
-    where: { email: user.email },
-    create: {
+export function dbInsertCommonsFabricUser(user: CommonsFabricUser) {
+  return prisma.user.create({
+    data: {
       fullname: user.fullname,
       email: user.email,
-      password: user.password,
-      organizationId: user.organizationId,
-    },
-    update: {
-      fullname: user.fullname,
       password: user.password,
       organizationId: user.organizationId,
     },
