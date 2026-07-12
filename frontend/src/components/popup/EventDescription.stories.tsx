@@ -2,7 +2,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
 import EventDescription from './EventDescription';
-import { EXAMPLE_EVENTS } from "../../data/events";
+import { EXAMPLE_EVENTS } from "../../mocks/events";
 
 const meta = {
   title: 'Components/Pop-Up/Event Description',

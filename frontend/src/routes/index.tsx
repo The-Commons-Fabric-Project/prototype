@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import EventCardGrid from '../components/cards/EventCardGrid'
 import { Calendar } from '../components/calendar/Calendar'
-import { EXAMPLE_EVENTS } from '../data/events'
+import { EXAMPLE_EVENTS } from '../mocks/events'
 
 function Index() {
   const [view, setView] = useState<'cards' | 'calendar'>('cards')

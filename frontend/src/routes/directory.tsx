@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import type { Org } from '../types/orgs'
 import type { Event } from '../types/events'
-import { SEED_ORGS } from '../data/orgs'
-import { EXAMPLE_EVENTS } from '../data/events'
+import { SEED_ORGS } from '../mocks/orgs'
+import { EXAMPLE_EVENTS } from '../mocks/events'
 import EventDescription from '../components/popup/EventDescription'
 
 export const Route = createFileRoute('/directory')({
