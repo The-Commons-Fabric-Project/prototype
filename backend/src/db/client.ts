@@ -18,5 +18,5 @@ const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL ?? 'file
 
 export const prisma = new PrismaClient({
   adapter,
-  log: process.env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error'],
+  log: ['query', 'warn', 'error'],
 });
