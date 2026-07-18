@@ -49,7 +49,7 @@ export default function EventCard({
           />
         ) : (
           <div
-            className="absolute inset-0 flex items-center justify-center text-muted text-[12.5px] font-semibold font-body"
+            className="absolute inset-0 flex items-center justify-center text-text-muted text-[12.5px] font-semibold font-body"
             style={{
               background:
                 "repeating-linear-gradient(135deg, transparent, transparent 14px, rgba(80, 122, 189, 0.05) 14px, rgba(80, 122, 189, 0.05) 28px)",

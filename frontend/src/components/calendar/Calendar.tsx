@@ -8,7 +8,7 @@ This might be more of an issue once we have to integrate with Google Calendar/Ou
 
 import { useState } from 'react'
 import type { Event } from '../../types/events'
-import EventDescription from '../popup/EventDescription'
+import EventDescription from '../overlays-feedback/EventDescription'
 
 type CalendarProps = {
   /** List of Events to view in the calendar */

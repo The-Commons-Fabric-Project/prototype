@@ -1,0 +1,135 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design System/Buttons & Controls" />
+
+{/* <div class="w-[720px] px-10 py-8 bg-bg-surface rounded-2xl inline-flex flex-col justify-start items-start gap-2 overflow-hidden"> */}
+  <div class="justify-start text-text-primary text-3xl font-semibold font-['Work_Sans']">
+    # Buttons & Controls
+  </div>
+  
+  <div class="self-stretch justify-start text-text-muted text-sm font-normal font-['Bitter']">
+    Button (primary / ghost / subtle / danger, with hover + pressed states), toggle, text input, and date/time picker fields. Primary actions use an Ink fill with Paper text per PRD §10.
+  </div>
+{/* </div> */}
+
+---
+
+## Buttons
+
+<div class="gap-1 flex-col">
+
+  ### Primary
+
+<div class="flex-row *:mx-1">
+  <div class="px-4 py-3 bg-action-primary-bg rounded-sm inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-action-primary-fg text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+  <div class="px-4 py-3 bg-action-primary-bg rounded-sm shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-action-primary-fg text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+  <div class="px-4 py-3 left-[348px] top-[28px] opacity-90 bg-action-primary-bg rounded-sm inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-action-primary-fg text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+</div>
+
+  ### Ghost
+
+  <div class="px-4 py-3 left-[28px] top-[96px] rounded-sm outline outline-1 outline-offset-[-1px] outline-border-strong inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+  <div class="px-4 py-3 left-[188px] top-[96px] rounded-sm shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] outline outline-1 outline-offset-[-1px] outline-border-strong inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+  <div class="px-4 py-3 left-[348px] top-[96px] opacity-90 rounded-sm outline outline-1 outline-offset-[-1px] outline-border-strong inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+  ### Subtle
+
+  <div class="px-4 py-3 left-[28px] top-[164px] bg-bg-subtle rounded-sm inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+  <div class="px-4 py-3 left-[188px] top-[164px] bg-bg-subtle rounded-sm shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+  <div class="px-4 py-3 left-[348px] top-[164px] opacity-90 bg-bg-subtle rounded-sm inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+### Danger
+
+  <div class="px-4 py-3 left-[28px] top-[232px] bg-action-danger-bg rounded-sm inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-action-danger-fg text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+  <div class="px-4 py-3 left-[188px] top-[232px] bg-action-danger-bg rounded-sm shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-action-danger-fg text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+
+  <div class="px-4 py-3 left-[348px] top-[232px] opacity-90 bg-action-danger-bg rounded-sm inline-flex justify-center items-center gap-2">
+    <div class="justify-start text-action-danger-fg text-sm font-medium font-['Work_Sans']">Button</div>
+  </div>
+</div>
+
+## Toggles
+
+<div class="w-24 h-28 relative rounded-[5px] overflow-hidden">
+  <div class="w-12 h-7 p-[3px] left-[28px] top-[24px] bg-bg-subtle rounded-full outline outline-[1.50px] outline-offset-[-1.50px] outline-border-default inline-flex justify-start items-center">
+    <div class="size-5 bg-bg-surface rounded-full shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)]"></div>
+  </div>
+  <div class="w-12 h-7 p-[3px] left-[28px] top-[68px] bg-accent-primary rounded-full inline-flex justify-end items-center">
+    <div class="size-5 bg-bg-surface rounded-full shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)]"></div>
+  </div>
+</div>
+
+## Text Input
+
+<div class="size-96 relative rounded-[5px] overflow-hidden">
+  <div class="w-80 left-[28px] top-[24px] inline-flex flex-col justify-start items-start gap-1.5">
+    <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Email</div>
+    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-1 outline-offset-[-1px] outline-border-default inline-flex justify-start items-center gap-2 overflow-hidden">
+      <div class="flex-1 justify-start text-text-muted text-sm font-normal font-['Bitter'] leading-5">you@example.org</div>
+    </div>
+    <div class="self-stretch justify-start text-text-muted text-xs font-normal font-['Bitter'] leading-5">We'll send a confirmation link to this address.</div>
+  </div>
+  <div class="w-80 left-[28px] top-[146px] inline-flex flex-col justify-start items-start gap-1.5">
+    <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Email</div>
+    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-[1.50px] outline-offset-[-1.50px] outline-border-focus inline-flex justify-start items-center gap-2 overflow-hidden">
+      <div class="flex-1 justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">diya@example.org</div>
+    </div>
+    <div class="self-stretch justify-start text-text-muted text-xs font-normal font-['Bitter'] leading-5">We'll send a confirmation link to this address.</div>
+  </div>
+  <div class="w-80 left-[28px] top-[268px] inline-flex flex-col justify-start items-start gap-1.5">
+    <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Email</div>
+    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-[1.50px] outline-offset-[-1.50px] outline-status-danger inline-flex justify-start items-center gap-2 overflow-hidden">
+      <div class="flex-1 justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">diya@example.org</div>
+    </div>
+    <div class="self-stretch justify-start text-status-danger text-xs font-normal font-['Bitter'] leading-5">Enter a valid email address.</div>
+  </div>
+</div>
+
+## Picker Field
+
+<div class="w-72 h-56 relative rounded-[5px] overflow-hidden">
+  <div class="w-60 left-[28px] top-[24px] inline-flex flex-col justify-start items-start gap-1.5">
+    <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Date</div>
+    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-1 outline-offset-[-1px] outline-border-default inline-flex justify-between items-center overflow-hidden">
+      <div class="flex-1 justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">Mon, Jun 16 2026</div>
+      <div class="w-3 h-1.5 outline outline-[1.50px] outline-offset-[-0.75px] outline-text-muted"></div>
+    </div>
+  </div>
+  <div class="w-60 left-[28px] top-[120px] inline-flex flex-col justify-start items-start gap-1.5">
+    <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Time</div>
+    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-1 outline-offset-[-1px] outline-border-default inline-flex justify-between items-center overflow-hidden">
+      <div class="flex-1 justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">Mon, Jun 16 2026</div>
+      <div class="w-3 h-1.5 outline outline-[1.50px] outline-offset-[-0.75px] outline-text-muted"></div>
+    </div>
+  </div>
+</div>

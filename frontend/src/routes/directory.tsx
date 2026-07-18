@@ -4,7 +4,7 @@ import type { Org } from '../types/orgs'
 import type { Event } from '../types/events'
 import { SEED_ORGS } from '../mocks/orgs'
 import { EXAMPLE_EVENTS } from '../mocks/events'
-import EventDescription from '../components/popup/EventDescription'
+import EventDescription from '../components/overlays-feedback/EventDescription'
 
 export const Route = createFileRoute('/directory')({
   component: Directory,

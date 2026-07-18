@@ -1,0 +1,288 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Design System/Foundations" />
+
+{/* TODO: get Work Sans font working */}
+
+{/* <div className="w-[1320px] px-16 pt-16 pb-20 bg-bg-page inline-flex flex-col justify-start items-start gap-12 overflow-hidden"> */}
+# Foundations
+
+  <div className="self-stretch flex flex-col justify-start items-start gap-5 overflow-hidden">
+
+    ## Colour
+
+    <div className="self-stretch flex flex-col justify-start items-start gap-3 overflow-hidden">
+
+    ### Background
+
+      {/* <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">Background</div> */}
+      <div className="self-stretch inline-flex justify-start items-start gap-4 flex-wrap content-start overflow-hidden">
+        <div className="inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-bg-page rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">bg/page</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-bg-page)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-bg-surface rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">bg/surface</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-bg-surface)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-bg-subtle rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">bg/subtle</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-bg-subtle)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-bg-scrim rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">bg/scrim</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-bg-scrim)</div>
+        </div>
+      </div>
+    </div>
+
+    <div className="self-stretch flex flex-col justify-start items-start gap-3 overflow-hidden">
+### Text
+
+      {/* <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">Text</div> */}
+      <div className="self-stretch inline-flex justify-start items-start gap-4 flex-wrap content-start overflow-hidden">
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-text-primary rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">text/primary</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-text-primary)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-text-muted rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">text/muted</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-text-muted)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-text-on-accent rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">text/on-accent</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-text-on-accent)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-text-link rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">text/link</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-text-link)</div>
+        </div>
+      </div>
+    </div>
+
+### Border
+
+    <div className="self-stretch flex flex-col justify-start items-start gap-3 overflow-hidden">
+      {/* <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">Border</div> */}
+      <div className="self-stretch inline-flex justify-start items-start gap-4 flex-wrap content-start overflow-hidden">
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-border-default rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">border/default</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-border-default)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-border-strong rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">border/strong</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-border-strong)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-border-focus rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">border/focus</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-border-focus)</div>
+        </div>
+      </div>
+    </div>
+
+### Action (buttons)
+
+    <div className="self-stretch flex flex-col justify-start items-start gap-3 overflow-hidden">
+      {/* <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">Action (buttons)</div> */}
+      <div className="self-stretch inline-flex justify-start items-start gap-4 flex-wrap content-start overflow-hidden">
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-action-primary-bg rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">action/primary-bg</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-action-primary-bg)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-action-primary-fg rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">action/primary-fg</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-action-primary-fg)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-action-danger-bg rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">action/danger-bg</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-action-danger-bg)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-action-danger-fg rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">action/danger-fg</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-action-danger-fg)</div>
+        </div>
+      </div>
+    </div>
+
+    <div className="self-stretch flex flex-col justify-start items-start gap-3 overflow-hidden">
+    ### Accent/interactive
+      {/* <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">Accent / interactive</div> */}
+      <div className="self-stretch inline-flex justify-start items-start gap-4 flex-wrap content-start overflow-hidden">
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-accent-primary rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">accent/primary</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-accent-primary)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-accent-primary-soft rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">accent/primary-soft</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-accent-primary-soft)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-accent-secondary rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">accent/secondary</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-accent-secondary)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-accent-secondary-soft rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">accent/secondary-soft</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-accent-secondary-soft)</div>
+        </div>
+      </div>
+    </div>
+
+    <div className="self-stretch flex flex-col justify-start items-start gap-3 overflow-hidden">
+    ### Status/feedback
+      {/* <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">Status / feedback</div> */}
+      <div className="self-stretch inline-flex justify-start items-start gap-4 flex-wrap content-start overflow-hidden">
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-status-danger rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">status/danger</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-status-danger)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-status-danger-soft rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">status/danger-soft</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-status-danger-soft)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-status-highlight rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">status/highlight</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-status-highlight)</div>
+        </div>
+        <div className="size- inline-flex flex-col justify-start items-start gap-1.5 overflow-hidden">
+          <div className="w-32 h-12 relative bg-status-highlight-soft rounded-[10px] border border-black/10" />
+          <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">status/highlight-soft</div>
+          <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">var(--color-status-highlight-soft)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="self-stretch flex flex-col justify-start items-start gap-5 overflow-hidden">
+  ## Typography
+    {/* <div className="justify-start text-text-primary text-2xl font-semibold font-['Work_Sans']">Typography</div> */}
+    <div className="self-stretch inline-flex justify-start items-center gap-8 overflow-hidden">
+      <div className="w-[640px] justify-start text-text-primary text-3xl font-semibold font-['Work_Sans'] leading-10">Newcomer Welcome Morning</div>
+      <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">Display/Hero   Work Sans SemiBold · 32/40</div>
+    </div>
+    <div className="self-stretch inline-flex justify-start items-center gap-8 overflow-hidden">
+      <div className="w-[640px] justify-start text-text-primary text-2xl font-semibold font-['Work_Sans'] leading-8">Organization Directory</div>
+      <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">Heading/L   Work Sans SemiBold · 24/32</div>
+    </div>
+    <div className="self-stretch inline-flex justify-start items-center gap-8 overflow-hidden">
+      <div className="w-[640px] justify-start text-text-primary text-xl font-semibold font-['Work_Sans'] leading-7">Family Maker Lab: Circuits</div>
+      <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">Heading/M   Work Sans SemiBold · 20/28</div>
+    </div>
+    <div className="self-stretch inline-flex justify-start items-center gap-8 overflow-hidden">
+      <div className="w-[640px] justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Registration</div>
+      <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">Heading/S   Work Sans Medium · 16/24</div>
+    </div>
+    <div className="self-stretch inline-flex justify-start items-center gap-8 overflow-hidden">
+      <div className="w-[640px] justify-start text-text-primary text-base font-normal font-['Bitter'] leading-6">A single, findable place to discover local events at the Hub.</div>
+      <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">Body/L   Bitter Regular · 16/26</div>
+    </div>
+    <div className="self-stretch inline-flex justify-start items-center gap-8 overflow-hidden">
+      <div className="w-[640px] justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">Hosted by the Council on Aging of Ottawa.</div>
+      <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">Body/M   Bitter Regular · 14/22</div>
+    </div>
+    <div className="self-stretch inline-flex justify-start items-center gap-8 overflow-hidden">
+      <div className="w-[640px] justify-start text-text-primary text-xs font-normal font-['Bitter'] leading-5">Jun 16 · 10:00 · Rideau Community Hub</div>
+      <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">Body/S   Bitter Regular · 13/20</div>
+    </div>
+    <div className="self-stretch inline-flex justify-start items-center gap-8 overflow-hidden">
+      <div className="w-[640px] justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] leading-4 tracking-wide">REGISTRATION REQUIRED</div>
+      <div className="justify-start text-text-muted text-xs font-normal font-['Bitter']">Label/Tag   Work Sans SemiBold · 12/16 · uppercase</div>
+    </div>
+  </div>
+
+  <div className="self-stretch flex flex-col justify-start items-start gap-5 overflow-hidden">
+
+  ## Spacing & Radius
+    {/* <div className="justify-start text-text-primary text-2xl font-semibold font-['Work_Sans']">Spacing &amp; Radius</div> */}
+    <div className="size- flex flex-col justify-start items-start gap-2.5 overflow-hidden">
+      <div className="size- inline-flex justify-start items-center gap-4 overflow-hidden">
+        <div className="w-1 h-4 relative bg-accent-primary rounded-[3px]" />
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">2xs  ·  4</div>
+      </div>
+      <div className="size- inline-flex justify-start items-center gap-4 overflow-hidden">
+        <div className="w-2 h-4 relative bg-accent-primary rounded-[3px]" />
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">xs  ·  8</div>
+      </div>
+      <div className="size- inline-flex justify-start items-center gap-4 overflow-hidden">
+        <div className="w-3 h-4 relative bg-accent-primary rounded-[3px]" />
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">sm  ·  12</div>
+      </div>
+      <div className="size- inline-flex justify-start items-center gap-4 overflow-hidden">
+        <div className="size-4 relative bg-accent-primary rounded-[3px]" />
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">md  ·  16</div>
+      </div>
+      <div className="size- inline-flex justify-start items-center gap-4 overflow-hidden">
+        <div className="w-6 h-4 relative bg-accent-primary rounded-[3px]" />
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">lg  ·  24</div>
+      </div>
+      <div className="size- inline-flex justify-start items-center gap-4 overflow-hidden">
+        <div className="w-8 h-4 relative bg-accent-primary rounded-[3px]" />
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">xl  ·  32</div>
+      </div>
+      <div className="size- inline-flex justify-start items-center gap-4 overflow-hidden">
+        <div className="w-12 h-4 relative bg-accent-primary rounded-[3px]" />
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">2xl  ·  48</div>
+      </div>
+    </div>
+    <div className="size- inline-flex justify-start items-start gap-6 overflow-hidden">
+      <div className="size- inline-flex flex-col justify-start items-center gap-2 overflow-hidden">
+        <div className="size-20 relative bg-bg-surface rounded-md border border-black/10" />
+        <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">sm · 6</div>
+      </div>
+      <div className="size- inline-flex flex-col justify-start items-center gap-2 overflow-hidden">
+        <div className="size-20 relative bg-bg-surface rounded-[10px] border border-black/10" />
+        <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">md · 10</div>
+      </div>
+      <div className="size- inline-flex flex-col justify-start items-center gap-2 overflow-hidden">
+        <div className="size-20 relative bg-bg-surface rounded-2xl border border-black/10" />
+        <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">card · 14</div>
+      </div>
+      <div className="size- inline-flex flex-col justify-start items-center gap-2 overflow-hidden">
+        <div className="size-20 relative bg-bg-surface rounded-full border border-black/10" />
+        <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">full · full</div>
+      </div>
+    </div>
+  </div>
+  <div className="self-stretch flex flex-col justify-start items-start gap-5 overflow-hidden">
+
+  ## Elevation
+  
+    <div className="justify-start text-text-primary text-2xl font-semibold font-['Work_Sans']">Elevation</div>
+    <div className="size- px-2 pt-2 pb-6 inline-flex justify-start items-start gap-10 overflow-hidden">
+      <div className="size- inline-flex flex-col justify-start items-center gap-2.5 overflow-hidden">
+        <div className="w-44 h-24 relative bg-bg-surface rounded-2xl shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)]" />
+        <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">Card Rest</div>
+      </div>
+      <div className="size- inline-flex flex-col justify-start items-center gap-2.5 overflow-hidden">
+        <div className="w-44 h-24 relative bg-bg-surface rounded-2xl shadow-[0px_8px_20px_0px_rgba(2,7,3,0.12)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.06)]" />
+        <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">Card Hover</div>
+      </div>
+      <div className="size- inline-flex flex-col justify-start items-center gap-2.5 overflow-hidden">
+        <div className="w-44 h-24 relative bg-bg-surface rounded-2xl shadow-[0px_24px_60px_0px_rgba(2,7,3,0.30)]" />
+        <div className="justify-start text-text-muted text-xs font-medium font-['Work_Sans']">Modal</div>
+      </div>
+    </div>
+  </div>
+{/* </div> */}
+

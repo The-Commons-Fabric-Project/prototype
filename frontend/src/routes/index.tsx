@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
-import EventCardGrid from '../components/cards/EventCardGrid'
+import EventCardGrid from '../components/cards-content/EventCardGrid'
 import { Calendar } from '../components/calendar/Calendar'
 import { EXAMPLE_EVENTS } from '../mocks/events'
 

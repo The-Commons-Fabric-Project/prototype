@@ -1,7 +1,7 @@
 import { C, inputStyle } from "../../styles/colors";
 import { useState } from "react";
-import Button from "../ui/Button";
-import Field from "../ui/Field";
+import Button from "../button-controls/Button";
+import Field from "../button-controls/Field";
 
 export default function LoginForm({
   accounts, // this is just a placeholder for auth
