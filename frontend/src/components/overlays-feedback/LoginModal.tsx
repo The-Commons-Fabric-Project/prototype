@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Modal, { ModalHeader, type ModalHeaderProps } from '../overlays-feedback/Modal';
-import LoginForm from './LoginForm';
+import Modal, { ModalHeader, type ModalHeaderProps } from './Modal';
+import LoginForm from '../login/LoginForm';
 
 /** Pop-up re: Log in button, prompts user for name/email and password */
 // TODO: make styles/structure match EventDescription, the other existing modal ATM

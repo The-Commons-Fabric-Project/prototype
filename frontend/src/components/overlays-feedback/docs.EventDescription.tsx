@@ -35,4 +35,9 @@ export const Default: Story = {
     // },
     "onClose": fn()
   },
+  parameters: {
+    docs: {
+      story: { height: "500px"}
+    }
+  }
 };

@@ -9,7 +9,10 @@ export type ModalProps = {
 
 // this was copied from Claude's TSX, need to reconcile with the existing EventDescription component
 
-/** Modal shell with header and blank contents */
+/** Modal shell with header and blank contents. 
+ * 
+ * TODO: fix the close button
+*/
 export default function Modal({ 
   children, 
   onClose, 
@@ -34,6 +37,7 @@ export default function Modal({
       <div
         role="dialog" aria-modal="true"
         className="bg-paper border border-solid border-line"
+        // TODO: merge these styles with className
         style={{
           width: "100%", maxWidth: width, maxHeight: "88vh", overflowY: "auto",
           borderRadius: 18, 
@@ -62,6 +66,7 @@ export type ModalHeaderProps = {
 
 export function ModalHeader({ title, onClose, subtitle }: ModalHeaderProps) {
   return (
+    // TODO: convert style w className
     <div style={{ padding: "20px 24px 0", position: "relative" }}>
       <button onClick={onClose} aria-label="Close"    
         className="cf-press absolute bg-white text-muted border-solid border-line" 
@@ -71,10 +76,12 @@ export function ModalHeader({ title, onClose, subtitle }: ModalHeaderProps) {
       }}>×</button>
       <h2 
         className="text-ink"
+        // TODO: merge style w className
         style={{ fontFamily: "'Fraunces', serif", fontSize: 22, fontWeight: 600, margin: 0, paddingRight: 32 }}>{title}</h2>
       {subtitle && 
       <p 
         className="text-muted"
+        // TODO: merge style w className
         style={{ fontSize: 13, margin: "6px 0 0", fontFamily: "'Public Sans', sans-serif" }}>{subtitle}</p>}
     </div>
   );

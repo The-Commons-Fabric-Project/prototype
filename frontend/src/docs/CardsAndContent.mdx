@@ -1,0 +1,74 @@
+import { Meta, Title } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design System/Cards & Content"/>
+<Title>Cards & Content</Title>
+
+<div className="w-[760px] px-10 py-8 bg-bg-surface rounded-2xl inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
+  {/* <div className="justify-start text-text-primary text-3xl font-semibold font-['Work_Sans']">Cards &amp; Content</div> */}
+  <div className="self-stretch justify-start text-text-muted text-sm font-normal font-['Bitter']">Event card and organization card (PRD §7.2, FR-4/5), the image/logo placeholder shown when no image is provided (§5.2/§5.3), and the directory empty state (FR-5). Cards use 14px radius with the hover-lift shadow from §10.</div>
+</div>
+<div className="w-96 h-52 relative rounded-[5px] overflow-hidden">
+  <div className="size-24 left-[28px] top-[28px] absolute bg-bg-subtle rounded-[10px] inline-flex justify-center items-center">
+    <div className="w-11 h-10 relative overflow-hidden">
+      <div className="size-3 left-[6px] top-[6px] absolute opacity-70 bg-border-strong rounded-full" />
+    </div>
+  </div>
+  <div className="w-64 h-36 left-[160px] top-[28px] absolute bg-bg-subtle rounded-[10px] inline-flex justify-center items-center">
+    <div className="w-11 h-10 relative overflow-hidden">
+      <div className="size-3 left-[6px] top-1.5 absolute opacity-70 bg-border-strong rounded-full" />
+    </div>
+  </div>
+</div>
+
+<div className="w-80 bg-bg-surface rounded-2xl shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex flex-col justify-start items-start overflow-hidden">
+  <div data-shape="Thumbnail" className="self-stretch h-40 bg-bg-subtle rounded-md inline-flex justify-center items-center">
+    <div className="w-11 h-10 relative overflow-hidden">
+      <div className="size-3 left-1.5 top-1.5 absolute opacity-70 bg-border-strong rounded-full" />
+    </div>
+  </div>
+  <div className="self-stretch p-4 flex flex-col justify-start items-start gap-3 overflow-hidden">
+    <div className="self-stretch h-24 inline-flex justify-start items-start gap-2 flex-wrap content-start overflow-hidden">
+      <div data-tone="Info" className="px-3 py-1 bg-accent-primary-soft rounded-full flex justify-start items-center">
+        <div className="justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">Registration required</div>
+      </div>
+      <div data-tone="Success" className="px-3 py-1 bg-accent-secondary-soft rounded-full flex justify-start items-center">
+        <div className="justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">Volunteers needed</div>
+      </div>
+    </div>
+    <div className="self-stretch h-24 inline-flex justify-start items-start gap-3 overflow-hidden">
+      <div className="px-3 py-2 bg-bg-surface rounded-[10px] outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-center items-center gap-0.5">
+        <div className="justify-start text-text-link text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">JUN</div>
+        <div className="justify-start text-text-primary text-xl font-semibold font-['Work_Sans']">16</div>
+      </div>
+      <div className="flex-1 inline-flex flex-col justify-start items-start gap-0.5 overflow-hidden">
+        <div className="self-stretch justify-start text-text-primary text-xl font-semibold font-['Work_Sans'] leading-7">Family Maker Lab: Circuits</div>
+        <div className="self-stretch justify-start text-text-muted text-xs font-normal font-['Bitter'] leading-5">STEAMakers Guild</div>
+      </div>
+    </div>
+    <div className="self-stretch justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">A hands-on electronics workshop for families — build simple circuits together.</div>
+    <div className="self-stretch justify-start text-text-muted text-xs font-normal font-['Bitter'] leading-5">15:30  ·  Rideau Community Hub</div>
+  </div>
+</div>
+<div className="w-[560px] p-4 bg-bg-surface rounded-2xl shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-start items-start gap-4">
+  <div data-shape="Logo" className="size-16 bg-bg-subtle rounded-[10px] flex justify-center items-center">
+    <div className="w-11 h-10 relative overflow-hidden">
+      <div className="size-3 left-[6px] top-[6px] absolute opacity-70 bg-border-strong rounded-full" />
+    </div>
+  </div>
+  <div className="flex-1 inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
+    <div className="self-stretch justify-start text-text-primary text-xl font-semibold font-['Work_Sans'] leading-7">Rideau-Rockcliffe Community Resource Centre</div>
+    <div className="self-stretch justify-start text-text-muted text-sm font-normal font-['Bitter'] leading-5">Programs and services for families and newcomers in the Rideau-Rockcliffe community.</div>
+    <div className="self-stretch h-24 inline-flex justify-start items-start gap-2 flex-wrap content-start overflow-hidden">
+      <div data-tone="Highlight" className="px-3 py-1 bg-status-highlight-soft rounded-full flex justify-start items-center">
+        <div className="justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">Community</div>
+      </div>
+      <div data-tone="Highlight" className="px-3 py-1 bg-status-highlight-soft rounded-full flex justify-start items-center">
+        <div className="justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">Newcomers</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div className="w-[560px] px-8 py-12 bg-bg-subtle rounded-2xl inline-flex flex-col justify-center items-center gap-3">
+  <div className="size-14 bg-bg-surface rounded-[999px] inline-flex justify-center items-center overflow-hidden" />
+  <div className="self-stretch text-center justify-start text-text-muted text-base font-normal font-['Bitter'] leading-6">No upcoming events from this organization yet.</div>
+</div>

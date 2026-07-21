@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/tanstack-react';
+import {INITIAL_VIEWPORTS } from 'storybook/viewport';
 
 import '../src/styles/index.css';
 
@@ -10,6 +11,8 @@ const preview: Preview = {
        date: /Date$/i,
       },
     },
+
+    viewport: { options: INITIAL_VIEWPORTS, },
 
     a11y: {
       // 'todo' - show a11y violations in the test UI only
@@ -23,9 +26,9 @@ const preview: Preview = {
       storySort: {
         method: "alphabetical",
         order: [
-          // TODO: configure story order for sidebar - https://storybook.js.org/docs/react/configure/sidebar-and-urls#sorting-stories
-          // "Design System/Foundations",
-          // "Components",
+          // TODO: configure story order for sidebar - ref https://storybook.js.org/docs/react/configure/sidebar-and-urls#sorting-stories or https://storybook.js.org/docs/writing-stories/naming-components-and-hierarchy#sorting-stories
+          "Design System", ["Foundations", "Buttons & Controls", "Tags, Chips, & Status"],
+          "Components",
         ]
       }
     },
