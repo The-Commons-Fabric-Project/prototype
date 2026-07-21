@@ -1,0 +1,38 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design System/Tags, Chips, & Status"/>
+
+# Tags, Chips, & Status
+
+<div className="w-[720px] px-10 py-8 bg-bg-surface rounded-2xl inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
+  
+  <div className="self-stretch justify-start text-text-muted text-sm font-normal font-['Bitter']">Tinted, uppercase pill tags (PRD §10) with tone variants. Applications: category tags → Highlight; “Registration required” → Info; “Volunteers needed” → Success. Date chip shows month + day on event cards.</div>
+</div>
+
+## Tag Chips
+
+<div className="w-64 h-56 relative rounded-[5px] overflow-hidden">
+  <div className="px-3 py-1 bg-status-highlight-soft rounded-full inline-flex justify-start items-center">
+    <div className="justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">Category</div>
+  </div>
+  <div className="px-3 py-1 bg-accent-primary-soft rounded-full inline-flex justify-start items-center">
+    <div className="justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">Category</div>
+  </div>
+  <div className="px-3 py-1 bg-accent-secondary-soft rounded-full inline-flex justify-start items-center">
+    <div className="justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">Category</div>
+  </div>
+  <div className="px-3 py-1 bg-status-danger-soft rounded-full inline-flex justify-start items-center">
+    <div className="justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">Category</div>
+  </div>
+  <div className="px-3 py-1 bg-bg-subtle rounded-full inline-flex justify-start items-center">
+    <div className="justify-start text-text-primary text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">Category</div>
+  </div>
+</div>
+
+## Date Chips
+
+<div className="px-3 py-2 bg-bg-surface rounded-[10px] outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-center items-center gap-0.5">
+  <div className="justify-start text-text-link text-xs font-semibold font-['Work_Sans'] uppercase tracking-wide">JUN</div>
+  <div className="justify-start text-text-primary text-xl font-semibold font-['Work_Sans']">16</div>
+</div>
+

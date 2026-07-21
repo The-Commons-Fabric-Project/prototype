@@ -1,6 +1,3 @@
-// import { C } from "../../styles/colors";
-
-// TODO: refactor this w/ CSS
 // reference: https://blog.logrocket.com/building-reusable-react-components-using-tailwind-css/#testing-badge-component
 export enum ButtonVariant {
   PRIMARY,
@@ -15,26 +12,15 @@ const VARIANT_MAPS: Record<ButtonVariant, string> = {
   [ButtonVariant.SUBTLE]: "bg-bg-subtle text-text-primary",
   [ButtonVariant.DANGER]: "bg-action-danger-bg text-action-danger-fg"
 }
-//   primary: { background: C.accent, color: C.white, borderColor: C.accent },
-//   ghost: { background: "transparent", color: C.accent, borderColor: C.line },
-//   subtle: { background: C.accentSoft, color: C.accent, borderColor: "transparent" },
-//   danger: { background: "transparent", color: C.danger, borderColor: "rgba(178,58,72,0.3)"},
-//   link: { background: "none", border: "none", color: C.muted, fontSize: 12.5, cursor: "pointer", 
-//   // fontFamily: "'Public Sans', sans-serif", 
-//   textDecoration: "underline", padding: 0 },
-// } as const;
-
-// type ButtonVariant = keyof typeof variants;
 
 type ButtonProps = {
   /** Variations on button styling */
   variant: ButtonVariant;
   /** Label for the button, used for accessibility and default display text unless otherwise specified */
   label: string;
-  /** custom display text for the button if not using the label */
-  displayText?: string;
   /** what do when button */
   onClick: () => void;
+  /** child elements; for a button, usually just the display text */
   children?: React.ReactElement[];
 };
 

@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import Button, { ButtonVariant } from './Button';
 
 const meta = {
-  title: "UI/Button",
+  title: "Components/Input/Button",
   component: Button,
 } satisfies Meta<typeof Button>;
 

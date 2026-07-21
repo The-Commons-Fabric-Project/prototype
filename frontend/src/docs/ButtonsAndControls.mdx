@@ -80,10 +80,19 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 ## Toggles
 
-<div class="w-24 h-28 relative rounded-[5px] overflow-hidden">
+<div class="mx-9 w-40 inline-flex flex-col">
+
+### Unchecked
+
   <div class="w-12 h-7 p-[3px] left-[28px] top-[24px] bg-bg-subtle rounded-full outline outline-[1.50px] outline-offset-[-1.50px] outline-border-default inline-flex justify-start items-center">
     <div class="size-5 bg-bg-surface rounded-full shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)]"></div>
   </div>
+</div>
+
+<div class="mx-9 w-40 inline-flex flex-col">
+  
+### Checked
+
   <div class="w-12 h-7 p-[3px] left-[28px] top-[68px] bg-accent-primary rounded-full inline-flex justify-end items-center">
     <div class="size-5 bg-bg-surface rounded-full shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)]"></div>
   </div>
@@ -91,15 +100,21 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 ## Text Input
 
-<div class="size-96 relative rounded-[5px] overflow-hidden">
   <div class="w-80 left-[28px] top-[24px] inline-flex flex-col justify-start items-start gap-1.5">
+
+### Default/Initial
+
     <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Email</div>
     <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-1 outline-offset-[-1px] outline-border-default inline-flex justify-start items-center gap-2 overflow-hidden">
       <div class="flex-1 justify-start text-text-muted text-sm font-normal font-['Bitter'] leading-5">you@example.org</div>
     </div>
     <div class="self-stretch justify-start text-text-muted text-xs font-normal font-['Bitter'] leading-5">We'll send a confirmation link to this address.</div>
   </div>
+
   <div class="w-80 left-[28px] top-[146px] inline-flex flex-col justify-start items-start gap-1.5">
+
+### Focused
+
     <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Email</div>
     <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-[1.50px] outline-offset-[-1.50px] outline-border-focus inline-flex justify-start items-center gap-2 overflow-hidden">
       <div class="flex-1 justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">diya@example.org</div>
@@ -107,17 +122,19 @@ import { Meta } from '@storybook/addon-docs/blocks';
     <div class="self-stretch justify-start text-text-muted text-xs font-normal font-['Bitter'] leading-5">We'll send a confirmation link to this address.</div>
   </div>
   <div class="w-80 left-[28px] top-[268px] inline-flex flex-col justify-start items-start gap-1.5">
+
+### Error
+
     <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Email</div>
     <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-[1.50px] outline-offset-[-1.50px] outline-status-danger inline-flex justify-start items-center gap-2 overflow-hidden">
       <div class="flex-1 justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">diya@example.org</div>
     </div>
     <div class="self-stretch justify-start text-status-danger text-xs font-normal font-['Bitter'] leading-5">Enter a valid email address.</div>
   </div>
-</div>
+
 
 ## Picker Field
 
-<div class="w-72 h-56 relative rounded-[5px] overflow-hidden">
   <div class="w-60 left-[28px] top-[24px] inline-flex flex-col justify-start items-start gap-1.5">
     <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Date</div>
     <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-1 outline-offset-[-1px] outline-border-default inline-flex justify-between items-center overflow-hidden">
@@ -132,4 +149,3 @@ import { Meta } from '@storybook/addon-docs/blocks';
       <div class="w-3 h-1.5 outline outline-[1.50px] outline-offset-[-0.75px] outline-text-muted"></div>
     </div>
   </div>
-</div>

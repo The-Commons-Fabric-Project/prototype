@@ -1,25 +1,41 @@
-import { C } from "../../styles/colors";
+type ToggleProps = {
+  /** label */
+  label: string,
+  /** tool tip for what this is toggling */
+  hint?: string,
+  /** toggle state */
+  checked: boolean,
+  /** callback for change */
+  onChange: (checked: boolean) => void,
+}
 
 export default function Toggle({ 
   label, 
   hint, 
   checked, 
   onChange 
-}) {
+}: ToggleProps) {
   return (
     <div 
-      className="bg-white border-line border" 
-      style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 14, padding: "12px 14px", border: `1px solid ${C.line}`, borderRadius: 10, marginBottom: 14 }}
+      className="outline-border-default rounded-md" 
+      style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", 
+        gap: 1, padding: "12px 14px", 
+        // border: `1px solid ${C.line}`, 
+        marginBottom: 14 }}
     >
       <div>
-        <span style={{ display: "block", fontSize: 13, fontWeight: 600, color: C.ink, fontFamily: "'Public Sans', sans-serif" }}>{label}</span>
-        {hint && <span style={{ display: "block", fontSize: 12, color: C.muted, marginTop: 2 }}>{hint}</span>}
+        <span className="text-sm font-semibold text-text-primary">{label}</span>
+        {hint && <span className="text-xs text-text-muted-muted" style={{ display: "block", marginTop: 2 }}>{hint}</span>}
       </div>
-      <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(!checked)} className="cf-press" style={{
-        flexShrink: 0, width: 44, height: 25, borderRadius: 999, border: "none", cursor: "pointer", position: "relative",
-        background: checked ? C.accent : C.line, transition: "background .18s ease", marginTop: 1,
+      <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(!checked)} className={`relative cf-press rounded-full border-accent-soft bg-${checked ? "accent-primary" : "bg-subtle"} w-12 h-7 p-0.75`} style={{
+        cursor: "pointer",
+        // background: checked ? C.accent : C.line, 
+        transition: "background .18s ease", marginTop: 1,
       }}>
-        <span style={{ position: "absolute", top: 3, left: checked ? 22 : 3, width: 19, height: 19, borderRadius: "50%", background: C.white, transition: "left .18s ease", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
+        <span className={`bg-bg-surface rounded-full size-5 absolute top-1 left-1 ${checked ? "translate-x-5" : ""}`}
+        style={{ 
+          transition: "translate 0.18s ease", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" 
+        }} />
       </button>
     </div>
   );

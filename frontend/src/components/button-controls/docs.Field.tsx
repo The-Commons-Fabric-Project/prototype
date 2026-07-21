@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import Field from './Field';
 
 const meta = {
-  title: "UI/Field",
+  title: "Components/Input/Field",
   component: Field,
 } satisfies Meta<typeof Field>;
 

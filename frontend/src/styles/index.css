@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
 /* body {
@@ -32,6 +33,22 @@
     /* --color-amber: #c8852b; */
 
     /* colors from Figma */
+    --color-ink : #020703;
+    --color-blue : #3EA4DE;
+    --color-green : #74C702;
+    --color-red : #EF5556;
+    --color-amber : #FEBB32;
+    --color-paper : #FFFBF7;
+    --color-grey : #7E7E7E;
+    --color-blue-soft : #94C9E8;
+    --color-green-soft : #BFDB99;
+    --color-red-soft : #FFA5A6;
+    --color-amber-soft : #FFDF9E;
+    --color-white: #FFFFFF;
+    --color-ink-a55: #020703;
+    --color-grey-a30: #7E7E7E;
+    --color-grey-a10: #7E7E7E;
+
     --color-bg-page: #FFFBF7;
     --color-bg-surface: #FFFFFF;
     --color-bg-subtle: #7E7E7E;
@@ -40,8 +57,8 @@
     --color-text-muted: #7E7E7E;
     --color-text-on-accent : #FFFBF7;
     --color-text-link : #3EA4DE;
-    --color-border-default : #7E7E7E;
-    --color-border-strong : #7E7E7E;
+    --color-border-default: #7E7E7E;
+    --color-border-strong: #7E7E7E;
     --color-border-focus: #3EA4DE;
     --color-action-primary-bg : #020703;
     --color-action-primary-fg : #FFFBF7;
@@ -55,22 +72,6 @@
     --color-status-danger-soft : #FFA5A6;
     --color-status-highlight : #FEBB32;
     --color-status-highlight-soft : #FFDF9E;
-
-    --color-ink : #020703;
-    --color-blue : #3EA4DE;
-    --color-green : #74C702;
-    --color-red : #EF5556;
-    --color-amber : #FEBB32;
-    --color-paper : #FFFBF7;
-    --color-grey : #7E7E7E;
-    --color-blue-soft : #94C9E8;
-    --color-green-soft : #BFDB99;
-    --color-red-soft : #FFA5A6;
-    --color-amber-soft : #FFDF9E;
-    --color-white : #FFFFFF;
-    --color-ink-a55 : #020703;
-    --color-grey-a30 : #7E7E7E;
-    --color-grey-a10 : #7E7E7E;
     
     /* layout from Figma */
     --spacing-2xs : 4px;
@@ -91,7 +92,6 @@
     --animate-pop: cf-pop .2s cubic-bezier(.2,.8,.3,.1);
     --animate-stagger: cf-stagger .4s ease ${idx * 0.05}s both;
 
-
     @keyframes cf-stagger {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -108,7 +108,8 @@
     }
 
     @keyframes cf-rise { 
-        0% { opacity: 0; transform: translate(-50%, 16px);} 100% { opacity: 1; transform: translate(-50%, 0);} 
+        0% { opacity: 0; transform: translate(-50%, 16px);} 
+        100% { opacity: 1; transform: translate(-50%, 0);} 
     }
 
     @keyframes cf-stagger { 
@@ -123,7 +124,8 @@
 }
 
 .cf-card-hover:hover { 
-    transform: translateY(-1px); box-shadow: 0 12px 28px rgba(28,43,39,0.12); 
+    transform: translateY(-1px); 
+    box-shadow: 0 12px 28px rgba(28,43,39,0.12); 
 }
 
 .cf-press { 

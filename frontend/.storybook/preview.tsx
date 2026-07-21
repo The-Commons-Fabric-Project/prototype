@@ -16,7 +16,19 @@ const preview: Preview = {
       // 'error' - fail CI on a11y violations
       // 'off' - skip a11y checks entirely
       test: 'todo'
-    }
+    },
+
+    // make custom story order here
+    options: {
+      storySort: {
+        method: "alphabetical",
+        order: [
+          // TODO: configure story order for sidebar - https://storybook.js.org/docs/react/configure/sidebar-and-urls#sorting-stories
+          // "Design System/Foundations",
+          // "Components",
+        ]
+      }
+    },
   },
   // enable autodocs for all components - https://storybook.js.org/docs/writing-docs/autodocs/?renderer=react&ref=guide
   tags: ['autodocs'],

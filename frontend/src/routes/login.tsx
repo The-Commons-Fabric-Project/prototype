@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router'
 import LoginForm from '../components/login/LoginForm'
-import { type ModalHeaderProps } from '../components/button-controls/Modal';
+import { type ModalHeaderProps } from '../components/overlays-feedback/Modal';
 
 function Login() {
   const [header, setHeader] = useState({title: "Log in", subtitle: undefined}); // login | password | email

@@ -7,7 +7,7 @@ export default function LoginForm({
   accounts, // this is just a placeholder for auth
   onLogin,
   onClose,
-  updateParent = () => {},
+  updateParent,
   toast
 }) {
   const [mode, setMode] = useState("login"); // login | password | email
@@ -29,18 +29,18 @@ export default function LoginForm({
     updateParent({title: (isPw? "Change password" : "Change email"), subtitle: (isPw ? undefined : "We'll send a confirmation link to the new address.")});
     return (
       <div style={{ padding: "18px 24px 24px" }}>
-          <Field label={isPw ? "New password" : "New email"}>
-            <input type={isPw ? "password" : "text"} style={inputStyle(false)} value={newVal}
-              onChange={(e) => setNewVal(e.target.value)} placeholder={isPw ? "At least 6 characters" : "you@org.example"} />
-          </Field>
-          <div style={{ display: "flex", gap: 10 }}>
-            <Button variant="ghost" style={{ flex: 1 }} onClick={() => { setMode("login"); setNewVal(""); }}>Back</Button>
-            <Button style={{ flex: 1 }} onClick={() => {
-              toast(isPw ? "Password updated." : "Confirmation email sent.");
-              setMode("login"); setNewVal("");
-            }}>Save</Button>
-          </div>
+        <Field label={isPw ? "New password" : "New email"}>
+          <input type={isPw ? "password" : "text"} style={inputStyle(false)} value={newVal}
+            onChange={(e) => setNewVal(e.target.value)} placeholder={isPw ? "At least 6 characters" : "you@org.example"} />
+        </Field>
+        <div style={{ display: "flex", gap: 10 }}>
+          <Button variant="ghost" style={{ flex: 1 }} onClick={() => { setMode("login"); setNewVal(""); }}>Back</Button>
+          <Button style={{ flex: 1 }} onClick={() => {
+            toast(isPw ? "Password updated." : "Confirmation email sent.");
+            setMode("login"); setNewVal("");
+          }}>Save</Button>
         </div>
+      </div>
     )
   }
 

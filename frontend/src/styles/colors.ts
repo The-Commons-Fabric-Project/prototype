@@ -12,12 +12,12 @@ export const C = {
   danger: "#B23A48",
 };
 
-export const base = {
-  //  fontFamily: "'Public Sans', sans-serif", 
-   fontWeight: 600, fontSize: 14,
-   padding: "10px 18px", borderRadius: 10, cursor: "pointer", border: "1px solid transparent",
-   lineHeight: 1.1, letterSpacing: 0.1,
-};
+// export const base = {
+//   //  fontFamily: "'Public Sans', sans-serif", 
+//    fontWeight: 600, fontSize: 14,
+//    padding: "10px 18px", borderRadius: 10, cursor: "pointer", border: "1px solid transparent",
+//    lineHeight: 1.1, letterSpacing: 0.1,
+// };
 
 export const inputStyle = (err: React.ErrorInfo) => ({
   width: "100%", padding: "10px 12px", borderRadius: 9, fontSize: 14,

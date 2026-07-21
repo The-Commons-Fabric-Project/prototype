@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Modal, { ModalHeader, type ModalHeaderProps } from '../button-controls/Modal';
+import Modal, { ModalHeader, type ModalHeaderProps } from '../overlays-feedback/Modal';
 import LoginForm from './LoginForm';
 
 /** Pop-up re: Log in button, prompts user for name/email and password */
