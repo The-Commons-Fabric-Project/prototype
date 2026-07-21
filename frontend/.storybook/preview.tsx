@@ -27,7 +27,7 @@ const preview: Preview = {
         method: "alphabetical",
         order: [
           // TODO: configure story order for sidebar - ref https://storybook.js.org/docs/react/configure/sidebar-and-urls#sorting-stories or https://storybook.js.org/docs/writing-stories/naming-components-and-hierarchy#sorting-stories
-          "Design System", ["Foundations", "Buttons & Controls", "Tags, Chips, & Status"],
+          "Design System", ["Foundations", "Buttons & Controls", "Tags, Chips, & Status", "Cards & Content", "Navigation & Headers", "Overlays & Feedback", "Calendar"],
           "Components",
         ]
       }

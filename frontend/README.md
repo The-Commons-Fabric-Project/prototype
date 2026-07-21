@@ -4,22 +4,26 @@ If you're in the root folder, `cd frontend` to do anything related to the protot
 
 Make sure your Node.js version is upgraded. Vite requires Node.js version 20.19+ or 22.12+.
 
-After that, run `npm run install` then `npm run dev` and you should now be able to see your changes whenever you modify the code. 
+After that, run `npm run install` then `npm run dev` and you should now be able to see your changes whenever you modify the code.
 
-Navigate to 
-```
-http://localhost:5173/
-```
+Navigate to `http://localhost:5173/`
 
 REMEMBER TO RUN ALL TERMINAL COMMANDS IN `./frontend`!
 
-# Documentation
+## Documentation
 
-This project is using Storybook (at least for now). Storybook runs separately from the dev server, so you have to open another terminal. If you want to work on the code with Storybook running, run `npm run storybook`. Navigate to (if it doesn't automatically open in your browser)
+This project is using Storybook (at least for now). Storybook runs separately from the dev server, so you have to open another terminal. If you want to work on the code with Storybook running, run `npm run storybook`. Navigate to `http://localhost:6006/` (if it doesn't automatically open in your browser)
 
-```
-http://localhost:6006/
-```
+## To-do List
+
+- Components to add:
+  - [] Toast
+  - [] Organization cards
+- [] fix close button on modals
+- [] implement modal switching (might need refactor?)
+- [] implement header feedback for user logged-in or not
+- [] populate Calendar component with test events
+- [] add "Create Event" form (pop-up)
 
 # React + TypeScript + Vite
 
