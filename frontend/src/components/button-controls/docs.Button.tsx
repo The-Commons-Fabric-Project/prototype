@@ -1,7 +1,7 @@
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
-import Button, { ButtonVariant } from './Button';
+import Button from './Button';
 
 const meta = {
   title: "Components/Input/Button",
@@ -14,7 +14,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    "variant": ButtonVariant.PRIMARY,
+    "variant": "primary",
     "label": "Click me",
     "onClick": fn()
   },
@@ -22,7 +22,7 @@ export const Default: Story = {
 
 export const Ghost: Story = {
   args: {
-    "variant": ButtonVariant.GHOST,
+    "variant": "ghost",
     "label": "You can't click me",
     "onClick": fn()
   }
@@ -30,7 +30,7 @@ export const Ghost: Story = {
 
 export const Danger: Story = {
   args: {
-    "variant": ButtonVariant.DANGER,
+    "variant": "danger",
     "label": "Bad things will happen",
     "onClick": fn()
   }

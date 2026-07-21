@@ -1,17 +1,11 @@
-enum TagVariant {
-  YELLOW,
-  BLUE,
-  PINK,
-  GREEN, 
-  GREY
-}
+import type { TagVariant } from "../../types/variants";
 
 const VARIANT_MAPS: Record<TagVariant, string> = {
-  [TagVariant.YELLOW]: "bg-status-highlight-soft",
-  [TagVariant.BLUE]: "bg-accent-primary-soft",
-  [TagVariant.PINK]: "bg-status-danger-soft",
-  [TagVariant.GREEN]: "bg-accent-secondary-soft",
-  [TagVariant.GREY]: "bg-bg-status"
+  yellow: "bg-status-highlight-soft",
+  blue: "bg-accent-primary-soft",
+  pink: "bg-status-danger-soft",
+  green: "bg-accent-secondary-soft",
+  grey: "bg-bg-status"
 }
 
 type TagProps = {
@@ -24,7 +18,7 @@ type TagProps = {
 }
 
 export default function Tag({ 
-  variant = TagVariant.YELLOW,
+  variant = "yellow",
   label = "Category",
   children,
 }: TagProps) {
