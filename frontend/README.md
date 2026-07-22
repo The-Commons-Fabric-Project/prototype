@@ -1,4 +1,6 @@
-# Installation
+# Commons Fabric prototype: Front End
+
+## Installation
 
 If you're in the root folder, `cd frontend` to do anything related to the prototype.
 
@@ -24,6 +26,8 @@ This project is using Storybook (at least for now). Storybook runs separately fr
 - [] implement header feedback for user logged-in or not
 - [] populate Calendar component with test events
 - [] add "Create Event" form (pop-up)
+- [] footer
+- [] components for filtering tags
 
 # React + TypeScript + Vite
 

@@ -1,8 +1,10 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+
+import * as ToggleStory from '../components/button-controls/docs.Toggle';
 
 <Meta title="Design System/Buttons & Controls" />
 
-{/* <div class="w-[720px] px-10 py-8 bg-bg-surface rounded-2xl inline-flex flex-col justify-start items-start gap-2 overflow-hidden"> */}
+{/* <div class="w-[720px] px-10 py-8 bg-bg-surface rounded-2xl inline-flex flex-col justify-start items-start overflow-hidden"> */}
   <div class="justify-start text-text-primary text-3xl font-semibold font-['Work_Sans']">
     # Buttons & Controls
   </div>
@@ -21,71 +23,75 @@ import { Meta } from '@storybook/addon-docs/blocks';
   ### Primary
 
 <div class="flex-row *:mx-1">
-  <div class="px-4 py-3 bg-action-primary-bg rounded-sm inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 bg-action-primary-bg rounded-sm inline-flex justify-center items-center">
     <div class="justify-start text-action-primary-fg text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
-  <div class="px-4 py-3 bg-action-primary-bg rounded-sm shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 bg-action-primary-bg rounded-sm shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-center items-center">
     <div class="justify-start text-action-primary-fg text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
-  <div class="px-4 py-3 left-[348px] top-[28px] opacity-90 bg-action-primary-bg rounded-sm inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 opacity-90 bg-action-primary-bg rounded-sm inline-flex justify-center items-center">
     <div class="justify-start text-action-primary-fg text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
-
 </div>
 
   ### Ghost
 
-  <div class="px-4 py-3 left-[28px] top-[96px] rounded-sm outline outline-1 outline-offset-[-1px] outline-border-strong inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 rounded-sm outline -outline-offset-1 outline-border-strong inline-flex justify-center items-center">
     <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
-  <div class="px-4 py-3 left-[188px] top-[96px] rounded-sm shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] outline outline-1 outline-offset-[-1px] outline-border-strong inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 left-47 top-24 rounded-sm shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] outline -outline-offset-1 outline-border-strong inline-flex justify-center items-center">
     <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
-  <div class="px-4 py-3 left-[348px] top-[96px] opacity-90 rounded-sm outline outline-1 outline-offset-[-1px] outline-border-strong inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 left-87 top-24 opacity-90 rounded-sm outline -outline-offset-1 outline-border-strong inline-flex justify-center items-center">
     <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
   ### Subtle
 
-  <div class="px-4 py-3 left-[28px] top-[164px] bg-bg-subtle rounded-sm inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 bg-bg-subtle/10 rounded-sm inline-flex justify-center items-center">
     <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
-  <div class="px-4 py-3 left-[188px] top-[164px] bg-bg-subtle rounded-sm shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 bg-bg-subtle/20 rounded-sm shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-center items-center">
     <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
-  <div class="px-4 py-3 left-[348px] top-[164px] opacity-90 bg-bg-subtle rounded-sm inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 opacity-90 bg-bg-subtle rounded-sm inline-flex justify-center items-center">
     <div class="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
 ### Danger
 
-  <div class="px-4 py-3 left-[28px] top-[232px] bg-action-danger-bg rounded-sm inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 left-[28px] top-[232px] bg-action-danger-bg rounded-sm inline-flex justify-center items-center">
     <div class="justify-start text-action-danger-fg text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
-  <div class="px-4 py-3 left-[188px] top-[232px] bg-action-danger-bg rounded-sm shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 left-[188px] top-[232px] bg-action-danger-bg rounded-sm shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)] inline-flex justify-center items-center">
     <div class="justify-start text-action-danger-fg text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 
-  <div class="px-4 py-3 left-[348px] top-[232px] opacity-90 bg-action-danger-bg rounded-sm inline-flex justify-center items-center gap-2">
+  <div class="px-4 py-3 left-[348px] top-[232px] opacity-90 bg-action-danger-bg rounded-sm inline-flex justify-center items-center">
     <div class="justify-start text-action-danger-fg text-sm font-medium font-['Work_Sans']">Button</div>
   </div>
 </div>
 
 ## Toggles
 
+<Story of={ToggleStory.Default} meta={ToggleStory} />
+{/* <Story name="Toggle" args={{ checked: false }}> */}
+  {/* {({ checked }) => <Toggle checked={checked} />} */}
+{/* </Story> */}
+
 <div class="mx-9 w-40 inline-flex flex-col">
 
 ### Unchecked
 
-  <div class="w-12 h-7 p-[3px] left-[28px] top-[24px] bg-bg-subtle rounded-full outline outline-[1.50px] outline-offset-[-1.50px] outline-border-default inline-flex justify-start items-center">
-    <div class="size-5 bg-bg-surface rounded-full shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)]"></div>
+  <div class="w-12 h-7 p-0.75 left-[28px] top-[24px] bg-bg-subtle/30 rounded-full outline-[1.50px] outline-offset-[-1.50px] outline-border-default/30 inline-flex justify-start items-center">
+    <div class="size-5 bg-bg-surface rounded-full shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)]"></div>
   </div>
 </div>
 
@@ -93,7 +99,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
   
 ### Checked
 
-  <div class="w-12 h-7 p-[3px] left-[28px] top-[68px] bg-accent-primary rounded-full inline-flex justify-end items-center">
+  <div class="w-12 h-7 p-0.75 left-[28px] top-[68px] bg-accent-primary rounded-full inline-flex justify-end items-center">
     <div class="size-5 bg-bg-surface rounded-full shadow-[0px_1px_2px_0px_rgba(2,7,3,0.06)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.05)]"></div>
   </div>
 </div>
@@ -105,7 +111,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 ### Default/Initial
 
     <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Email</div>
-    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-1 outline-offset-[-1px] outline-border-default inline-flex justify-start items-center gap-2 overflow-hidden">
+    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline -outline-offset-1 outline-border-default inline-flex justify-start items-center overflow-hidden">
       <div class="flex-1 justify-start text-text-muted text-sm font-normal font-['Bitter'] leading-5">you@example.org</div>
     </div>
     <div class="self-stretch justify-start text-text-muted text-xs font-normal font-['Bitter'] leading-5">We'll send a confirmation link to this address.</div>
@@ -116,7 +122,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 ### Focused
 
     <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Email</div>
-    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-[1.50px] outline-offset-[-1.50px] outline-border-focus inline-flex justify-start items-center gap-2 overflow-hidden">
+    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline-[1.50px] outline-offset-[-1.50px] outline-border-focus inline-flex justify-start items-center overflow-hidden">
       <div class="flex-1 justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">diya@example.org</div>
     </div>
     <div class="self-stretch justify-start text-text-muted text-xs font-normal font-['Bitter'] leading-5">We'll send a confirmation link to this address.</div>
@@ -126,7 +132,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 ### Error
 
     <div class="self-stretch justify-start text-text-primary text-base font-medium font-['Work_Sans'] leading-6">Email</div>
-    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline outline-[1.50px] outline-offset-[-1.50px] outline-status-danger inline-flex justify-start items-center gap-2 overflow-hidden">
+    <div class="self-stretch p-3 bg-bg-surface rounded-sm outline-[1.50px] outline-offset-[-1.50px] outline-status-danger inline-flex justify-start items-center overflow-hidden">
       <div class="flex-1 justify-start text-text-primary text-sm font-normal font-['Bitter'] leading-5">diya@example.org</div>
     </div>
     <div class="self-stretch justify-start text-status-danger text-xs font-normal font-['Bitter'] leading-5">Enter a valid email address.</div>
