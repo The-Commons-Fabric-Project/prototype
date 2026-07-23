@@ -12,6 +12,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -31,7 +32,6 @@
     "@types/node": "^24.12.3",
     "dotenv": "^17.4.2",
     "prisma": "^7.8.0",
-    "tsx": "^4.19.2",
-    "typescript": "~6.0.2"
+    "tsx": "^4.19.2"
   }
 }
