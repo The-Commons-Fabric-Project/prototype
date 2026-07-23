@@ -14,24 +14,3 @@ lerna-debug.log*
 
 node_modules
 dist
-dist-ssr
-*.local
-
-# Generated files
-**/routeTree.gen.ts
-
-# Editor directories and files
-.vscode
-.vscode/*
-*.code-workspace
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-*storybook.log
-storybook-static

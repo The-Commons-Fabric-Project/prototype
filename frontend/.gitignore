@@ -1,0 +1,10 @@
+# Vite
+dist-ssr
+*.local
+
+# TanStack Router generated route tree
+src/routeTree.gen.ts
+
+# Storybook
+*storybook.log
+storybook-static
