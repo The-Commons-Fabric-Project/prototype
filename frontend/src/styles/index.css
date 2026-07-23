@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+/* body {
+    background-color: rgb(247, 248, 250);
+    font-family: "Inter", Arial, sans-serif;
+    color: rgb(65, 65, 66);
+} */
+
+/* Commons Fabric brand theme — see Brandguide 2026 */
+@theme {
+    /* Typography: Sofia (headers/titles) + Inter (body), Arial fallback */
+    --font-display: "Work Sans", "Bitter", Arial, sans-serif;
+    --font-body: "Bitter", Arial, sans-serif;
+    --font-sans: "Work Sans", Arial, sans-serif;
+
+    /* Brand palette */
+    --color-primary: rgb(80, 122, 189);      /* Primary blue   #507ABD */
+    --color-secondary: rgb(242, 165, 65);    /* Secondary      #F2A541 */
+    /* --color-ink: rgb(65, 65, 66);            /* Body copy      #414142 */
+
+    /* Neutrals + tints */
+    /* --color-paper: rgb(247, 248, 250);       /* page background */
+    /* --color-surface: rgb(231, 238, 247);     /* soft primary tint */
+    /* --color-muted: rgb(107, 114, 128);       /* secondary text  #6B8D80 */
+    /* --color-line: rgb(224, 228, 235);        /* borders */
+
+    /* Accents + UI */
+    --color-danger: #EF5556; /* errors or negative */
+    --color-accent: #f2a541;
+    --color-accent-soft: #e3f0ec;
+    --color-ink-dark: #1c2b27;
+    /* --color-amber: #c8852b; */
+
+    /* colors from Figma */
+    --color-ink : #020703;
+    --color-blue : #3EA4DE;
+    --color-green : #74C702;
+    --color-red : #EF5556;
+    --color-amber : #FEBB32;
+    --color-paper : #FFFBF7;
+    --color-grey : #7E7E7E;
+    --color-blue-soft : #94C9E8;
+    --color-green-soft : #BFDB99;
+    --color-red-soft : #FFA5A6;
+    --color-amber-soft : #FFDF9E;
+    --color-white: #FFFFFF;
+    --color-ink-a55: #020703;
+    --color-grey-a30: #7E7E7E;
+    --color-grey-a10: #7E7E7E;
+
+    --color-bg-page: #FFFBF7;
+    --color-bg-surface: #FFFFFF;
+    --color-bg-subtle: #7E7E7E;
+    --color-bg-scrim : #020703;
+    --color-text-primary: #020703;
+    --color-text-muted: #7E7E7E;
+    --color-text-on-accent : #FFFBF7;
+    --color-text-link : #3EA4DE;
+    --color-border-default: #7E7E7E;
+    --color-border-strong: #7E7E7E;
+    --color-border-focus: #3EA4DE;
+    --color-action-primary-bg : #020703;
+    --color-action-primary-fg : #FFFBF7;
+    --color-action-danger-bg: #EF5556;
+    --color-action-danger-fg : #020703;
+    --color-accent-primary : #3EA4DE;
+    --color-accent-primary-soft : #94C9E8;
+    --color-accent-secondary: #74C702;
+    --color-accent-secondary-soft : #BFDB99;
+    --color-status-danger: #EF5556;
+    --color-status-danger-soft : #FFA5A6;
+    --color-status-highlight : #FEBB32;
+    --color-status-highlight-soft : #FFDF9E;
+    
+    /* layout from Figma */
+    --spacing-2xs : 4px;
+    --spacing-xs : 8px;
+    --spacing-sm : 12px;
+    --spacing-md : 16px;
+    --spacing-lg : 24px;
+    --spacing-xl : 32px;
+    --spacing-2xl : 48px;
+    --radius-sm : 6px;
+    --radius-md : 10px;
+    --radius-card : 14px;
+    --radius-full : 9999px;
+    --layout-max-width : 1040px;
+
+    --animate-fade: cf-fade .18s ease;
+    --animate-fade-long: cf-fade .3s ease;
+    --animate-pop: cf-pop .2s cubic-bezier(.2,.8,.3,.1);
+    --animate-stagger: cf-stagger .4s ease ${idx * 0.05}s both;
+
+    @keyframes cf-stagger {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes cf-fade {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    @keyframes cf-pop { 
+        0% { opacity: 0; transform: scale(0.94) translateY(8px);} 
+        100% { opacity: 1; transform: scale(1) translateY(0);} 
+    }
+
+    @keyframes cf-rise { 
+        0% { opacity: 0; transform: translate(-50%, 16px);} 
+        100% { opacity: 1; transform: translate(-50%, 0);} 
+    }
+
+    @keyframes cf-stagger { 
+        from { opacity: 0; transform: translateY(10px);} 
+        to { opacity: 1; transform: translateY(0);} 
+    }
+}
+
+.cf-card-hover { 
+    transition: transform .18s ease, 
+    box-shadow .18s ease; 
+}
+
+.cf-card-hover:hover { 
+    transform: translateY(-1px); 
+    box-shadow: 0 12px 28px rgba(28,43,39,0.12); 
+}
+
+.cf-press { 
+    transition: transform .08s ease, background .15s ease, border-color .15s ease, color .15s ease; 
+}
+
+.cf-press:active { 
+    transform: translateY(1px) scale(0.985); 
+}
+
+.cf-link { transition: color .15s ease; }

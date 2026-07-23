@@ -1,0 +1,44 @@
+import { Meta, Title } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design System/Overlays & Feedback"/>
+<Title>Overlays & Feedback</Title>
+
+   {/* <div className="justify-start text-text-primary text-3xl font-semibold font-['Work_Sans']">Overlays &amp; Feedback</div> */}
+
+## Modals
+
+  <div className="self-stretch justify-start text-text-muted text-sm font-normal font-['Bitter'] leading-5">Modal shell with blurred scrim and pop/scale entrance (PRD §7.3) — the shared container for Create account, Log in, Create event and Event detail. Toast for transient action feedback (FR-6).</div>
+
+<div className="w-205 h-130 bg-linear-to-r/increasing from-indigo-500 to-teal-400 backdrop-blur-xs inline-flex justify-center items-center">
+  <div className="w-115 p-6 bg-bg-surface rounded-2xl shadow-[0px_24px_60px_0px_rgba(2,7,3,0.30)] inline-flex flex-col justify-start items-start gap-4 overflow-hidden">
+    <div className="self-stretch h-24 inline-flex justify-between items-center overflow-hidden">
+      <div className="justify-start text-text-primary text-2xl font-semibold font-['Work_Sans'] leading-8">Create an event</div>
+      <div className="justify-start text-text-muted text-2xl font-semibold font-['Work_Sans']">×</div>
+    </div>
+    <div className="self-stretch justify-start text-text-muted text-sm font-normal font-['Bitter'] leading-5">Modal content — account, login, event form, or event detail — renders here on a blurred backdrop. Clicking the backdrop closes; clicking the body does not.</div>
+    <div className="self-stretch h-24 inline-flex justify-end items-start gap-3 overflow-hidden">
+      <div data-state="Default" data-style="Ghost" className="px-4 py-3 rounded-md outline-1 -outline-offset-1 outline-border-strong flex justify-center items-center gap-2">
+        <div className="justify-start text-text-primary text-sm font-medium font-['Work_Sans']">Cancel</div>
+      </div>
+      <div data-state="Default" data-style="Primary" className="px-4 py-3 bg-action-primary-bg rounded-md flex justify-center items-center gap-2">
+        <div className="justify-start text-action-primary-fg text-sm font-medium font-['Work_Sans']">Publish event</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+## Toasts
+
+  <div className="px-4 py-3 bg-text-primary rounded-[10px] shadow-[0px_8px_20px_0px_rgba(2,7,3,0.12)]  inline-flex justify-start items-center gap-2.5">
+    <div className="size-2 bg-accent-secondary rounded-full" />
+    <div className="justify-start text-text-on-accent text-sm font-normal font-['Bitter'] leading-5">Event created and confirmed.</div>
+  </div>
+
+  <div className="px-4 py-3 bg-text-primary rounded-[10px] shadow-[0px_8px_20px_0px_rgba(2,7,3,0.12)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.06)] inline-flex justify-start items-center gap-2.5">
+    <div className="size-2 bg-accent-primary rounded-full" />
+    <div className="justify-start text-text-on-accent text-sm font-normal font-['Bitter'] leading-5">Event created and confirmed.</div>
+  </div>
+  <div className="px-4 py-3 bg-text-primary rounded-[10px] shadow-[0px_8px_20px_0px_rgba(2,7,3,0.12)] shadow-[0px_2px_6px_0px_rgba(2,7,3,0.06)] inline-flex justify-start items-center gap-2.5">
+    <div className="size-2 bg-status-danger rounded-full" />
+    <div className="justify-start text-text-on-accent text-sm font-normal font-['Bitter'] leading-5">Event created and confirmed.</div>
+  </div>

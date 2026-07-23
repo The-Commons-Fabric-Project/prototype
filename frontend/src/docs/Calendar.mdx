@@ -1,0 +1,175 @@
+import { Meta, Title } from '@storybook/addon-docs/blocks';
+
+import * as CalendarStories from '../components/calendar/docs.Calendar'
+
+<Meta 
+  title="Design System/Calendar"
+/>
+<Title>Calendar</Title>
+
+<div className="self-stretch justify-start text-text-muted text-sm font-normal font-['Bitter'] leading-5">Month-grid calendar view (PRD §7.2, FR-4). Days with events show a tinted event marker that opens the same Event detail modal as the card grid. Seeded with June 2026 events.</div>
+
+<div className="w-[1040px] p-6 bg-bg-surface rounded-2xl outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-3">
+  <div className="self-stretch justify-start text-text-primary text-2xl font-semibold font-['Work_Sans'] leading-8">June 2026</div>
+  <div className="self-stretch h-24 inline-flex justify-start items-start gap-2 overflow-hidden">
+    <div className="flex-1 pb-1 flex justify-center items-start overflow-hidden">
+      <div className="justify-start text-text-muted text-xs font-semibold font-['Work_Sans'] leading-4 tracking-wide">SUN</div>
+    </div>
+    <div className="flex-1 pb-1 flex justify-center items-start overflow-hidden">
+      <div className="justify-start text-text-muted text-xs font-semibold font-['Work_Sans'] leading-4 tracking-wide">MON</div>
+    </div>
+    <div className="flex-1 pb-1 flex justify-center items-start overflow-hidden">
+      <div className="justify-start text-text-muted text-xs font-semibold font-['Work_Sans'] leading-4 tracking-wide">TUE</div>
+    </div>
+    <div className="flex-1 pb-1 flex justify-center items-start overflow-hidden">
+      <div className="justify-start text-text-muted text-xs font-semibold font-['Work_Sans'] leading-4 tracking-wide">WED</div>
+    </div>
+    <div className="flex-1 pb-1 flex justify-center items-start overflow-hidden">
+      <div className="justify-start text-text-muted text-xs font-semibold font-['Work_Sans'] leading-4 tracking-wide">THU</div>
+    </div>
+    <div className="flex-1 pb-1 flex justify-center items-start overflow-hidden">
+      <div className="justify-start text-text-muted text-xs font-semibold font-['Work_Sans'] leading-4 tracking-wide">FRI</div>
+    </div>
+    <div className="flex-1 pb-1 flex justify-center items-start overflow-hidden">
+      <div className="justify-start text-text-muted text-xs font-semibold font-['Work_Sans'] leading-4 tracking-wide">SAT</div>
+    </div>
+  </div>
+  <div className="self-stretch flex flex-col justify-start items-start gap-2 overflow-hidden">
+    <div className="self-stretch h-24 inline-flex justify-start items-start gap-2 overflow-hidden">
+      <div className="flex-1 h-24 p-2 bg-bg-subtle rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start"></div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">1</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">2</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">3</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">4</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">5</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">6</div>
+      </div>
+    </div>
+    <div className="self-stretch h-24 inline-flex justify-start items-start gap-2 overflow-hidden">
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">7</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">8</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">9</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">10</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">11</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">12</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">13</div>
+      </div>
+    </div>
+    <div className="self-stretch h-24 inline-flex justify-start items-start gap-2 overflow-hidden">
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">14</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">15</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">16</div>
+        <div className="self-stretch h-24 px-1.5 py-[3px] bg-accent-primary-soft rounded-md inline-flex justify-start items-start overflow-hidden">
+          <div className="flex-1 justify-start text-text-primary text-xs font-normal font-['Bitter'] line-clamp-1">Newcomer Welcome</div>
+        </div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">17</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">18</div>
+        <div className="self-stretch h-24 px-1.5 py-[3px] bg-status-highlight-soft rounded-md inline-flex justify-start items-start overflow-hidden">
+          <div className="flex-1 justify-start text-text-primary text-xs font-normal font-['Bitter'] line-clamp-1">CF Meetup</div>
+        </div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">19</div>
+        <div className="self-stretch h-24 px-1.5 py-[3px] bg-accent-primary-soft rounded-md inline-flex justify-start items-start overflow-hidden">
+          <div className="flex-1 justify-start text-text-primary text-xs font-normal font-['Bitter'] line-clamp-1">Age-Friendly Town Hall</div>
+        </div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">20</div>
+        <div className="self-stretch h-24 px-1.5 py-[3px] bg-accent-secondary-soft rounded-md inline-flex justify-start items-start overflow-hidden">
+          <div className="flex-1 justify-start text-text-primary text-xs font-normal font-['Bitter'] line-clamp-1">Odawa Powwow</div>
+        </div>
+      </div>
+    </div>
+    <div className="self-stretch h-24 inline-flex justify-start items-start gap-2 overflow-hidden">
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">21</div>
+        <div className="self-stretch h-24 px-1.5 py-[3px] bg-accent-secondary-soft rounded-md inline-flex justify-start items-start overflow-hidden">
+          <div className="flex-1 justify-start text-text-primary text-xs font-normal font-['Bitter'] line-clamp-1">Powwow — Day 2</div>
+        </div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">22</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">23</div>
+        <div className="self-stretch h-24 px-1.5 py-[3px] bg-accent-primary-soft rounded-md inline-flex justify-start items-start overflow-hidden">
+          <div className="flex-1 justify-start text-text-primary text-xs font-normal font-['Bitter'] line-clamp-1">Poverty Briefing</div>
+        </div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">24</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">25</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">26</div>
+        <div className="self-stretch h-24 px-1.5 py-[3px] bg-status-highlight-soft rounded-md inline-flex justify-start items-start overflow-hidden">
+          <div className="flex-1 justify-start text-text-primary text-xs font-normal font-['Bitter'] line-clamp-1">Family Maker Lab</div>
+        </div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">27</div>
+      </div>
+    </div>
+    <div className="self-stretch h-24 inline-flex justify-start items-start gap-2 overflow-hidden">
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">28</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">29</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-surface rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start text-text-primary text-xs font-medium font-['Work_Sans']">30</div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-subtle rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start"></div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-subtle rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start"></div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-subtle rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start"></div>
+      </div>
+      <div className="flex-1 h-24 p-2 bg-bg-subtle rounded-md outline outline-1 outline-offset-[-1px] outline-border-default inline-flex flex-col justify-start items-start gap-1 overflow-hidden">
+        <div className="justify-start"></div>
+      </div>
+    </div>
+  </div>
+</div>

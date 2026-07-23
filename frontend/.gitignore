@@ -13,7 +13,9 @@ dist-ssr
 *.local
 
 # Editor directories and files
+.vscode
 .vscode/*
+*.code-workspace
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -22,3 +24,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+*storybook.log
+storybook-static

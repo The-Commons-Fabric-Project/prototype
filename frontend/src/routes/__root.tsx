@@ -1,5 +1,11 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
+import Header from '../components/nav-headers/Header'
 
 export const Route = createRootRoute({
-  component: () => <Outlet />,
+  component: () => (
+    <div className="flex flex-col min-h-dvh w-dvw items-center">
+      <Header />
+      <Outlet />
+    </div>
+  ),
 })

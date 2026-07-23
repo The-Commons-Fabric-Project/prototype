@@ -1,0 +1,75 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Project cfp {
+    database_type: 'PostgreSQL'
+}
+
+enum org_tags {
+    Advocacy
+    Civic
+    Community
+    Culture
+    Education
+    Equity
+    Indigenous
+    Makers
+    Policy
+    Research
+    Seniors
+    Settlement
+    Tech
+    Volunteer
+    Youth
+}
+
+Table users {
+    id              bigint          [pk, increment]
+    fullname        text            [not null, check: `length(trim(fullname)) > 0`]
+    email           varchar(255)    [not null, unique, check: `email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'`]
+    password        varchar         [not null, check: `length(password) > 0`, note: 'Stores the password hash, not plaintext']
+    organization_id bigint          [not null, ref: > organizations.id]
+    created_at      timestamp       [not null, default: `now()`]
+}
+
+Table events {
+    id                  bigint          [pk, increment]
+    title               text            [not null, check: `length(trim(title)) > 0`]
+    owner_id            bigint          [not null, ref: > users.id]
+    starts_at           timestamptz     [not null]
+    ends_at             timestamptz     [not null, check: `ends_at > starts_at`]
+    location            bigint          [not null, ref: > addresses.id]
+    description         text            [note: 'Content of the post']
+    thumbnail           text            [note: "file path of image e.g. ./public/event_images/example.jpg"]
+    registration_link   text            [default: null, check: `registration_link IS NULL OR registration_link ~* '^https?://[^\s/$.?#].[^\s]*$'`]
+    volunteer_contact   varchar(255)    [check: `volunteer_contact IS NULL OR volunteer_contact ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'`]
+    created_at          timestamp       [not null, default: `now()`]
+}
+
+Table organizations {
+    id      bigint          [primary key, increment]
+    name    text            [not null, check: `length(trim(name)) > 0`]
+    logo    text            [note: "file path of image e.g. ./public/organization_logos/example.jpg"]
+    blurb   text            [note: "Short description of the organization"]
+    contact varchar(255)    [check: `contact IS NULL OR contact ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'`]
+    website varchar(2048)   [check: `website IS NULL OR website ~* '^https?://[^\s/$.?#].[^\s]*$'`]
+}
+
+Table organizations_tags {
+    organization_id bigint      [not null, ref: > organizations.id]
+    tag             org_tags    [not null]
+
+    indexes {
+        (organization_id, tag) [pk]
+    }
+}
+
+Table addresses {
+    id          bigint      [primary key, increment]
+    line1       text        [not null, default: "815 St. Laurent Blvd", note: "Address i.e. - 123 Example Street"]
+    line2       text        [note: "Second Address line - i.e. Apt 123 / Room 123"]
+    city        text        [not null, default: "Ottawa"]
+    province    varchar(2)  [default: "ON", check: `province IS NULL OR province ~ '^[A-Z]{2}$'`]       // state/province
+    postal_code varchar(6)  [default: "K1K3A7", check: `postal_code IS NULL OR postal_code ~* '^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$'`]
+    country     varchar(2)  [default: "CA", check: `country ~ '^[A-Z]{2}$'`]  // ISO 3166-1 alpha-2, e.g. "US", "CA"
+}
