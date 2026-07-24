@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
+import { EXAMPLE_EVENTS } from '../../mocks/events';
 import EventCard from './EventCard';
 
 const meta = {
@@ -14,10 +15,8 @@ type Story = StoryObj<typeof meta>;
 // what shows up in the Storybook default preview
 export const Default: Story = {
   args: {
-    "month": "June",
-    "day": 23,
-    "title": "Example",
-    "time": "6/23/2026",
-    description: "Add a description for your event here"
+    event: EXAMPLE_EVENTS[0],
+    onClick: ()=>{},
+    idx: 0
   },
 };

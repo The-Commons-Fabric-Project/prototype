@@ -3,6 +3,8 @@ import type { Event } from '../../types/events'
 import EventCard from './EventCard'
 import EventDescription from '../modals/EventDescription'
 
+// FIXME: component has been swapped out
+
 type EventCardGridProps = {
   events: Event[];
 };

@@ -1,113 +1,59 @@
-import { EVENT_TAGS } from '../../types/events'
-import type { EventTagKey } from '../../types/events'
+import type { Event } from '../../types/events'
+import { fmtTime } from '../../utils/datetime';
 
-/** All properties that can be specified for an event */
+import InlineDate from '../chips/InlineDate';
+import Tag from '../chips/Tag';
+import Icon from '../../assets/Icons';
+
+/** Event props now live in the event type */
 type EventCardProps = {
-  /** Month of the event as a string */
-  month: string;
-  /** Date of the event */
-  day: number;
-  /** Event title */
-  title: string;
-  /** Host organization (optional) */
-  organization?: string;
-  description?: string;
-  time: string;
-  location?: string;
-  /** array of tags for the event */
-  tags?: EventTagKey[];
-  thumbnailUrl?: string;
-  onClick?: () => void;
+  event: Event;
+  onClick: (args:any) => void;
+  idx: number;
+  // /** Month of the event as a string */
+  // month: string;
+  // /** Date of the event */
+  // day: number;
+  // /** Event title */
+  // title: string;
+  // /** Host organization (optional) */
+  // organization?: string;
+  // description?: string;
+  // time: string;
+  // location?: string;
+  // /** array of tags for the event */
+  // tags?: EventTagKey[];
+  // thumbnailUrl?: string;
+  // onClick?: () => void;
 };
-
-/** Event card component */
-export default function EventCard({
-  month,
-  day,
-  title,
-  organization,
-  description,
-  time,
-  location,
-  tags = [],
-  thumbnailUrl,
-  onClick,
-}: EventCardProps) {
+// ===========================================================================
+// Event card
+// ===========================================================================
+export default function EventCard({ event, onClick, idx }: EventCardProps) {
   return (
-    <div
-      className="flex flex-col rounded-2xl overflow-hidden border border-line bg-white shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:-translate-y-[1px] hover:shadow-[0_6px_18px_rgba(0,0,0,0.10)] cursor-pointer"
-      style={{ transition: "transform .18s ease, box-shadow .18s ease" }}
-      onClick={onClick}
-    >
-      {/* Thumbnail */}
-      <div className="relative w-full aspect-[16/10] bg-surface shrink-0">
-        {thumbnailUrl ? (
-          <img
-            src={thumbnailUrl}
-            alt={title}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <div
-            className="absolute inset-0 flex items-center justify-center text-text-muted text-[12.5px] font-semibold font-body"
-            style={{
-              background:
-                "repeating-linear-gradient(135deg, transparent, transparent 14px, rgba(80, 122, 189, 0.05) 14px, rgba(80, 122, 189, 0.05) 28px)",
-            }}
-          >
-            [thumbnail placeholder]
-          </div>
-        )}
+    <div onClick={onClick} className={`cf-card-hover bg-white border border-slate-200 rounded-[8px] cursor-pointer flex flex-col p-[18px] gap-[10px] animate-[cf-stagger_0.35s_ease_both]`} style={{ animationDelay: `${idx * 0.04}s` }}>
+      {/* Tags now live inside the card (no image) */}
+      {(event.registrationRequired || event.volunteersNeeded) && (
+        <div className="flex flex-wrap gap-1.5">
+          {event.registrationRequired && <Tag variant="solid">Registration</Tag>}
+          {event.volunteersNeeded && <Tag variant="outline">Volunteers wanted</Tag>}
+        </div>
+      )}
 
-        {/* EventTags */}
-        {tags.length > 0 && (
-          <div className="absolute top-[10px] left-[10px] flex gap-[6px] flex-wrap">
-            {tags.map((key) => (
-              <span
-                key={key}
-                className="inline-block py-[3px] px-[9px] rounded-full text-[10.5px] font-bold tracking-[0.8px] uppercase font-body"
-                style={{ background: EVENT_TAGS[key].background, color: EVENT_TAGS[key].color }}
-              >
-                {EVENT_TAGS[key].label}
-              </span>
-            ))}
-          </div>
-        )}
+      <div className="min-w-0">
+        <InlineDate date={event.date} className="block text-[12.5px] font-bold text-slate-500 mb-[4px] tracking-[0.3px]" />
+        <h3 className="font-sans text-[17px] font-bold text-slate-900 m-0 leading-[1.25]">{event.title}</h3>
+        <p className="text-[12.5px] text-slate-500 font-semibold mt-[4px] mb-0">{event.org}</p>
       </div>
 
-      {/* Body */}
-      <div className="p-[18px] flex flex-col gap-[10px] flex-1">
-        {/* Date + title row */}
-        <div className="flex gap-[14px] items-start">
-          <div className="flex flex-col items-center justify-center size-[52px] rounded-xl bg-white border border-line shrink-0">
-            <span className="text-[10px] font-bold text-secondary tracking-[0.6px] font-body">
-              {month.toUpperCase()}
-            </span>
-            <span className="font-display text-[22px] font-semibold text-ink leading-none">
-              {day}
-            </span>
-          </div>
+      {event.description && <p className="text-[13.5px] text-slate-500 leading-[1.5] m-0 line-clamp-2">{event.description}</p>}
 
-          <div className="flex-1 min-w-0">
-            <h3 className="font-display text-lg font-semibold text-ink m-0 leading-[1.2]">
-              {title}
-            </h3>
-            <p className="text-[12.5px] text-primary font-semibold mt-1 mb-0 font-body">
-              {organization}
-            </p>
-          </div>
-        </div>
-
-        {/* Description */}
-        <p className="text-[13.5px] text-muted leading-[1.5] m-0 line-clamp-2 font-body">
-          {description}
-        </p>
-
-        {/* Footer */}
-        <div className="flex gap-[14px] text-[12.5px] text-muted border-t border-line pt-[10px] mt-auto font-body">
-          <span>🕓 {time}</span>
-          <span>📍 {location}</span>
-        </div>
+      {/* Time left, location right-aligned in the same row */}
+      <div className="flex items-center justify-between gap-[12px] text-[12.5px] text-slate-500 border-t border-slate-200 pt-[10px] mt-auto">
+        <span className="inline-flex items-center gap-1.5"><Icon name="clock" size={14} /> {fmtTime(event.time)}</span>
+        <span className="inline-flex items-center gap-1.5 text-right min-w-0">
+          <Icon name="pin" size={14} /> <span className="overflow-hidden text-ellipsis whitespace-nowrap">{event.location}</span>
+        </span>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { fmtMonthDate, fmtPlainDate } from "../../utils/date";
+import { fmtMonthDate, fmtPlainDate } from "../../utils/datetime";
 
 export interface InlineDateProps {
   date: string;

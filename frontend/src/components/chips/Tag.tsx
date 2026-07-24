@@ -14,20 +14,17 @@ const VARIANT_MAPS: Record<TagVariant, string> = {
 type TagProps = {
   /** Tag color */
   variant: TagVariant;
-  /** label */
-  label: string;
   /** child elements; for tags, just the content */
-  children?: React.ReactElement[];
-}
+  children: React.ReactElement[] | string;
+} 
 
 export default function Tag({ 
   variant = "solid",
-  label = "Category",
   children,
 }: TagProps) {
   return (
     <span 
       className={"inline-block px-2 py-1 rounded-[4px] text-[10.5px] font-semibold uppercase tracking-[0.06em] font-sans " + VARIANT_MAPS[variant]}
-    >{label} {children}</span>
+    >{children}</span>
   );
 }
