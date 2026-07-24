@@ -3,6 +3,7 @@ type FieldProps = {
   label: string,
   /** error message to display */
   error?: string,
+  /** children elements, needs some kind of input HTML element */
   children: React.ReactElement,
 }
 
@@ -13,8 +14,8 @@ export default function Field({
   children,
 }: FieldProps) {
   return (
-    <label className="block mb-6">
-      <span className="block text-ink text-xs font-semibold mb-2">{label}</span>
+    <label className="block mb-3.5">
+      <span className="block text-[12.5px] font-semibold text-ink mb-1.5 font-sans">{label}</span>
       {children}
       {error && <span className="text-danger font-medium text-xs">{error}</span>}
     </label>

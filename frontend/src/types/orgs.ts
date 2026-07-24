@@ -1,3 +1,5 @@
+export const EMAIL_RE = /\S+@\S+\.\S+/;
+
 export const ORG_TAGS = [
   "Advocacy",
   "Civic",

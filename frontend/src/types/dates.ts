@@ -1,4 +1,4 @@
-// TODO: convert these to types
+// TODO: convert these to types?
 
 export type Month = {
   num: number,
@@ -18,13 +18,4 @@ export const MONTHS_FULL = MONTHS_DATA.full;
 
 export const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"] as const;
 
-// export type MonthStringAbbv = typeof MONTHS_DATA["abbv"][number];
-// export type MonthStringFull = typeof MONTHS_DATA.full[number];
-
-// let x = Array.from(MONTHS.keys()).map((m) => {
-//   return {
-//     num: m+1,
-//     abbv: MONTHS[m] as MonthStringAbbv,
-//     full: MONTHS_FULL[m] as MonthStringFull
-//   }
-// })
+export const DOW_FULL = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"] as const;

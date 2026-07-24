@@ -26,32 +26,14 @@ export default function Modal({
   return (
     <div
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-xs"
-      style={{
-        background: 'rgba(65, 65, 66, 0.42)'
-      //   position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center",
-      //   justifyContent: "center", padding: 20, background: "rgba(28,43,39,0.42)",
-      //   backdropFilter: "blur(5px)", WebkitBackdropFilter: "blur(5px)", animation: "cf-fade .18s ease",
-      }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-5 bg-black/45"
+      style={{ animation: "cf-fade .16s ease" }}
     >
       <div
         role="dialog" aria-modal="true"
-        className="bg-paper border border-solid border-line"
-        // TODO: merge these styles with className
-        style={{
-          width: "100%", maxWidth: width, maxHeight: "88vh", overflowY: "auto",
-          borderRadius: 18, 
-          boxShadow: "0 24px 60px rgba(28,43,39,0.28)", animation: "cf-pop .2s cubic-bezier(.2,.8,.3,1)",
-        }}
+        className="w-full max-h-[88vh] overflow-y-auto bg-white rounded-[10px] border border-gray-200 shadow-[0_16px_40px_rgba(0,0,0,0.2)]"
+        style={{ maxWidth: width, animation: "cf-pop .18s ease" }}
       >
-        {/* Close button */}
-        <button
-          aria-label="Close"
-          className="cf-press absolute top-4 right-4 z-10 w-[30px] h-[30px] rounded-[8px] border border-line bg-white cursor-pointer text-muted text-[16px] flex items-center justify-center"
-          onClick={onClose}
-        >
-          ×
-        </button>
         {children}
       </div>
     </div>
@@ -66,23 +48,15 @@ export type ModalHeaderProps = {
 
 export function ModalHeader({ title, onClose, subtitle }: ModalHeaderProps) {
   return (
-    // TODO: convert style w className
-    <div style={{ padding: "20px 24px 0", position: "relative" }}>
+    <div className="relative border-b border-gray-200 pt-5 px-6 pb-4">
       <button onClick={onClose} aria-label="Close"    
-        className="cf-press absolute bg-white text-muted border-solid border-line" 
-        style={{
-        position: "absolute", top: 16, right: 16, width: 30, height: 30, borderRadius: 8,
-        cursor: "pointer", fontSize: 16, lineHeight: 1,
-      }}>×</button>
+        className="cf-press absolute top-4 right-4 w-7 h-7 rounded-md border border-gray-200 bg-white cursor-pointer text-gray-500 text-[16px] leading-none flex items-center justify-center"
+      >×</button>
       <h2 
-        className="text-ink"
-        // TODO: merge style w className
-        style={{ fontFamily: "'Fraunces', serif", fontSize: 22, fontWeight: 600, margin: 0, paddingRight: 32 }}>{title}</h2>
+        className="font-bold text-[20px] text-slate-900 m-0 pr-8">{title}</h2>
       {subtitle && 
       <p 
-        className="text-muted"
-        // TODO: merge style w className
-        style={{ fontSize: 13, margin: "6px 0 0", fontFamily: "'Public Sans', sans-serif" }}>{subtitle}</p>}
+        className="mt-1 text-xs text-slate-500 font-sans">{subtitle}</p>}
     </div>
   );
 }

@@ -2,7 +2,7 @@
  * Helper functions for parsing and formatting dates and times
  */
 
-import { MONTHS, MONTHS_FULL, DOW } from "../types/dates";
+import { MONTHS, MONTHS_FULL, DOW, DOW_FULL } from "../types/dates";
 
 export function parseDate(d: string) { 
   const [y, m, day] = d.split("-").map(Number); 
@@ -16,6 +16,21 @@ export function fmtDateChip(d: string) {
     month: MONTHS[dt.getMonth()].toUpperCase(), 
     day: dt.getDate() 
   }; 
+}
+
+export function ordinal(n: number) { 
+  const s = ["th","st","nd","rd"]; 
+  const v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); 
+}
+
+export function fmtMonthDate(d: string) { 
+  const dt = parseDate(d); 
+  return `${MONTHS_FULL[dt.getMonth()]} ${dt.getDate()}`; 
+}
+
+export function fmtPlainDate(d: string) { 
+  const dt = parseDate(d); 
+  return `${DOW_FULL[dt.getDay()]}, ${MONTHS_FULL[dt.getMonth()]} ${ordinal(dt.getDate())}, ${dt.getFullYear()}`; 
 }
 
 export function fmtLongDate(d: string) { 

@@ -10,11 +10,13 @@ const ButtonVariant = {
 export type ButtonVariant = (typeof ButtonVariant)[keyof typeof ButtonVariant];
 
 const TagVariant = {
-  0: 'yellow',
-  1: 'blue',
-  2: 'pink',
-  3: 'green',
-  4: 'grey'
+  // 0: 'yellow',
+  // 1: 'blue',
+  // 2: 'pink',
+  // 3: 'green',
+  // 4: 'grey'
+  0: "solid",
+  1: "outline",
 } as const;
 
 export type TagVariant = (typeof TagVariant)[keyof typeof TagVariant];

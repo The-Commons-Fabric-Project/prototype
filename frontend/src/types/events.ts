@@ -11,21 +11,24 @@ export const EVENT_TAGS = {
   },
 } as const
 
-export type EventTagKey = keyof typeof EVENT_TAGS
-export type EventTag = (typeof EVENT_TAGS)[EventTagKey]
+export type EventTag = keyof typeof EVENT_TAGS
+export type EventTagInfo = (typeof EVENT_TAGS)[EventTag]
 
-export type Event = {
+type EventBasics = {
   id: string | number;
-  month: string;
-  day: number;
-  year: number;
   title: string;
+  date: string;
   time: string;
-  organization?: string;
+  org?: string;
   description?: string;
   location?: string;
-  tags?: EventTagKey[];
+  tags?: EventTag[];
+  registrationRequired: boolean;
+}
+
+export type Event = EventBasics & {
   thumbnailUrl?: string;
-  registrationInfo?: string;
+  registrationLink?: string;
   registerUrl?: string;
+  [prop: string]: unknown; // in case we need to add other properties, ref: https://www.typescriptlang.org/docs/handbook/2/objects.html#excess-property-checks
 };
