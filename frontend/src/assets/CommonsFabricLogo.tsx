@@ -1,8 +1,8 @@
-export default function CommonsFabricLogo({ width = 40 }: { width?: number }) {
+export default function CommonsFabricLogo({ width = 40, color = "var(--color-ink)" }) {
   const height = width * (1546.66 / 1859.55)
   return (
     <svg viewBox="0 0 1859.55 1546.66" width={width} height={height} aria-hidden="true" className="block shrink-0">
-      <g fill="#507abd">
+      <g fill={color}>
         <path d="M965.49,1017.38h-106.23c-8.94,0-16.2,7.25-16.2,16.2s7.25,16.2,16.2,16.2h106.23c8.94,0,16.2-7.25,16.2-16.2s-7.25-16.2-16.2-16.2Z" />
         <path d="M1151.4,1017.38h-106.23c-8.94,0-16.2,7.25-16.2,16.2s7.25,16.2,16.2,16.2h106.23c8.94,0,16.2-7.25,16.2-16.2s-7.25-16.2-16.2-16.2Z" />
         <path d="M620.12,1120.54l-80.18,69.69c-6.75,5.87-7.47,16.1-1.6,22.85,3.2,3.69,7.71,5.57,12.23,5.57,3.77,0,7.55-1.31,10.62-3.97l80.18-69.69c6.75-5.87,7.47-16.1,1.6-22.85-5.87-6.75-16.1-7.47-22.85-1.6Z" />

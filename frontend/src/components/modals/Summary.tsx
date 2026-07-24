@@ -1,12 +1,12 @@
 import type { ReactElement } from "react";
 
-type SummaryProps {
+type SummaryProps = {
   label: string | ReactElement;
   value: string | number | ReactElement;
   last: boolean;
 }
 
-export default function Summary({ label, value, last }) {
+export default function Summary({ label, value, last }: SummaryProps) {
   return (
     <div className={`flex justify-between gap-4 ${last ? "" : "border-b border-slate-200 pb-2 mb-2"}`}>
       <span className="text-[12.5px] font-semibold text-slate-500">{label}</span>

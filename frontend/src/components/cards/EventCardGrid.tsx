@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Event } from '../../types/events'
 import EventCard from './EventCard'
-import EventDescription from '../overlays-feedback/EventDescription'
+import EventDescription from '../modals/EventDescription'
 
 type EventCardGridProps = {
   events: Event[];

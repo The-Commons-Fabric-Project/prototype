@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Button from "../button-controls/Button";
-import Field from "../button-controls/Field";
+import Button from "../controls/Button";
+import Field from "../controls/Field";
 
 import type { TextInputVariant as InputVariant } from "../../types/variants";
 
