@@ -38,7 +38,7 @@ export function dbInsertCommonsFabricUser(user: CommonsFabricUser) {
     data: {
       fullname: user.fullname,
       email: user.email,
-      password: user.password,
+      passwordHash: user.password,
       organizationId: user.organizationId,
     },
     select: { id: true, fullname: true, email: true, organizationId: true, createdAt: true },

@@ -14,7 +14,7 @@
  * high-water mark to match, so rows the app creates later still get fresh ids.
  *
  * `devPassword` in the fixture is plaintext; it is hashed with argon2id here so
- * users.password only ever receives a hash.
+ * users.password_hash only ever receives a hash.
  *
  * Usage (from backend/):
  *   npm run db:seed                 wipe and reseed
@@ -342,7 +342,7 @@ async function main() {
           id: user.id,
           fullname: user.fullname,
           email: user.email,
-          password: passwords.get(user.id)!,
+          passwordHash: passwords.get(user.id)!,
           organizationId: user.organizationId,
         })),
       });

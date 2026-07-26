@@ -23,11 +23,8 @@ usersRouter.get('/count', async (_req: Request, res: Response) => {
  *
  * Body: { fullname, email, password, organizationId }
  *
- * NOTE: `password` is stored as-is here. Before this is used for anything real
- * it must be hashed (e.g. bcrypt/argon2) - the column is meant to hold a hash,
- * not plaintext.
  */
-usersRouter.post('/', async (req: Request, res: Response) => {
+usersRouter.post('/create', async (req: Request, res: Response) => {
   try {
     const newUser = parseCommonsFabricUser(req.body);
     const user = await dbInsertCommonsFabricUser(newUser);
