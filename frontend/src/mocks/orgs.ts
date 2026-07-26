@@ -50,3 +50,7 @@ export const SEED_ORGS: Org[] = [
     website: "ottawacivictech.example",
   },
 ]
+
+export const DEMO_ACCOUNTS = [
+  { name: "Ottawa Civic Tech", email: "hi@ottawacivictech.example", password: "demo123" },
+]

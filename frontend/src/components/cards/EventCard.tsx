@@ -8,7 +8,7 @@ import Icon from '../../assets/Icons';
 /** Event props now live in the event type */
 type EventCardProps = {
   event: Event;
-  onClick: (args:any) => void;
+  onClick: () => void;
   idx: number;
   // /** Month of the event as a string */
   // month: string;

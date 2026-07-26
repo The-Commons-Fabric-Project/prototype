@@ -14,18 +14,6 @@ export const EVENT_TAGS = {
 export type EventTag = keyof typeof EVENT_TAGS
 export type EventTagInfo = (typeof EVENT_TAGS)[EventTag]
 
-// type EventBasics = {
-//   id: string | number;
-//   title: string;
-//   date: string;
-//   time: string;
-//   org?: string;
-//   description?: string;
-//   location?: string;
-//   tags?: EventTag[];
-//   registrationRequired: boolean;
-// }
-
 export type Event = {
   id: string | number;
   title: string;

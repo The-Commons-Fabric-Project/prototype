@@ -4,7 +4,7 @@ type FieldProps = {
   /** error message to display */
   error?: string,
   /** children elements, needs some kind of input HTML element */
-  children: React.ReactElement,
+  children: React.ReactElement | string,
 }
 
 /** text input field used in forms, e.g. login username and password */

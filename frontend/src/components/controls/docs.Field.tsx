@@ -1,4 +1,3 @@
-import { fn } from "storybook/test";
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
 import Field from './Field';
@@ -12,10 +11,17 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+function blankInput(){ return (
+  <input 
+    type='text' className='border border-bg-subtle rounded-md'
+    placeholder="placeholder"  
+  />
+)}
+
 export const Default: Story = {
   args: {
     "label": "label",
     "error": "error",
-    "children": fn()
+    "children": blankInput(),
   },
 };

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
 import EventCardGrid from '../components/cards/EventCardGrid'
-import { Calendar } from '../components/calendar/Calendar'
+import { CalendarView } from '../components/calendar/Calendar'
 import { EXAMPLE_EVENTS } from '../mocks/events'
 
 function Index() {
@@ -36,7 +36,7 @@ function Index() {
         {view === 'cards' ? (
           <EventCardGrid events={EXAMPLE_EVENTS} />
         ) : (
-          <Calendar events={EXAMPLE_EVENTS} />
+          <CalendarView events={EXAMPLE_EVENTS} />
         )}
       </div>
     </div>

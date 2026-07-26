@@ -3,31 +3,23 @@ import type { Event } from '../../types/events'
 import EventCard from './EventCard'
 import EventDescription from '../modals/EventDescription'
 
-// FIXME: component has been swapped out
+// FIXME: component has been swapped out?
 
-type EventCardGridProps = {
+type EventsGridProps = {
   events: Event[];
 };
 
-export default function EventCardGrid({ events }: EventCardGridProps) {
+export default function EventsGrid({ events }: EventsGridProps) {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   return (
     <>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[18px] w-full">
-        {events.map((event) => (
+        {events.map((event, i) => (
           <EventCard
-            key={event.id}
-            month={event.month}
-            day={event.day}
-            title={event.title}
-            organization={event.organization}
-            description={event.description}
-            time={event.time}
-            location={event.location}
-            tags={event.tags}
-            thumbnailUrl={event.thumbnailUrl}
+            event={event}
             onClick={() => setSelectedEvent(event)}
+            idx={i}
           />
         ))}
       </div>

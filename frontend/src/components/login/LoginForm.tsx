@@ -9,7 +9,7 @@ function inputStyle (err: React.ErrorInfo | boolean): InputVariant {
 }
 
 export default function LoginForm({
-  accounts, // this is just a placeholder for auth
+  accounts, // this is just a placeholder for auth?
   onLogin,
   onClose,
   updateParent,
@@ -35,9 +35,7 @@ export default function LoginForm({
     const isPw = mode === "password";
     updateParent({title: (isPw? "Change password" : "Change email"), subtitle: (isPw ? undefined : "We'll send a confirmation link to the new address.")});
     return (
-      <div className="py-2 px-6"
-      // style={{ padding: "18px 24px 24px" }}
-      >
+      <div className="py-2 px-6">
         <Field label={isPw ? "New password" : "New email"}>
           <input 
             type={isPw ? "password" : "text"} 
@@ -46,9 +44,9 @@ export default function LoginForm({
             onChange={(e) => setNewVal(e.target.value)} placeholder={isPw ? "At least 6 characters" : "you@org.example"} />
         </Field>
         <div className="flex gap-2.5">
-          <Button variant="ghost" styles="flex-1"
+          <Button variant="ghost" className="flex-1"
           onClick={() => { setMode("login"); setNewVal(""); }} label="Back"/>
-          <Button styles="flex-1" onClick={() => {
+          <Button className="flex-1" onClick={() => {
             toast(isPw ? "Password updated." : "Confirmation email sent.");
             setMode("login"); setNewVal("");
           }} label="Save"/>

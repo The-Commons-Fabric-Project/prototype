@@ -6,18 +6,18 @@ Still unsure whether this is the right direction however, one of the pros of usi
 This might be more of an issue once we have to integrate with Google Calendar/Outlook but for the demo it's probably fine.
 **/
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import type { Event } from '../../types/events'
-import EventDescription from '../modals/EventDescription'
 
-type CalendarProps = {
+import { parseDate, fmtTime } from '../../utils/datetime';
+import { MONTHS_FULL as MONTH_NAMES, DOW as DAY_HEADERS } from '../../types/dates';
+
+type CalendarViewProps = {
   /** List of Events to view in the calendar */
   events: Event[];
+  /** callback for selected event */
+  onSelect: () => void;
 };
-
-const MONTH_ABBR = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const DAY_HEADERS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 function formatTimeShort(time: string): string {
   const match = time.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
@@ -26,33 +26,27 @@ function formatTimeShort(time: string): string {
   return m === '00' ? `${h} ${period.toUpperCase()}` : `${h}:${m} ${period.toUpperCase()}`;
 }
 
-export function Calendar({ events }: CalendarProps) {
-  const now = new Date();
-  const [year, setYear] = useState(now.getFullYear());
-  const [monthIndex, setMonthIndex] = useState(now.getMonth());
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+export function CalendarView({ events, onSelect }: CalendarViewProps) {
+  const [cursor, setCursor] = useState(() => parseDate(events[0]?.date || "2026-06-01"));
+  const year = cursor.getFullYear(), month = cursor.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const goToPrev = () => {
-    if (monthIndex === 0) { setMonthIndex(11); setYear(y => y - 1); }
-    else { setMonthIndex(m => m - 1); }
-  };
+  const byDay = useMemo(() => {
+    const map: Event[][] = [];
+    events.forEach((e) => {
+      const d = parseDate(e.date);
+      if (d.getFullYear() === year && d.getMonth() === month) {
+        (map[d.getDate()] = map[d.getDate()] || []).push(e);
+      }
+    });
+    Object.values(map).forEach((list) => list.sort((a, b) => a.time.localeCompare(b.time)));
+    return map;
+  }, [events, year, month]);
 
-  const goToNext = () => {
-    if (monthIndex === 11) { setMonthIndex(0); setYear(y => y + 1); }
-    else { setMonthIndex(m => m + 1); }
-  };
+  const goToPrev = () => {setCursor(new Date(year, month - 1, 1))};
 
-  const firstDay = new Date(year, monthIndex, 1).getDay();
-  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
-
-  const currentMonthAbbr = MONTH_ABBR[monthIndex];
-  const monthEvents: Record<number, Event[]> = {};
-  for (const event of events) {
-    if (event.month.toUpperCase() === currentMonthAbbr) {
-      if (!monthEvents[event.day]) monthEvents[event.day] = [];
-      monthEvents[event.day].push(event);
-    }
-  }
+  const goToNext = () => {setCursor(new Date(year, month + 1, 1))};
 
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
@@ -60,11 +54,10 @@ export function Calendar({ events }: CalendarProps) {
   ];
 
   return (
-    <>
     <div className="bg-white border border-line rounded-[16px] p-[18px]">
       <div className="flex justify-between items-center mb-[14px]">
         <h3 className="font-display text-[20px] font-semibold text-ink m-0">
-          {MONTH_NAMES[monthIndex]} {year}
+          {MONTH_NAMES[month]} {year}
         </h3>
         <div className="flex gap-2">
           <button
@@ -101,12 +94,12 @@ export function Calendar({ events }: CalendarProps) {
             {day !== null && (
               <>
                 <div className="text-xs font-semibold text-muted mb-1">{day}</div>
-                {(monthEvents[day] ?? []).map(event => (
+                {(byDay[day] || []).map(event => (
                   <div
                     key={event.id}
                     className="cf-press bg-primary text-white text-[10.5px] font-semibold rounded-[6px] px-[6px] py-[3px] mb-[3px] cursor-pointer truncate max-w-full"
-                    title={`${event.time} ${event.title}`}
-                    onClick={() => setSelectedEvent(event)}
+                    title={`${fmtTime(event.time)} ${event.title}`}
+                    onClick={() => onSelect(event)} // setSelectedEvent(event)}
                   >
                     {formatTimeShort(event.time)} {event.title}
                   </div>
@@ -117,13 +110,5 @@ export function Calendar({ events }: CalendarProps) {
         ))}
       </div>
     </div>
-
-    {selectedEvent && (
-      <EventDescription
-        event={selectedEvent}
-        onClose={() => setSelectedEvent(null)}
-      />
-    )}
-    </>
   );
 }
