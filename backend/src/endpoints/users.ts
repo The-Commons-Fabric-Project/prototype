@@ -1,7 +1,12 @@
 import { Router, Request, Response } from 'express';
 import { Prisma } from '../generated/prisma/client.js';
 import { prisma } from '../db/client.js';
-import { parseCommonsFabricUser, dbInsertCommonsFabricUser, CommonsFabricUserValidationError } from '../models/CommonsFabricUser.js';
+import { hashPassword } from '../utils/encryption.js';
+import { 
+  parseCommonsFabricUser, 
+  dbInsertCommonsFabricUser, 
+  CommonsFabricUserValidationError 
+} from '../models/CommonsFabricUser.js';
 
 /**
  * Routes for the `users` table. Mounted under /users in app.ts.
@@ -18,7 +23,7 @@ usersRouter.get('/count', async (_req: Request, res: Response) => {
 });
 
 /**
- * POST /users
+ * POST /users/create
  * Creates a new user.
  *
  * Body: { fullname, email, password, organizationId }
@@ -27,6 +32,8 @@ usersRouter.get('/count', async (_req: Request, res: Response) => {
 usersRouter.post('/create', async (req: Request, res: Response) => {
   try {
     const newUser = parseCommonsFabricUser(req.body);
+    newUser.passwordHash = await hashPassword(newUser.password);
+
     const user = await dbInsertCommonsFabricUser(newUser);
     res.status(201).json(user);
   } catch (err) {
