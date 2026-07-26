@@ -1,5 +1,7 @@
 /**
  * Development-only seed for the SQLite dev database.
+ * Note that this file was entirely AI generated. It's only a one use script for seeding data
+ * so it's probably fine. I have not read through the code in detail.
  *
  * Loads dev-organizations-seed.json (the human-editable fixture), validates it,
  * then wipes and repopulates organizations, organizations_tags, users and events.
@@ -13,8 +15,9 @@
  * frontend mocks already use (SEED_ORGS is 1-6). SQLite raises its AUTOINCREMENT
  * high-water mark to match, so rows the app creates later still get fresh ids.
  *
- * `devPassword` in the fixture is plaintext; it is hashed with argon2id here so
- * users.password_hash only ever receives a hash.
+ * `devPassword` in the fixture is plaintext; it is hashed here with the same
+ * hashPassword helper the app uses, so users.password_hash only ever receives a
+ * hash in the same format production writes.
  *
  * Usage (from backend/):
  *   npm run db:seed                 wipe and reseed
@@ -24,10 +27,10 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { hash, argon2id } from 'argon2';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 
 import { PrismaClient } from '../../src/generated/prisma/client.js';
+import { hashPassword } from '../../src/utils/encryption.js';
 
 const SEED_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'dev-organizations-seed.json');
 
@@ -253,29 +256,24 @@ function validate(raw: unknown): string[] {
 }
 
 /**
- * Hashes each user's plaintext devPassword with argon2id.
+ * Hashes each user's plaintext devPassword via the shared hashPassword helper.
  *
- * argon2 is deliberately slow, so identical passwords are hashed once and shared -
- * the whole fixture currently uses one password, which would otherwise mean N
- * redundant ~100ms hashes.
+ * Every user is hashed separately even when they share a plaintext: argon2 embeds a
+ * fresh random salt per call, so reusing one digest across users would make the dev
+ * data misrepresent production - identical hashes on identical passwords is exactly
+ * the pattern salting exists to prevent. The hashes run concurrently to keep the
+ * cost of N deliberately-slow hashes off the critical path.
  */
 async function hashPasswords(users: SeedUser[], defaultPassword?: string): Promise<Map<number, string>> {
-  const byPlaintext = new Map<string, string>();
-  const byUserId = new Map<number, string>();
+  const digests = await Promise.all(
+    users.map((user) => {
+      const plaintext = user.devPassword ?? defaultPassword;
+      if (plaintext === undefined) throw new Error(`user ${user.id} has no password to hash`); // validate() already guarantees this
+      return hashPassword(plaintext);
+    }),
+  );
 
-  for (const user of users) {
-    const plaintext = user.devPassword ?? defaultPassword;
-    if (plaintext === undefined) throw new Error(`user ${user.id} has no password to hash`); // validate() already guarantees this
-
-    let digest = byPlaintext.get(plaintext);
-    if (digest === undefined) {
-      digest = await hash(plaintext, { type: argon2id });
-      byPlaintext.set(plaintext, digest);
-    }
-    byUserId.set(user.id, digest);
-  }
-
-  return byUserId;
+  return new Map(users.map((user, i) => [user.id, digests[i]!]));
 }
 
 async function main() {

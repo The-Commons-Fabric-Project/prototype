@@ -2,7 +2,7 @@
   "_notes": {
     "purpose": "Development-only seed data for the Rideau Community Hub prototype. Sourced from frontend/src/mocks/orgs.ts and frontend/src/mocks/events.ts.",
     "editing": "Flat arrays mirroring the Prisma models in prisma/schema.prisma. Cross-references use the explicit `id` fields below (users.organizationId -> organizations.id, events.ownerId -> users.id). Ids are only meaningful inside this file; the seed script is responsible for mapping them onto real autoincrement primary keys.",
-    "passwords": "`devPassword` is plaintext and exists only so the seed script can hash it with argon2 before writing to users.password. Never ship this file to a non-development environment.",
+    "passwords": "`devPassword` is plaintext and exists only so the seed script can hash it with argon2 before writing to users.password_hash. Each user is hashed separately, so users sharing a password still get distinct hashes (argon2 salts per call). Never ship this file to a non-development environment.",
     "datetimes": "ISO 8601 with an explicit UTC offset. -04:00 is Ottawa local time (EDT) for these June dates. The frontend derives month/day/year/time for display.",
     "organizationTags": "Must be one of: Advocacy, Civic, Community, Culture, Education, Equity, Indigenous, Makers, Policy, Research, Seniors, Settlement, Tech, Volunteer, Youth. Enforced by a CHECK in the initial migration.",
     "images": "organizations.logo uses a shared placeholder path; no logo assets exist in the repo yet. events.thumbnail is left null for the same reason.",
