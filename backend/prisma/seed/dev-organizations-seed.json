@@ -1,0 +1,216 @@
+{
+  "_notes": {
+    "purpose": "Development-only seed data for the Rideau Community Hub prototype. Sourced from frontend/src/mocks/orgs.ts and frontend/src/mocks/events.ts.",
+    "editing": "Flat arrays mirroring the Prisma models in prisma/schema.prisma. Cross-references use the explicit `id` fields below (users.organizationId -> organizations.id, events.ownerId -> users.id). Ids are only meaningful inside this file; the seed script is responsible for mapping them onto real autoincrement primary keys.",
+    "passwords": "`devPassword` is plaintext and exists only so the seed script can hash it with argon2 before writing to users.password_hash. Each user is hashed separately, so users sharing a password still get distinct hashes (argon2 salts per call). Never ship this file to a non-development environment.",
+    "datetimes": "ISO 8601 with an explicit UTC offset. -04:00 is Ottawa local time (EDT) for these June dates. The frontend derives month/day/year/time for display.",
+    "organizationTags": "Must be one of: Advocacy, Civic, Community, Culture, Education, Equity, Indigenous, Makers, Policy, Research, Seniors, Settlement, Tech, Volunteer, Youth. Enforced by a CHECK in the initial migration.",
+    "images": "organizations.logo uses a shared placeholder path; no logo assets exist in the repo yet. events.thumbnail is left null for the same reason.",
+    "eventTags": "The frontend's `Registration` / `Volunteers wanted` chips have no column in the schema, so they are represented by the presence of registrationLink / volunteerContact respectively."
+  },
+
+  "defaultDevPassword": "devpassword123",
+
+  "organizations": [
+    {
+      "id": 1,
+      "name": "Rideau-Rockcliffe Community Resource Centre",
+      "logo": "./public/organization_logos/placeholder.png",
+      "blurb": "A neighbourhood anchor offering settlement, employment, family, and seniors programming across Ottawa's east end.",
+      "contact": "hello@rrcrc.example",
+      "website": "https://rrcrc.example",
+      "tags": ["Community", "Settlement", "Seniors"]
+    },
+    {
+      "id": 2,
+      "name": "Council on Aging of Ottawa",
+      "logo": "./public/organization_logos/placeholder.png",
+      "blurb": "Advocacy and convening for older adults, championing age-friendly policy and connection across the city.",
+      "contact": "info@coaottawa.example",
+      "website": "https://coaottawa.example",
+      "tags": ["Seniors", "Advocacy"]
+    },
+    {
+      "id": 3,
+      "name": "Odawa Native Friendship Centre",
+      "logo": "./public/organization_logos/placeholder.png",
+      "blurb": "A welcoming gathering place delivering culturally grounded programs and supports for the urban Indigenous community.",
+      "contact": "reception@odawa.example",
+      "website": "https://odawa.example",
+      "tags": ["Indigenous", "Culture", "Community"]
+    },
+    {
+      "id": 4,
+      "name": "Social Planning Council of Ottawa",
+      "logo": "./public/organization_logos/placeholder.png",
+      "blurb": "Research, policy, and community development working toward a more equitable and inclusive Ottawa.",
+      "contact": "spc@spcottawa.example",
+      "website": "https://spcottawa.example",
+      "tags": ["Policy", "Research", "Equity"]
+    },
+    {
+      "id": 5,
+      "name": "STEAMakers Guild",
+      "logo": "./public/organization_logos/placeholder.png",
+      "blurb": "Hands-on science, tech, engineering, art, and math workshops for curious makers of every age.",
+      "contact": "build@steamakers.example",
+      "website": "https://steamakers.example",
+      "tags": ["Education", "Makers", "Youth"]
+    },
+    {
+      "id": 6,
+      "name": "Ottawa Civic Tech",
+      "logo": "./public/organization_logos/placeholder.png",
+      "blurb": "Volunteers building open, public-interest technology with and for the Ottawa community.",
+      "contact": "hi@ottawacivictech.example",
+      "website": "https://ottawacivictech.example",
+      "tags": ["Tech", "Civic", "Volunteer"]
+    }
+  ],
+
+  "users": [
+    {
+      "id": 1,
+      "fullname": "Amina Ibrahim",
+      "email": "amina.ibrahim@rrcrc.example",
+      "devPassword": "devpassword123",
+      "organizationId": 1
+    },
+    {
+      "id": 2,
+      "fullname": "Daniel Okonjo",
+      "email": "daniel.okonjo@rrcrc.example",
+      "devPassword": "devpassword123",
+      "organizationId": 1
+    },
+    {
+      "id": 3,
+      "fullname": "Margaret Chen",
+      "email": "margaret.chen@coaottawa.example",
+      "devPassword": "devpassword123",
+      "organizationId": 2
+    },
+    {
+      "id": 4,
+      "fullname": "John Doe",
+      "email": "john.doe@odawa.example",
+      "devPassword": "devpassword123",
+      "organizationId": 3
+    },
+    {
+      "id": 5,
+      "fullname": "Luc Tremblay",
+      "email": "luc.tremblay@spcottawa.example",
+      "devPassword": "devpassword123",
+      "organizationId": 4
+    },
+    {
+      "id": 6,
+      "fullname": "Priya Raman",
+      "email": "priya.raman@steamakers.example",
+      "devPassword": "devpassword123",
+      "organizationId": 5
+    },
+    {
+      "id": 7,
+      "fullname": "Jordan Lefebvre",
+      "email": "jordan.lefebvre@ottawacivictech.example",
+      "devPassword": "devpassword123",
+      "organizationId": 6
+    },
+    {
+      "id": 8,
+      "fullname": "Max Peacock",
+      "email": "max.peacock@ottawacivictech.example",
+      "devPassword": "devpassword123",
+      "organizationId": 6
+    }
+  ],
+
+  "events": [
+    {
+      "id": 1,
+      "title": "Newcomer Welcome Morning",
+      "ownerId": 1,
+      "startsAt": "2026-06-16T10:00:00-04:00",
+      "endsAt": "2026-06-16T12:00:00-04:00",
+      "location": "RCH Room 1",
+      "description": "A relaxed drop-in for newcomers to the neighbourhood. Meet settlement workers, learn what programs are running this summer, and connect with other families over coffee.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteer@rrcrc.example"
+    },
+    {
+      "id": 2,
+      "title": "Commons Fabric Meetup",
+      "ownerId": 7,
+      "startsAt": "2026-06-18T18:00:00-04:00",
+      "endsAt": "2026-06-18T20:00:00-04:00",
+      "location": "RCH Room 2",
+      "description": "Monthly working session for the Commons Fabric project. Newcomers welcome — we'll walk through the calendar prototype and pick up open tasks together.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteers@ottawacivictech.example"
+    },
+    {
+      "id": 3,
+      "title": "Age-Friendly Ottawa Town Hall",
+      "ownerId": 3,
+      "startsAt": "2026-06-19T13:30:00-04:00",
+      "endsAt": "2026-06-19T15:30:00-04:00",
+      "location": "RCH Main Hall",
+      "description": "An open conversation about making Ottawa more age-friendly. Bring your ideas on transit, housing, and connection — your input shapes this year's advocacy priorities.",
+      "thumbnail": null,
+      "registrationLink": "https://coaottawa.example/events/age-friendly-town-hall",
+      "volunteerContact": null
+    },
+    {
+      "id": 4,
+      "title": "Odawa Annual Powwow (Day 1)",
+      "ownerId": 4,
+      "startsAt": "2026-06-20T11:00:00-04:00",
+      "endsAt": "2026-06-20T13:00:00-04:00",
+      "location": "RCH Grounds",
+      "description": "Day one of our annual powwow — a celebration of culture, dance, and community. Grand entry at noon, followed by drumming, dancing, craft and food vendors. All are welcome.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "powwow@odawa.example"
+    },
+    {
+      "id": 5,
+      "title": "Odawa Annual Powwow (Day 2)",
+      "ownerId": 4,
+      "startsAt": "2026-06-21T11:00:00-04:00",
+      "endsAt": "2026-06-21T13:00:00-04:00",
+      "location": "RCH Grounds",
+      "description": "Day two of our annual powwow, closing on National Indigenous Peoples Day. Grand entry at noon, special performances, honour songs, and a community feast to close the weekend.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "powwow@odawa.example"
+    },
+    {
+      "id": 6,
+      "title": "Poverty & Policy Briefing",
+      "ownerId": 5,
+      "startsAt": "2026-06-23T12:00:00-04:00",
+      "endsAt": "2026-06-23T13:00:00-04:00",
+      "location": "RCH Room 2",
+      "description": "A lunchtime briefing on the latest local data around income, housing, and food security, with time for discussion on where research can drive change.",
+      "thumbnail": null,
+      "registrationLink": "https://spcottawa.example/briefings/poverty-and-policy",
+      "volunteerContact": null
+    },
+    {
+      "id": 7,
+      "title": "Family Maker Lab: Circuits",
+      "ownerId": 6,
+      "startsAt": "2026-06-26T15:30:00-04:00",
+      "endsAt": "2026-06-26T17:30:00-04:00",
+      "location": "RCH Workshop",
+      "description": "Hands-on electronics for curious makers aged 8 and up. Build a working circuit you can take home — no experience needed, just bring your curiosity.",
+      "thumbnail": null,
+      "registrationLink": "https://steamakers.example/register/circuits-lab",
+      "volunteerContact": "volunteer@steamakers.example"
+    }
+  ]
+}

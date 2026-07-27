@@ -1,4 +1,4 @@
-// This is your Prisma schema file,
+// This is the Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 //
 // Source of truth for the DB structure. The human-readable diagram lives in
@@ -23,7 +23,7 @@ model User {
   id             Int          @id @default(autoincrement())
   fullname       String
   email          String       @unique
-  password       String // stores the password hash, not plaintext
+  passwordHash   String       @map("password_hash") // argon2id PHC string - the salt and params are encoded in it
   organizationId Int          @map("organization_id")
   createdAt      DateTime     @default(now()) @map("created_at")
 
@@ -39,7 +39,7 @@ model Event {
   ownerId          Int      @map("owner_id")
   startsAt         DateTime @map("starts_at")
   endsAt           DateTime @map("ends_at")
-  location         Int
+  location         String?
   description      String?
   thumbnail        String? // file path of image e.g. ./public/event_images/example.jpg
   registrationLink String?  @map("registration_link")
@@ -47,7 +47,6 @@ model Event {
   createdAt        DateTime @default(now()) @map("created_at")
 
   owner            User     @relation(fields: [ownerId], references: [id])
-  address          Address  @relation(fields: [location], references: [id])
 
   @@map("events")
 }
@@ -80,16 +79,17 @@ model OrganizationTag {
   @@map("organizations_tags")
 }
 
-model Address {
-  id         Int     @id @default(autoincrement())
-  line1      String  @default("815 St. Laurent Blvd") // Address i.e. - 123 Example Street
-  line2      String? // Second address line - i.e. Apt 123 / Room 123
-  city       String  @default("Ottawa")
-  province   String? @default("ON")
-  postalCode String? @default("K1K3A7") @map("postal_code")
-  country    String  @default("CA") // ISO 3166-1 alpha-2, e.g. "US", "CA"
+// Location is now just a string commenting this out for now for future use
+// model Address {
+//   id         Int     @id @default(autoincrement())
+//   line1      String  @default("815 St. Laurent Blvd") // Address i.e. - 123 Example Street
+//   line2      String? // Second address line - i.e. Apt 123 / Room 123
+//   city       String  @default("Ottawa")
+//   province   String? @default("ON")
+//   postalCode String? @default("K1K3A7") @map("postal_code")
+//   country    String  @default("CA") // ISO 3166-1 alpha-2, e.g. "US", "CA"
 
-  events     Event[]
+//   events     Event[]
 
-  @@map("addresses")
-}
+//   @@map("addresses")
+// }

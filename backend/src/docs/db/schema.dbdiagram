@@ -25,12 +25,6 @@
         "y": 806.6157105103013
       },
       {
-        "name": "addresses",
-        "schemaName": "public",
-        "x": -272.5910966428993,
-        "y": 407.40990923896527
-      },
-      {
         "name": "organizations_tags",
         "schemaName": "public",
         "x": -269.9059172791093,
@@ -83,21 +77,6 @@
         "secondTableName": "users",
         "secondSchemaName": "public",
         "secondRelation": "1",
-        "checkPoints": []
-      },
-      {
-        "firstFieldNames": [
-          "id"
-        ],
-        "firstTableName": "addresses",
-        "firstSchemaName": "public",
-        "firstRelation": "1",
-        "secondFieldNames": [
-          "location"
-        ],
-        "secondTableName": "events",
-        "secondSchemaName": "public",
-        "secondRelation": "*",
         "checkPoints": []
       },
       {

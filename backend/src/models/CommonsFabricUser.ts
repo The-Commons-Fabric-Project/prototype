@@ -6,7 +6,17 @@ export interface CommonsFabricUser {
   fullname: string;
   email: string;
   password: string;
+  passwordHash?: string;
   organizationId: number;
+}
+
+/** The user fields returned to clients — never includes passwordHash. */
+export interface CommonsFabricUserRecord {
+  id: number;
+  fullname: string;
+  email: string;
+  organizationId: number;
+  createdAt: Date;
 }
 
 /**
@@ -32,13 +42,19 @@ export function parseCommonsFabricUser(body: unknown): CommonsFabricUser {
 
 /**
  * Creates a new user. Fails (Prisma P2002) if the email is already taken.
+ * Throws CommonsFabricUserValidationError if the password has not been hashed.
  */
-export function dbInsertCommonsFabricUser(user: CommonsFabricUser) {
+export async function dbInsertCommonsFabricUser(
+  user: CommonsFabricUser,
+): Promise<CommonsFabricUserRecord> {
+  if (user.passwordHash === undefined) {
+    throw new CommonsFabricUserValidationError('passwordHash must be set before inserting a user');
+  }
   return prisma.user.create({
     data: {
       fullname: user.fullname,
       email: user.email,
-      password: user.password,
+      passwordHash: user.passwordHash,
       organizationId: user.organizationId,
     },
     select: { id: true, fullname: true, email: true, organizationId: true, createdAt: true },

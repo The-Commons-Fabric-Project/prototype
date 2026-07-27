@@ -38,7 +38,7 @@ Table events {
     owner_id            bigint          [not null, ref: > users.id]
     starts_at           timestamptz     [not null]
     ends_at             timestamptz     [not null, check: `ends_at > starts_at`]
-    location            bigint          [not null, ref: > addresses.id]
+    location            text            [note: "Free-form location, e.g. 'Free-form location, e.g. 'RCH Room 1'. Was a FK to a previous addresses table, now commented out in the file"]
     description         text            [note: 'Content of the post']
     thumbnail           text            [note: "file path of image e.g. ./public/event_images/example.jpg"]
     registration_link   text            [default: null, check: `registration_link IS NULL OR registration_link ~* '^https?://[^\s/$.?#].[^\s]*$'`]
@@ -64,12 +64,15 @@ Table organizations_tags {
     }
 }
 
-Table addresses {
-    id          bigint      [primary key, increment]
-    line1       text        [not null, default: "815 St. Laurent Blvd", note: "Address i.e. - 123 Example Street"]
-    line2       text        [note: "Second Address line - i.e. Apt 123 / Room 123"]
-    city        text        [not null, default: "Ottawa"]
-    province    varchar(2)  [default: "ON", check: `province IS NULL OR province ~ '^[A-Z]{2}$'`]       // state/province
-    postal_code varchar(6)  [default: "K1K3A7", check: `postal_code IS NULL OR postal_code ~* '^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$'`]
-    country     varchar(2)  [default: "CA", check: `country ~ '^[A-Z]{2}$'`]  // ISO 3166-1 alpha-2, e.g. "US", "CA"
-}
+// events.location is now a plain string, so addresses is commented out for now.
+// Kept here for future use, mirroring the commented-out Address model in
+// prisma/schema.prisma.
+// Table addresses {
+//     id          bigint      [primary key, increment]
+//     line1       text        [not null, default: "815 St. Laurent Blvd", note: "Address i.e. - 123 Example Street"]
+//     line2       text        [note: "Second Address line - i.e. Apt 123 / Room 123"]
+//     city        text        [not null, default: "Ottawa"]
+//     province    varchar(2)  [default: "ON", check: `province IS NULL OR province ~ '^[A-Z]{2}$'`]       // state/province
+//     postal_code varchar(6)  [default: "K1K3A7", check: `postal_code IS NULL OR postal_code ~* '^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$'`]
+//     country     varchar(2)  [default: "CA", check: `country ~ '^[A-Z]{2}$'`]  // ISO 3166-1 alpha-2, e.g. "US", "CA"
+// }
