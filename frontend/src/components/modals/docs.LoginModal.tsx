@@ -14,7 +14,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   parameters: {
     docs: {
-      story: { height: "500px"}
+      story: { height: "800px"}
     }
   }
 };

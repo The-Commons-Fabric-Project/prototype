@@ -1,13 +1,13 @@
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
-import EventDescription from './EventDescription';
+import EventDetailModal from './EventDetailModal';
 import { EXAMPLE_EVENTS } from "../../mocks/events";
 
 const meta = {
-  title: 'Components/Pop-Up/Event Description',
-  component: EventDescription,
-} satisfies Meta<typeof EventDescription>;
+  title: 'Components/Pop-Up/Event Detail Modal',
+  component: EventDetailModal,
+} satisfies Meta<typeof EventDetailModal>;
 
 export default meta;
 

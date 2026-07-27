@@ -1,12 +1,12 @@
 import type { Event } from '../../types/events'
 
-type EventDescriptionProps = {
+type EventDetailModalProps = {
   event: Event;
   onClose: () => void;
 };
 
 /** Pop-up with event details when clicked */
-export default function EventDescription({ event, onClose }: EventDescriptionProps) {
+export default function EventDetailModal({ event, onClose }: EventDetailModalProps) {
   // should extract the HTML for popup to reuse in other modals
   return (
     <div

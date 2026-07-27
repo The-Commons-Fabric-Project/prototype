@@ -4,29 +4,32 @@ import type { Org } from '../types/orgs'
 import type { Event } from '../types/events'
 import { SEED_ORGS } from '../mocks/orgs'
 import { EXAMPLE_EVENTS } from '../mocks/events'
-import EventDescription from '../components/modals/EventDescription'
+
+import EventDetailModal from '../components/modals/EventDetailModal'
+import OrgCard from '../components/cards/OrgCard'
+import LogoPlaceholder from '../assets/LogoPlaceholder';
 
 export const Route = createFileRoute('/directory')({
   component: Directory,
 })
 
-function LogoPlaceholder({ size = 72 }: { size?: number }) {
-  return (
-    <div
-      className="shrink-0 flex items-center justify-center text-muted font-semibold font-body leading-[1.2] tracking-[0.2px]"
-      style={{
-        width: size,
-        height: size,
-        borderRadius: size <= 80 ? 12 : 16,
-        background: 'rgb(231, 238, 247)',
-        border: '1px dashed rgb(224, 228, 235)',
-        fontSize: Math.max(8.5, size * 0.12),
-      }}
-    >
-      [logo]
-    </div>
-  )
-}
+// function LogoPlaceholder({ size = 72 }: { size?: number }) {
+//   return (
+//     <div
+//       className="shrink-0 flex items-center justify-center text-muted font-semibold font-body leading-[1.2] tracking-[0.2px]"
+//       style={{
+//         width: size,
+//         height: size,
+//         borderRadius: size <= 80 ? 12 : 16,
+//         background: 'rgb(231, 238, 247)',
+//         border: '1px dashed rgb(224, 228, 235)',
+//         fontSize: Math.max(8.5, size * 0.12),
+//       }}
+//     >
+//       [logo]
+//     </div>
+//   )
+// }
 
 function OrgTag({ children }: { children: React.ReactNode }) {
   return (
@@ -36,31 +39,32 @@ function OrgTag({ children }: { children: React.ReactNode }) {
   )
 }
 
-function OrgCard({ org, onClick, idx }: { org: Org; onClick: () => void; idx: number }) {
-  return (
-    <div
-      onClick={onClick}
-      className="flex gap-[18px] items-start bg-white border border-line rounded-2xl p-5 cursor-pointer hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(65,65,66,0.10)] active:scale-[0.99]"
-      style={{
-        transition: 'transform .18s ease, box-shadow .18s ease',
-        animation: `cf-stagger .4s ease ${idx * 0.05}s both`,
-      }}
-    >
-      <LogoPlaceholder size={72} />
-      <div className="flex-1 min-w-0">
-        <div className="flex gap-2 flex-wrap mb-[10px]">
-          {org.tags.map((t) => <OrgTag key={t}>{t}</OrgTag>)}
-        </div>
-        <h3 className="font-display text-[19px] font-semibold text-ink m-0 mb-[6px] leading-[1.2]">
-          {org.name}
-        </h3>
-        <p className="text-[13.5px] text-muted leading-[1.5] m-0 font-body">
-          {org.blurb}
-        </p>
-      </div>
-    </div>
-  )
-}
+// FIXME: OrgCard.tsx missing organization tags
+// function OrgCard({ org, onClick, idx }: { org: Org; onClick: () => void; idx: number }) {
+//   return (
+//     <div
+//       onClick={onClick}
+//       className="flex gap-[18px] items-start bg-white border border-line rounded-2xl p-5 cursor-pointer hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(65,65,66,0.10)] active:scale-[0.99]"
+//       style={{
+//         transition: 'transform .18s ease, box-shadow .18s ease',
+//         animation: `cf-stagger .4s ease ${idx * 0.05}s both`,
+//       }}
+//     >
+//       <LogoPlaceholder size={72} />
+//       <div className="flex-1 min-w-0">
+//         <div className="flex gap-2 flex-wrap mb-[10px]">
+//           {org.tags.map((t) => <OrgTag key={t}>{t}</OrgTag>)}
+//         </div>
+//         <h3 className="font-display text-[19px] font-semibold text-ink m-0 mb-[6px] leading-[1.2]">
+//           {org.name}
+//         </h3>
+//         <p className="text-[13.5px] text-muted leading-[1.5] m-0 font-body">
+//           {org.blurb}
+//         </p>
+//       </div>
+//     </div>
+//   )
+// }
 
 function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
   return (
@@ -98,7 +102,7 @@ function ProfileView({
   onBack: () => void
   onSelectEvent: (e: Event) => void
 }) {
-  const orgEvents = EXAMPLE_EVENTS.filter((e) => e.organization === org.name)
+  const orgEvents = EXAMPLE_EVENTS.filter((e) => e.org === org.name)
 
   return (
     <div style={{ animation: 'cf-fade .3s ease' }}>
@@ -205,7 +209,7 @@ function Directory() {
       )}
 
       {selectedEvent && (
-        <EventDescription event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+        <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
       )}
     </div>
   )

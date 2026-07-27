@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Event } from '../../types/events'
 import EventCard from './EventCard'
-import EventDescription from '../modals/EventDescription'
+import EventDetailModal from '../modals/EventDetailModal'
 
 // FIXME: component has been swapped out?
 
@@ -25,7 +25,7 @@ export default function EventsGrid({ events }: EventsGridProps) {
       </div>
 
       {selectedEvent && (
-        <EventDescription
+        <EventDetailModal
           event={selectedEvent}
           onClose={() => setSelectedEvent(null)}
         />
