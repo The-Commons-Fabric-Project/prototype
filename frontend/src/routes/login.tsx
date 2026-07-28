@@ -9,7 +9,7 @@ function Login() {
   const updateHeader = (e: Partial<ModalHeaderProps>) => { setHeader({...e}) }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-paper">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-paper w-full">
       <h1 className="font-display text-2xl font-semibold text-ink">{header.title}</h1>
       <LoginForm 
         updateParent={updateHeader}

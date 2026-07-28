@@ -1,16 +1,17 @@
 import { useState } from "react";
 import Button from "../controls/Button";
 import Field from "../controls/Field";
-
 import type { TextInputVariant as InputVariant } from "../../types/variants";
+
+import { useAuth } from "../../auth";
 
 function inputStyle (err: React.ErrorInfo | boolean): InputVariant {
   return `${err ? "error" : "default"}`;
 }
 
 export default function LoginForm({
-  accounts, // this is just a placeholder for auth?
-  onLogin,
+  // accounts, // this is just a placeholder for auth?
+  // onLogin,
   onClose,
   updateParent,
   toast
@@ -20,12 +21,15 @@ export default function LoginForm({
   const [err, setErr] = useState("");
   const [newVal, setNewVal] = useState("");
 
-  const doLogin = () => {
-    const acct = accounts.find((a) => a.email === creds.email && a.password === creds.password);
-    if (!acct) { setErr("Email or password not recognized."); return; }
-    onLogin(acct);
-    toast(`Welcome back, ${acct.name}`);
-    onClose();
+  const auth = useAuth();
+
+  const doLogin = async () => {
+    // const acct = accounts.find((a) => a.email === creds.email && a.password === creds.password);
+    await auth.login(creds.email, creds.password).then(() => {
+      console.log(auth);
+      toast(`Welcome back, ${auth.user.username}`);
+      onClose();
+    }).catch(() => setErr("Authentication failed"));
   };
   
   const baseInputStyles = "px-3 py-2 border border-bg-subtle rounded-md w-full";
