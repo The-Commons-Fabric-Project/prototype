@@ -3,8 +3,6 @@ import type { Event } from '../../types/events'
 import EventCard from './EventCard'
 import EventDetailModal from '../modals/EventDetailModal'
 
-// FIXME: component has been swapped out?
-
 type EventsGridProps = {
   events: Event[];
 };
@@ -23,7 +21,7 @@ export default function EventsGrid({ events }: EventsGridProps) {
           />
         ))}
       </div>
-
+{/* FIXME: modal needs toast prop */}
       {selectedEvent && (
         <EventDetailModal
           event={selectedEvent}

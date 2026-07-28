@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/tanstack-react';
 import {INITIAL_VIEWPORTS } from 'storybook/viewport';
 
 import '../src/styles/index.css';
+import { AuthProvider } from '../src/auth'
 
 const preview: Preview = {
   parameters: {
@@ -27,14 +28,37 @@ const preview: Preview = {
         method: "alphabetical",
         order: [
           // TODO: configure story order for sidebar - ref https://storybook.js.org/docs/react/configure/sidebar-and-urls#sorting-stories or https://storybook.js.org/docs/writing-stories/naming-components-and-hierarchy#sorting-stories
-          "Design System", ["Foundations", "Buttons & Controls", "Tags, Chips, & Status", "Cards & Content", "Navigation & Headers", "Overlays & Feedback", "Calendar"],
+          "Design System", [
+            "Foundations", 
+            "Buttons & Controls", 
+            "Tags, Chips, & Status", 
+            "Cards & Content", 
+            "Navigation & Headers", 
+            "Overlays & Feedback", 
+            "Calendar"
+          ],
           "Components",
         ]
       }
     },
   },
+
   // enable autodocs for all components - https://storybook.js.org/docs/writing-docs/autodocs/?renderer=react&ref=guide
   tags: ['autodocs'],
+  
+  
+  decorators: [
+    // 👇 Defining the decorator in the preview file applies it to all stories
+    (Story, { parameters }) => {
+      // 👇 Make it configurable by reading the theme value from parameters
+      const { theme = 'light' } = parameters;
+      return (
+        <AuthProvider>
+          <Story />
+        </AuthProvider>
+      );
+    },
+  ]
 };
 
 export default preview;

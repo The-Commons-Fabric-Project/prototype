@@ -26,7 +26,7 @@ export default function Modal({
   return (
     <div
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-5 bg-black/45"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-5 bg-black/45 backdrop-blur-xs"
       style={{ animation: "cf-fade .16s ease" }}
     >
       <div

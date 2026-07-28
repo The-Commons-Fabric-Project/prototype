@@ -9,11 +9,14 @@ function inputStyle (err: React.ErrorInfo | boolean): InputVariant {
   return `${err ? "error" : "default"}`;
 }
 
+// HACK: separating the form from the modal is stupid, S
+
 export default function LoginForm({
   // accounts, // this is just a placeholder for auth?
   // onLogin,
   onClose,
   updateParent,
+  // FIXME: toast pop-ups
   toast
 }) {
   const [mode, setMode] = useState("login"); // login | password | email

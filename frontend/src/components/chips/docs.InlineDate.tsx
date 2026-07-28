@@ -10,4 +10,6 @@ export default meta;
 
 type Story = StoryObj<typeof InlineDate>;
 
-export const Basic: Story = {args: {}};
+export const Basic: Story = {args: {
+  date: "2026-06-16"
+}};

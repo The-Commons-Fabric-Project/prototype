@@ -1,96 +1,64 @@
 import type { Event } from '../../types/events'
+import { fmtDateChip, fmtPlainDate, fmtTime } from '../../utils/datetime';
+import DetailRow from '../cards/DetailRow';
+import Icon from '../../assets/Icons';
+import Modal, { ModalHeader } from './Modal';
+import Button from '../controls/Button';
 
 type EventDetailModalProps = {
+  /** event details */
   event: Event;
+  /** callback */
   onClose: () => void;
+  toast: () => void;
 };
 
 /** Pop-up with event details when clicked */
-export default function EventDetailModal({ event, onClose }: EventDetailModalProps) {
-  // should extract the HTML for popup to reuse in other modals
+export default function EventDetailModal({ 
+  event, onClose, toast
+}: EventDetailModalProps) {
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-xs"
-      style={{ background: 'rgba(65, 65, 66, 0.42)' }}
-      onClick={onClose}
-    >
-      <div
-        className="relative bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.18)] w-full max-w-[520px] overflow-hidden"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Close button */}
-        <button
-          aria-label="Close"
-          className="cf-press absolute top-4 right-4 z-10 w-[30px] h-[30px] rounded-[8px] border border-line bg-white cursor-pointer text-muted text-[16px] flex items-center justify-center"
-          onClick={onClose}
-        >
-          ×
-        </button>
-
-        {/* Header */}
-        <div className="px-6 pt-6 pb-0 flex gap-4 items-start">
-          <div className="flex flex-col items-center justify-center w-16 h-16 rounded-xl bg-white border border-line shrink-0">
-            <span className="text-[11px] font-bold text-secondary tracking-[0.6px] font-body">
-              {event.month.toUpperCase()}
-            </span>
-            <span className="font-display text-[28px] font-semibold text-ink leading-none">
-              {event.day}
-            </span>
-          </div>
-
-          <div className="pr-7">
-            <h2 className="font-display text-[24px] font-semibold text-ink m-0 leading-[1.15]">
-              {event.title}
-            </h2>
-            {event.organization && (
-              <p className="text-[13.5px] text-primary font-semibold mt-[6px] mb-0 font-body">
-                {event.organization}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Body */}
-        <div className="px-6 pt-[18px] pb-6">
-          {event.description && (
-            <p className="text-[14.5px] text-ink leading-[1.6] m-0 mb-4 font-body">
-              {event.description}
-            </p>
+    <Modal onClose={onClose} width={520}>
+      <ModalHeader 
+        title={event.title} 
+        onClose={onClose}
+        subtitle={event.org} />
+      <div className="px-6 pt-6 pb-6">
+        {event.description && <p className="text-[14.5px] text-slate-900 leading-[1.6] mb-4">{event.description}</p>}
+        <div className="flex flex-col gap-[10px] mb-[18px] border-t border-slate-200 pt-4">
+          <DetailRow 
+            icon={<Icon name="calendar" size={15} />}  
+            text={fmtPlainDate(event.date)} /> 
+          <DetailRow 
+            icon={<Icon name="clock" size={15} />} 
+            text={fmtTime(event.time)} />
+          <DetailRow 
+            icon={<Icon name="pin" size={15} />} 
+            text={event.location} />
+          <DetailRow 
+            icon={<Icon name="ticket" size={15} />} 
+            text={
+              event.registrationRequired ? (
+                <>Registration required — <a href={event.registrationLink || "#"} target="_blank" rel="noreferrer" onClick={(e) => { if (!event.registrationLink) e.preventDefault(); }} className="text-slate-900 font-semibold underline break-all">{event.registrationLink || "link to come"}</a></>
+              ) : "No registration required — just show up"
+            } />
+          {event.volunteersNeeded && (
+            <DetailRow icon={<Icon name="user" size={15}/>} text={<>Volunteers wanted — <a href={
+              // FIXME: event properties doesn't have volunteerContact
+              `mailto:${event.volunteerContact}`} className="text-slate-900 font-semibold underline">{event.volunteerContact}</a></>} />
           )}
-
-          <div className="flex flex-col gap-2 mb-[18px]">
-            <div className="flex gap-[10px] items-start text-[14px] text-muted leading-[1.45] font-body">
-              <span className="text-[15px] shrink-0">🕓</span>
-              <span>{event.time}</span>
-            </div>
-
-            {event.location && (
-              <div className="flex gap-[10px] items-start text-[14px] text-muted leading-[1.45] font-body">
-                <span className="text-[15px] shrink-0">📍</span>
-                <span>{event.location}</span>
-              </div>
-            )}
-
-            {(event.registrationInfo || !event.registerUrl) && (
-              <div className="flex gap-[10px] items-start text-[14px] text-muted leading-[1.45] font-body">
-                <span className="text-[15px] shrink-0">🎟️</span>
-                <span>{event.registrationInfo ?? 'No registration required — just show up'}</span>
-              </div>
-            )}
-          </div>
-
-          {event.registerUrl && (
-            <a
-              href={event.registerUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cf-press inline-block bg-primary text-white text-[13.5px] font-semibold font-body px-5 py-[10px] rounded-[10px] no-underline"
-            >
-              Register for this event
+          {event.registrationRequired && (
+            <a href={event.registrationLink || "#"} target="_blank" rel="noreferrer"
+              onClick={(e) => { if (!event.registrationLink) e.preventDefault(); 
+                // FIXME: fix toast pop-ups
+              toast("Opening registration…"); }}
+              className="no-underline">
+                {/* FIXME: button doesn't work */}
+              <Button className="w-full">Register on host's site ↗</Button>
             </a>
           )}
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

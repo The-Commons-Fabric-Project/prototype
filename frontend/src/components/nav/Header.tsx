@@ -18,6 +18,12 @@ type HeaderProps = {
 }
 
 // ref for user auth in a Header component: https://github.com/david4473/Reciped/blob/main/src/components/Header.tsx
+
+/**
+ * Header bar appearing on top of all pages.
+ * 
+ * TODO: replace CF logo with RCH logo, move CF logo to a new footer element
+ */
 export default function Header({}: HeaderProps) {
   const [hidden, setHidden] = useState(false);
   const session = useAuth();

@@ -15,6 +15,7 @@ const router = createRouter({
   context: {
     // auth will be passed down from App component
     auth: undefined!,
+    modal: "",
   },
 })
 

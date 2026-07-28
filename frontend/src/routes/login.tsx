@@ -4,7 +4,7 @@ import LoginForm from '../components/login/LoginForm'
 import { type ModalHeaderProps } from '../components/modals/Modal';
 
 function Login() {
-  const [header, setHeader] = useState({title: "Log in", subtitle: undefined}); // login | password | email
+  const [header, setHeader] = useState({title: "Log in", subtitle: undefined} as Partial<ModalHeaderProps>); // login | password | email
 
   const updateHeader = (e: Partial<ModalHeaderProps>) => { setHeader({...e}) }
 

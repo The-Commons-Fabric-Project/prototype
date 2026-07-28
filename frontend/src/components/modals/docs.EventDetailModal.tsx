@@ -5,7 +5,7 @@ import EventDetailModal from './EventDetailModal';
 import { EXAMPLE_EVENTS } from "../../mocks/events";
 
 const meta = {
-  title: 'Components/Pop-Up/Event Detail Modal',
+  // title: 'Components/Pop-Up/Event Detail Modal',
   component: EventDetailModal,
 } satisfies Meta<typeof EventDetailModal>;
 
