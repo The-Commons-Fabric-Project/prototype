@@ -7,12 +7,7 @@ export type ModalProps = {
   width: number,
 }
 
-// this was copied from Claude's TSX, need to reconcile with the existing EventDescription component
-
-/** Modal shell with header and blank contents. 
- * 
- * TODO: fix the close button
-*/
+/** Modal shell with header and blank contents. */
 export default function Modal({ 
   children, 
   onClose, 
@@ -26,8 +21,8 @@ export default function Modal({
   return (
     <div
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-5 bg-black/45 backdrop-blur-xs"
-      style={{ animation: "cf-fade .16s ease" }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-5 bg-black/45 backdrop-blur-xs animate-fade"
+      // style={{ animation: "cf-fade .16s ease" }}
     >
       <div
         role="dialog" aria-modal="true"

@@ -30,5 +30,25 @@ export const auth: AuthState = {
   logout: async () => {
     auth.isAuthenticated = false;
     auth.user = null;
-  },
+  }
+}
+
+export const addUser = (userInfo: Partial<UserCredentials>) => {
+  const { email, username, password } = {...userInfo};
+  const newUser: UserCredentials = {
+    id: "",
+    email: "",
+    username: "",
+    password: ""
+  };
+  if (email && password) {
+    newUser.email = email;
+    newUser.username = username ? username : email;
+    newUser.password = password;
+    newUser.id = (parseInt(accounts[accounts.length-1].id)+1).toString();
+
+    accounts.push(newUser);
+  } else {
+    throw new Error("both email and password are required");
+  }
 }

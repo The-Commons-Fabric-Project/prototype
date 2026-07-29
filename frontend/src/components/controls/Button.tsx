@@ -1,3 +1,4 @@
+import type { ButtonHTMLAttributes } from "react";
 import type { ButtonVariant } from "../../types/variants";
 
 // reference: https://blog.logrocket.com/building-reusable-react-components-using-tailwind-css/#testing-badge-component
@@ -9,11 +10,11 @@ const VARIANT_MAPS: Record<ButtonVariant, string> = {
   link: "bg-transparent text-bg-subtle underline"
 }
 
-type ButtonProps = {
+type ButtonProps = Partial<ButtonHTMLAttributes<any>> &{
   /** Variations on button styling */
   variant?: ButtonVariant;
   /** Label for the button, used for accessibility and default display text unless otherwise specified */
-  label: string;
+  label?: string;
   /** what do when button */
   onClick: () => void;
   /** child elements; for a button, usually just the display text */
@@ -35,7 +36,7 @@ export default function Button({
   const classes = `${baseClasses} ${VARIANT_MAPS[variant]} ${className || ''}`
   return (
     <button 
-      aria-label={label}
+      aria-label={label ? label : children?.toString() }
       onClick={onClick}
       className={`${classes} cf-press`}
       {...props}

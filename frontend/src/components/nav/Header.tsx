@@ -22,12 +22,12 @@ type HeaderProps = {
 /**
  * Header bar appearing on top of all pages.
  * 
- * TODO: replace CF logo with RCH logo, move CF logo to a new footer element
+ * TODO: replace CF logo with RCH logo, move CF logo to a new footer element -- blocked: need RCH logo asset
  */
 export default function Header({}: HeaderProps) {
   const [hidden, setHidden] = useState(false);
   const session = useAuth();
-  const { location } = useRouterState();
+  const { location,  } = useRouterState();
   const path = location.pathname;
 
   const [ showLogin, setShowLogin ] = useState(false);
@@ -45,7 +45,7 @@ export default function Header({}: HeaderProps) {
 
   const handleLogin = () => { setShowLogin(true) }
   const closeLogin = () => { setShowLogin(false) }
-  const handleLogout = () => {}
+  const handleLogout = () => { session.logout(); closeLogin() }
   const handleCreateAccount = () => {}
 
   return (
@@ -90,10 +90,9 @@ export default function Header({}: HeaderProps) {
           )}
         </div>
       </div>
-      
-      
     </header>
-    { showLogin ? (<LoginModal onClose={closeLogin} />) : ""}
+    {/* BUG (minor) showLogin never gets set back to false after authenticating */}
+    { (showLogin && !session.isAuthenticated) ? (<LoginModal onClose={closeLogin} />) : ""}
     </>
   )
 }

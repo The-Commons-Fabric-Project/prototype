@@ -1,5 +1,7 @@
 /**
  * Source and reference project: https://tanstack.com/router/v1/docs/how-to/setup-authentication#create-authentication-context
+ * 
+ * ??? Tanstack's setup example uses an AuthProvider, but their kitchen sink example
  */
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
@@ -61,6 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await auth.login(username, password);
 
     if (auth.isAuthenticated) {
+      console.log("Authentication successful");
       setUser(auth.user)
       setIsAuthenticated(true)
       // Store token for persistence
