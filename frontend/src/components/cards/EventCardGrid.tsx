@@ -26,6 +26,7 @@ export default function EventsGrid({ events }: EventsGridProps) {
         <EventDetailModal
           event={selectedEvent}
           onClose={() => setSelectedEvent(null)}
+
         />
       )}
     </>

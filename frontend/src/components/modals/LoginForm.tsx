@@ -3,26 +3,29 @@ import Button from "../controls/Button";
 import Field from "../controls/Field";
 import type { TextInputVariant as InputVariant } from "../../types/variants";
 
-import { useAuth } from "../../auth";
+import { useAuth } from "../../hooks/useAuth";
+import useToast from "../../hooks/useOverlayContext";
 
 function inputStyle (err: React.ErrorInfo | boolean): InputVariant {
   return `${err ? "error" : "default"}`;
 }
 
 // HACK: separating the form from the modal is stupid, S
+// TODO: this should probably be three separate forms? changing credentials could also be located in user profile (out of scope)
 
 export default function LoginForm({
   onClose,
   onSubmit,
   updateParent,
   // FIXME: toast pop-ups
-  toast
+  // toast
 }) {
   const [mode, setMode] = useState("login"); // login | password | email
   const [creds, setCreds] = useState({ email: "", password: "" });
   const [err, setErr] = useState("");
   const [newVal, setNewVal] = useState("");
 
+  const { toast } = useToast();
   const auth = useAuth(); // only use auth context to render error messages
   
   // const doLogin = async () => {

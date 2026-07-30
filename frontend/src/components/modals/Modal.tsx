@@ -4,7 +4,7 @@ import type { ReactElement } from "react";
 export type ModalProps = {
   children: ReactElement[],
   onClose: () => void,
-  width: number,
+  width?: number,
 }
 
 /** Modal shell with header and blank contents. */

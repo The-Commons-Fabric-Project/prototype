@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Modal, { ModalHeader, type ModalHeaderProps } from './Modal';
 import LoginForm from './LoginForm';
-import { useAuth } from '../../auth';
+import { useAuth } from '../../hooks/useAuth';
 
 /** Pop-up re: Log in button, prompts user for name/email and password */
 // TODO: make styles/structure match EventDescription, the other existing modal ATM

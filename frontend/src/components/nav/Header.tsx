@@ -6,7 +6,7 @@ import Button from '../controls/Button';
 
 import type { AuthState } from '../../types/users';
 import LoginModal from '../modals/LoginModal';
-import { useAuth } from '../../auth';
+import { useAuth } from '../../hooks/useAuth';
 
 type HeaderProps = {
 //   view: string;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router'
 import LoginForm from '../components/modals/LoginForm'
 import { type ModalHeaderProps } from '../components/modals/Modal';
-import { useAuth } from '../auth';
+import { useAuth } from '../hooks/useAuth';
 
 function Login() {
   const auth = useAuth();

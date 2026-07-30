@@ -1,15 +1,16 @@
 /**
  * Auth modals - create account
+ * FIXME: form doesn't check if the organization you're registering already exists, should first show you a dropdown of existing orgs then offer option to add a new org
  */ 
 
 import { useState } from "react";
 import { EMAIL_RE } from "../../types/orgs";
 import Toast from "./Toast";
-import Modal from "./Modal";
+import Modal, { ModalHeader } from "./Modal";
 
 type CreateAccountModalProps = {
   onClose: () => void;
-  onCreate: () => void;
+  onCreate: (e: any) => void;
   toast: typeof Toast;
 }
 
@@ -34,14 +35,17 @@ export default function CreateAccountModal({
     return Object.keys(e).length === 0;
   };
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    onCreate({...formData});
+  }
+
   return (
     <Modal onClose={onClose}>
       <ModalHeader title="Create account" onClose={onClose}
         subtitle={step === 1 ? "Register your organization to publish events." : "Confirm your details."} />
-      <form method="post" action={} name="Create account">
-        
-      </form>
-      <div className="p-[18px_24px_24px]">
+      <form onSubmit={handleSubmit} name="Create account">
+        <div className="p-[18px_24px_24px]">
         {step === 1 ? (
           <>
             <Field label="Organization name" error={errors.name}>
@@ -76,6 +80,7 @@ export default function CreateAccountModal({
           </>
         )}
       </div>
+      </form>
     </Modal>
   );
 }
