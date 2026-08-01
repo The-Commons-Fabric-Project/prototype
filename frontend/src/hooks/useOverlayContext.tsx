@@ -1,7 +1,20 @@
-import { useState, useRef, createContext, type RefObject, useContext } from "react";
+import { useState, useRef, createContext, type RefObject, useContext, type Dispatch, type SetStateAction } from "react";
+
+import LoginModal from "../components/modals/LoginModal";
+import CreateAccountModal from "../components/modals/CreateAccountModal";
+import EventDetailModal from "../components/modals/EventDetailModal";
+
+// any new modals added, just add them here
+const Modals = {
+  login: LoginModal,
+  create_account: CreateAccountModal,
+  event_detail: EventDetailModal,
+}
+
+type ModalOption = keyof typeof Modals | undefined;
 
 type OverlayState = {
-  modal: any,
+  modal: { modal: ModalOption, setModal: Dispatch<SetStateAction<ModalOption>> },
   toast: { toastMsg: string, toastTimer: any, toast: (msg: string) => void},
 }
 
@@ -9,6 +22,7 @@ const OverlayContext = createContext<OverlayState | undefined>(undefined); //({ 
 
 export function OverlayProvider({ children }: { children: React.ReactNode }) {
   const [toastMsg, setToastMsg] = useState("");
+  const [modal, setModal] = useState<ModalOption>(undefined);
   const toastTimer = useRef(0) as RefObject<NodeJS.Timeout | number > ;
 
   const toast = (msg: string) => {
@@ -21,20 +35,26 @@ export function OverlayProvider({ children }: { children: React.ReactNode }) {
   return (
     <OverlayContext.Provider value={{ 
       toast: { toastMsg, toastTimer, toast },
-      modal: ""
+      modal: { modal, setModal }
       }}>
       {children}
     </OverlayContext.Provider>
   )
 }
 
-export default function useToast() {
- const context = useContext(OverlayContext);
- 
+export function useToast() {
+  const context = useContext(OverlayContext);
   if (context === undefined) {
     throw new Error('useToast must be used within an OverlayProvider')
   }
   // else { console.log(`toast message is set to: ${context.toast.toastMsg}`)};
-
   return context.toast
+}
+
+export function useModal() {
+  const context = useContext(OverlayContext);
+  if (context === undefined) {
+    throw new Error('useModal must be used within an OverlayProvider');
+  }
+  return context.modal;
 }

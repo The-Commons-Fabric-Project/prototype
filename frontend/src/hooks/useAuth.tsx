@@ -15,9 +15,12 @@ import { auth } from '../mocks/auth'
 
 const AuthContext = createContext<AuthState | undefined>(undefined)
 
+type AuthAttemptStatus = 'unsent' | 'pending' | 'success' | 'fail';
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [status, setStatus] = useState<AuthAttemptStatus>('unsent');
   // const [isLoading, setIsLoading] = useState(true)
 
   // Restore auth state on app load
@@ -64,15 +67,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify({ username, password }),
     // })
+    setStatus('pending');
     await auth.login(username, password);
 
     if (auth.isAuthenticated) {
+      setStatus('success');
+      setUser(auth.user);
+      setIsAuthenticated(true);
       console.log("Authentication successful");
-      setUser(auth.user)
-      setIsAuthenticated(true)
+
       // Store token for persistence
       // localStorage.setItem('auth-token', userData.token)
     } else {
+      setStatus('fail');
       throw new Error('Authentication failed')
     }
   }
@@ -80,11 +87,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     setUser(null)
     setIsAuthenticated(false)
+    setStatus('unsent');
+    // TODO: add any additional logout logic
     // localStorage.removeItem('auth-token')
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, status, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

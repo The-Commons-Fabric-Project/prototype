@@ -1,46 +1,68 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../controls/Button";
 import Field from "../controls/Field";
 import type { TextInputVariant as InputVariant } from "../../types/variants";
 
 import { useAuth } from "../../hooks/useAuth";
-import useToast from "../../hooks/useOverlayContext";
+import { useToast } from "../../hooks/useOverlayContext";
 
 function inputStyle (err: React.ErrorInfo | boolean): InputVariant {
   return `${err ? "error" : "default"}`;
 }
 
-// HACK: separating the form from the modal is stupid, S
-// TODO: this should probably be three separate forms? changing credentials could also be located in user profile (out of scope)
-
+/** 
+ * 
+ * HACK: I (S) decided to separate the form from the modal so that the user could directly navigate to the URL /login but IDK if that's even useful...
+ * 
+ * TODO: this should probably be three separate forms? changing credentials could also be located in user profile (out of scope)
+ */
 export default function LoginForm({
   onClose,
-  onSubmit,
-  updateParent,
-  // FIXME: toast pop-ups
-  // toast
+  onChangeMode,
 }) {
+  // state
   const [mode, setMode] = useState("login"); // login | password | email
+  /** @state login form data */
   const [creds, setCreds] = useState({ email: "", password: "" });
-  const [err, setErr] = useState("");
+  /** @state user specified value to update new email or new password */
   const [newVal, setNewVal] = useState("");
+  const [err, setErr] = useState("");
 
+  // context
   const { toast } = useToast();
-  const auth = useAuth(); // only use auth context to render error messages
-  
-  // const doLogin = async () => {
-    // THIS IS BAD REACT, COMPONENT SHOULD NOT CALL THIS
+  const auth = useAuth(); 
+  const { status } = auth;
+
+  // event handlers and effects
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    onSubmit();
+    auth.login(creds.email, creds.password);
   } 
+
+  // handle when auth service successfully verifies the user
+  useEffect(() => {
+    // console.log("Login form effect!");
+    switch (status) {
+      case 'success': {
+        toast(`Welcome back, ${auth.user?.username}`);
+        onClose();
+        return;
+      } case 'fail': {
+        setErr("Authentication failed");
+        return;
+      } case 'pending': {
+        setErr("Logging in...");
+        return;
+      }
+    }
+  }, [status])
 
   const baseInputStyles = "px-3 py-2 border border-bg-subtle rounded-md w-full";
 
   // user is changing either password or username
   if (mode !== "login") {
     const isPw = mode === "password";
-    updateParent({title: (isPw? "Change password" : "Change email"), subtitle: (isPw ? undefined : "We'll send a confirmation link to the new address.")});
+    // onChangeMode({title: (isPw? "Change password" : "Change email"), subtitle: (isPw ? undefined : "We'll send a confirmation link to the new address.")});
     return (
       <form onSubmit={handleSubmit} className="py-2 px-6">
         <Field label={isPw ? "New password" : "New email"}>
@@ -52,11 +74,16 @@ export default function LoginForm({
         </Field>
         <div className="flex gap-2.5">
           <Button variant="ghost" className="flex-1"
-          onClick={() => { setMode("login"); setNewVal(""); }} label="Back"/>
+          onClick={() => { 
+            setMode("login"); 
+            setNewVal(""); 
+            onChangeMode({ title: "Log in", subtitle: undefined});
+          }} label="Back"/>
           <Button className="flex-1" type="submit"
             onClick={() => {
             toast(isPw ? "Password updated." : "Confirmation email sent.");
             setMode("login"); setNewVal("");
+            onChangeMode({ title: "Log in", subtitle: undefined});
           }} label="Save"/>
         </div>
       </form>
@@ -64,7 +91,7 @@ export default function LoginForm({
   }
 
   // default return: user logging in
-  // updateParent({ title: "Log in", subtitle: undefined});
+  // onChangeMode({ title: "Log in", subtitle: undefined});
   return (
     <form onSubmit={handleSubmit} className="py-2 px-6">
       <div className="bg-accent-primary-soft text-shadow-text-primary rounded-md text-xs font-normal tracking-[0.8px] px-3 py-2 mb-4">
@@ -81,12 +108,18 @@ export default function LoginForm({
       </Field>
       <Button type="submit" onClick={() => {
         // auth.login(creds.email, creds.password);
-        onSubmit({ username: creds.email, password: creds.password});
+        // onSubmit({ username: creds.email, password: creds.password});
       }} label="Log in"/>
       <div className="flex justify-center gap-4.5 mt-4">
-        <Button onClick={() => setMode("password")} 
+        <Button onClick={() => {
+          setMode("password");
+          onChangeMode({title: "Change password", subtitle: undefined});
+        }} 
         variant="link" label="Change password"/>
-        <Button onClick={() => setMode("email")} 
+        <Button onClick={() => {
+          setMode("email");
+          onChangeMode({title: "Change email", subtitle: "We'll send a confirmation link to the new address."});
+        }} 
         variant="link" label="Change email"/>
       </div>
     </form>

@@ -7,7 +7,7 @@ import type { MyRouterContext } from '../main'
 import Header from '../components/nav/Header'
 import type { AuthState } from '../types/users'
 import Toast from '../components/modals/Toast'
-import useToast from '../hooks/useOverlayContext'
+import { useToast } from '../hooks/useOverlayContext'
 
 
 // export const Route = createRootRoute({

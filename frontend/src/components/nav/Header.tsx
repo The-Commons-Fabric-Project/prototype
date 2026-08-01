@@ -4,9 +4,10 @@ import { Link, useRouterState } from '@tanstack/react-router'
 import CommonsFabricLogo from '../../assets/CommonsFabricLogo'
 import Button from '../controls/Button';
 
-import type { AuthState } from '../../types/users';
 import LoginModal from '../modals/LoginModal';
 import { useAuth } from '../../hooks/useAuth';
+import { useModal } from '../../hooks/useOverlayContext';
+import CreateAccountModal from '../modals/CreateAccountModal';
 
 type HeaderProps = {
 //   view: string;
@@ -29,8 +30,8 @@ export default function Header({}: HeaderProps) {
   const session = useAuth();
   const { location,  } = useRouterState();
   const path = location.pathname;
-
-  const [ showLogin, setShowLogin ] = useState(false);
+  
+  const { modal, setModal } = useModal();
 
   useEffect(() => {
     const handleScroll = () => setHidden(window.scrollY > 200)
@@ -43,10 +44,22 @@ export default function Header({}: HeaderProps) {
       active ? 'border-primary text-ink' : 'border-transparent text-muted'
     }`
 
-  const handleLogin = () => { setShowLogin(true) }
-  const closeLogin = () => { setShowLogin(false) }
-  const handleLogout = () => { session.logout(); closeLogin() }
-  const handleCreateAccount = () => {}
+  const handleLogin = () => { setModal("login"); }
+  const handleLogout = () => { session.logout(); }
+  const handleCreateAccount = () => { setModal("create_account"); }
+  const closeModal = () => { setModal(undefined) }
+
+  const renderModal =  () => { 
+    // header only controls the login and create account modals, don't need cases for the other modal options
+    switch (modal) {
+      case "create_account": 
+        return <CreateAccountModal onClose={closeModal} />;
+      case "login": 
+        return <LoginModal onClose={closeModal} />;
+      default: 
+        return "";
+    }
+  }
 
   return (
     <>
@@ -92,7 +105,9 @@ export default function Header({}: HeaderProps) {
       </div>
     </header>
     {/* BUG (minor) showLogin never gets set back to false after authenticating */}
-    { (showLogin && !session.isAuthenticated) ? (<LoginModal onClose={closeLogin} />) : ""}
+    {/* { (showLogin) ? (<LoginModal onClose={closeLogin} />) : ""} */}
+    {renderModal()}
+   
     </>
   )
 }

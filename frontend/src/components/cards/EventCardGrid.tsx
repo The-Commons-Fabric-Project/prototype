@@ -21,12 +21,11 @@ export default function EventsGrid({ events }: EventsGridProps) {
           />
         ))}
       </div>
-{/* FIXME: modal needs toast prop */}
+{/* FIXME: modal needs to use toast */}
       {selectedEvent && (
         <EventDetailModal
           event={selectedEvent}
           onClose={() => setSelectedEvent(null)}
-
         />
       )}
     </>

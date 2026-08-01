@@ -5,29 +5,42 @@
 
 import { useState } from "react";
 import { EMAIL_RE } from "../../types/orgs";
-import Toast from "./Toast";
 import Modal, { ModalHeader } from "./Modal";
+import Field from "../controls/Field";
+import Button from "../controls/Button";
+import Summary from "../cards/Summary";
+
+import { useToast } from "../../hooks/useOverlayContext";
 
 type CreateAccountModalProps = {
   onClose: () => void;
-  onCreate: (e: any) => void;
-  toast: typeof Toast;
+  // onCreate: (e: any) => void;
+}
+
+type CreateAccountFormData = {
+  name: string,
+  email: string,
+  password: string,
+  org: string
 }
 
 export default function CreateAccountModal({ 
-  onClose, onCreate, toast 
+  onClose, 
+  // onCreate, 
 }: CreateAccountModalProps) {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({ 
+  const [formData, setFormData] = useState<CreateAccountFormData>({ 
     name: "", 
     email: "", 
     password: "",
     org: "",
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Partial<CreateAccountFormData>>({});
+
+  const { toast } = useToast();
 
   const validate = () => {
-    const e = {};
+    const e: Partial<CreateAccountFormData> = {};
     if (!formData.name.trim()) e.name = "Organization name is required.";
     if (!EMAIL_RE.test(formData.email)) e.email = "Enter a valid email address.";
     if (formData.password.length < 6) e.password = "Password must be at least 6 characters.";
@@ -37,7 +50,7 @@ export default function CreateAccountModal({
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    onCreate({...formData});
+    // onCreate({...formData});
   }
 
   return (

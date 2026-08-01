@@ -3,7 +3,7 @@ import type { ReactElement } from "react";
 type SummaryProps = {
   label: string | ReactElement;
   value: string | number | ReactElement;
-  last: boolean;
+  last?: boolean;
 }
 
 export default function Summary({ label, value, last }: SummaryProps) {
