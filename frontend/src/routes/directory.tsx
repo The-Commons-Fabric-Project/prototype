@@ -4,6 +4,7 @@ import type { Org } from '../utils/types/orgs'
 import type { Event } from '../utils/types/events'
 import { SEED_ORGS } from '../mocks/orgs'
 import { EXAMPLE_EVENTS } from '../mocks/events'
+import { fmtDateChip } from '../utils/datetime'
 
 import EventDetailModal from '../components/modals/EventDetailModal'
 import OrgCard from '../components/cards/OrgCard'
@@ -67,6 +68,8 @@ function OrgTag({ children }: { children: React.ReactNode }) {
 // }
 
 function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
+  const { month, day } = fmtDateChip(event.date)
+
   return (
     <div
       onClick={onClick}
@@ -75,10 +78,10 @@ function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
     >
       <div className="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-xl bg-white border border-line shrink-0">
         <span className="text-[10px] font-bold text-secondary tracking-[0.6px] font-body">
-          {event.month}
+          {month}
         </span>
         <span className="font-display text-[22px] font-semibold text-ink leading-none">
-          {event.day}
+          {day}
         </span>
       </div>
       <div className="flex-1 min-w-0">
