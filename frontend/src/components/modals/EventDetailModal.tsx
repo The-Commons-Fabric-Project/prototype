@@ -4,19 +4,21 @@ import DetailRow from '../cards/DetailRow';
 import Icon from '../../assets/Icons';
 import Modal, { ModalHeader } from './Modal';
 import Button from '../controls/Button';
+import { useToast } from '../../hooks/useOverlayContext';
 
 type EventDetailModalProps = {
   /** event details */
   event: Event;
   /** callback */
   onClose: () => void;
-  toast: () => void;
 };
 
 /** Pop-up with event details when clicked */
-export default function EventDetailModal({ 
-  event, onClose, toast
+export default function EventDetailModal({
+  event, onClose
 }: EventDetailModalProps) {
+  const { toast } = useToast();
+
   return (
     <Modal onClose={onClose} width={520}>
       <ModalHeader 
@@ -49,12 +51,11 @@ export default function EventDetailModal({
           )}
           {event.registrationRequired && (
             <a href={event.registrationLink || "#"} target="_blank" rel="noreferrer"
-              onClick={(e) => { if (!event.registrationLink) e.preventDefault(); 
-                // FIXME: fix toast pop-ups
+              onClick={(e) => { if (!event.registrationLink) e.preventDefault();
               toast("Opening registration…"); }}
               className="no-underline">
                 {/* FIXME: button doesn't work */}
-              <Button className="w-full">Register on host's site ↗</Button>
+              <Button className="w-full" onClick={() => {}}>Register on host's site ↗</Button>
             </a>
           )}
         </div>

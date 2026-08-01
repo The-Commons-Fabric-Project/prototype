@@ -21,7 +21,6 @@ export default function EventsGrid({ events }: EventsGridProps) {
           />
         ))}
       </div>
-{/* FIXME: modal needs to use toast */}
       {selectedEvent && (
         <EventDetailModal
           event={selectedEvent}
