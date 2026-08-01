@@ -60,7 +60,8 @@ function Index() {
         <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
       )}
 
-      {modal === "create_event" && (
+      {/* the create event flow is meaningless without a signed-in user */}
+      {user && modal === "create_event" && (
         <CreateEventModal 
           onClose={() => setModal(undefined)}
           session={user}
