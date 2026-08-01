@@ -9,13 +9,11 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
-import type { AuthState, User } from '../utils/types/users'
+import type { AuthAttemptStatus, AuthState, User } from '../utils/types/users'
 // TODO: replace mock auth with real auth
 import { auth } from '../mocks/auth'
 
 const AuthContext = createContext<AuthState | undefined>(undefined)
-
-type AuthAttemptStatus = 'unsent' | 'pending' | 'success' | 'fail';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)

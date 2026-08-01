@@ -2,7 +2,7 @@
  * Mock react auth client, ref: https://github.com/better-auth/better-auth/blob/main/packages/better-auth/src/client/react/index.ts
  */
 
-import type { AuthState, User } from "../utils/types/users"
+import type { AuthClient, User } from "../utils/types/users"
 
 type UserCredentials = User & { password: string };
 
@@ -14,7 +14,7 @@ const accounts: UserCredentials[] = [{
 }];
 
 // copied from https://tanstack.com/router/latest/docs/framework/react/examples/kitchen-sink-react-query-file-based?path=examples%2Freact%2Fkitchen-sink-react-query-file-based%2Fsrc%2Futils%2Fauth.tsx
-export const auth: AuthState = {
+export const auth: AuthClient = {
   isAuthenticated: false,
   user: null,
   login: async (username: string, password: string) => {
