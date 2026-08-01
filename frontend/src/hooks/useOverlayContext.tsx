@@ -15,9 +15,11 @@ const Modals = {
 
 type ModalOption = keyof typeof Modals | undefined;
 
+type ToastTimer = RefObject<ReturnType<typeof setTimeout> | undefined>;
+
 type OverlayState = {
   modal: { modal: ModalOption, setModal: Dispatch<SetStateAction<ModalOption>> },
-  toast: { toastMsg: string, toastTimer: any, toast: (msg: string) => void},
+  toast: { toastMsg: string, toastTimer: ToastTimer, toast: (msg: string) => void},
 }
 
 const OverlayContext = createContext<OverlayState | undefined>(undefined); //({ toastMsg, toastTimer, toast })
@@ -25,7 +27,7 @@ const OverlayContext = createContext<OverlayState | undefined>(undefined); //({ 
 export function OverlayProvider({ children }: { children: React.ReactNode }) {
   const [toastMsg, setToastMsg] = useState("");
   const [modal, setModal] = useState<ModalOption>(undefined);
-  const toastTimer = useRef(0) as RefObject<NodeJS.Timeout | number > ;
+  const toastTimer: ToastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const toast = (msg: string) => {
     console.log(`Updating toast: "${msg}"`);

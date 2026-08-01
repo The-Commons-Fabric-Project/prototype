@@ -7,7 +7,7 @@ import type { ModalHeaderProps } from "./Modal";
 import { useAuth } from "../../hooks/useAuth";
 import { useToast } from "../../hooks/useOverlayContext";
 
-function inputStyle (err: React.ErrorInfo | boolean): InputVariant {
+function inputStyle (err: boolean): InputVariant {
   return `${err ? "error" : "default"}`;
 }
 
@@ -44,7 +44,7 @@ export default function LoginForm({
   const { status } = auth;
 
   // event handlers and effects
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     auth.login(creds.email, creds.password);
   } 

@@ -44,7 +44,7 @@ export default function CreateEventModal({
   const [errors, setErrors] = useState<EventFormErrors>({});
   const { toast } = useToast();
 
-  const setF = (patch) => setForm((f) => ({ ...f, ...patch }));
+  const setF = (patch: Partial<CreateEventFormData>) => setForm((f) => ({ ...f, ...patch }));
 
   const validate = () => {
     const e: Partial<CreateEventFormData> = {};
