@@ -5,10 +5,10 @@ import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import { routeTree } from './routeTree.gen'
 
-import './styles/index.css'
+import './index.css'
 import { OverlayProvider } from './hooks/useOverlayContext'
 
-import type { AuthState } from './types/users'
+import type { AuthState } from './utils/types/users'
 
 // const router = createRouter({ routeTree })
 

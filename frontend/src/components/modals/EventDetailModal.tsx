@@ -1,4 +1,4 @@
-import type { Event } from '../../types/events'
+import type { Event } from '../../utils/types/events'
 import { fmtDateChip, fmtPlainDate, fmtTime } from '../../utils/datetime';
 import DetailRow from '../cards/DetailRow';
 import Icon from '../../assets/Icons';

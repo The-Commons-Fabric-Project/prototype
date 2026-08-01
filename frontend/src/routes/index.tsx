@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
+import Button from '../components/controls/Button';
 import EventCardGrid from '../components/cards/EventCardGrid'
 import { CalendarView } from '../components/calendar/Calendar'
 import { EXAMPLE_EVENTS } from '../mocks/events'
+import { useAuth } from '../hooks/useAuth'
+import { useModal } from '../hooks/useOverlayContext';
+import CreateEventModal from '../components/modals/CreateEventModal';
 
 function Index() {
   const [view, setView] = useState<'cards' | 'calendar'>('cards')
+  const { user } = useAuth();
+  const { modal, setModal } = useModal();
 
   // TODO: add routes for individual events, follow https://www.notanumber.in/blog/render-modal-on-a-route-with-the-parent-in-background-in-tanstack-router
 
@@ -17,7 +23,8 @@ function Index() {
         One shared place to discover and share events across the Rideau Community Hub network.
       </p>
 
-      <div className="inline-flex mt-6 bg-white border border-line p-[5px] rounded-[10px]">
+      <div className="w-full flex centered justify-between items-center mt-6">
+      <div className="inline-flex bg-white border border-line p-[5px] rounded-[10px]">
         <button
           onClick={() => setView('cards')}
           className={`text-[13px] rounded-lg font-semibold px-4 py-[7px] capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
@@ -30,8 +37,12 @@ function Index() {
         >
           Calendar
         </button>
+        </div>
 
-
+        {/* If signed in, display create event button */}
+        {user && (
+          <Button onClick={() => setModal("create_event")}>+ Create an event</Button>
+        )}
       </div>
 
       <div className="w-full pt-6">
@@ -41,6 +52,14 @@ function Index() {
           <CalendarView events={EXAMPLE_EVENTS} />
         )}
       </div>
+
+      {modal === "create_event" && (
+        <CreateEventModal 
+          onClose={() => setModal(undefined)}
+          session={user}
+          onCreate={() => console.log("created event")}
+        />
+      )}
     </div>
   )
 }

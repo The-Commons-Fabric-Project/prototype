@@ -1,4 +1,4 @@
-import type { Event } from '../../types/events'
+import type { Event } from '../../utils/types/events'
 import { fmtTime } from '../../utils/datetime';
 
 import InlineDate from '../chips/InlineDate';

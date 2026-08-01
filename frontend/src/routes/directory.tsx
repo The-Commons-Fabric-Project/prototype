@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import type { Org } from '../types/orgs'
-import type { Event } from '../types/events'
+import type { Org } from '../utils/types/orgs'
+import type { Event } from '../utils/types/events'
 import { SEED_ORGS } from '../mocks/orgs'
 import { EXAMPLE_EVENTS } from '../mocks/events'
 

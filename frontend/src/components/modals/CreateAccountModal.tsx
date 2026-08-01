@@ -1,10 +1,10 @@
 /**
  * Auth modals - create account
- * FIXME: form doesn't check if the organization you're registering already exists, should first show you a dropdown of existing orgs then offer option to add a new org
+ * SOMEDAY: form doesn't check if the organization you're registering already exists, should first show you a dropdown of existing orgs then offer option to add a new org
  */ 
 
 import { useState } from "react";
-import { EMAIL_RE } from "../../types/orgs";
+import { EMAIL_RE } from "../../utils/types/orgs";
 import Modal, { ModalHeader } from "./Modal";
 import Field from "../controls/Field";
 import Button from "../controls/Button";

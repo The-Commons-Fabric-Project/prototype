@@ -2,7 +2,7 @@
  * Mock react auth client, ref: https://github.com/better-auth/better-auth/blob/main/packages/better-auth/src/client/react/index.ts
  */
 
-import type { AuthState, User } from "../types/users"
+import type { AuthState, User } from "../utils/types/users"
 
 type UserCredentials = User & { password: string };
 

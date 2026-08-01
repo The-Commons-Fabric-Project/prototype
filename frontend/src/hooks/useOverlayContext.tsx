@@ -3,12 +3,14 @@ import { useState, useRef, createContext, type RefObject, useContext, type Dispa
 import LoginModal from "../components/modals/LoginModal";
 import CreateAccountModal from "../components/modals/CreateAccountModal";
 import EventDetailModal from "../components/modals/EventDetailModal";
+import CreateEventModal from "../components/modals/CreateEventModal";
 
 // any new modals added, just add them here
 const Modals = {
   login: LoginModal,
   create_account: CreateAccountModal,
   event_detail: EventDetailModal,
+  create_event: CreateEventModal,
 }
 
 type ModalOption = keyof typeof Modals | undefined;

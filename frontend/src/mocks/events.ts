@@ -1,4 +1,4 @@
-import type { Event } from '../types/events'
+import type { Event } from '../utils/types/events'
 
 export const EXAMPLE_EVENTS: Event[] = [
   { id: 1, title: "Newcomer Welcome Morning", org: "Rideau-Rockcliffe Community Resource Centre", date: "2026-06-16", time: "10:00", location: "RCH Room 1", description: "A relaxed drop-in for newcomers to the neighbourhood. Meet settlement workers, learn what programs are running this summer, and connect with other families over coffee.", registrationRequired: false, registrationLink: "", volunteersNeeded: true, volunteerContact: "volunteer@rrcrc.example" },

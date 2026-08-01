@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "../controls/Button";
 import Field from "../controls/Field";
-import type { TextInputVariant as InputVariant } from "../../types/variants";
+import type { TextInputVariant as InputVariant } from "../../utils/types/variants";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useToast } from "../../hooks/useOverlayContext";

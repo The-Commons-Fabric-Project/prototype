@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes } from "react";
-import type { ButtonVariant } from "../../types/variants";
+import type { ButtonVariant } from "../../utils/types/variants";
 
 // reference: https://blog.logrocket.com/building-reusable-react-components-using-tailwind-css/#testing-badge-component
 const VARIANT_MAPS: Record<ButtonVariant, string> = {

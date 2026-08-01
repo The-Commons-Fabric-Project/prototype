@@ -2,14 +2,14 @@
  * Source and reference project: https://tanstack.com/router/v1/docs/how-to/setup-authentication#create-authentication-context
  * 
  * ??? Tanstack's setup example uses an AuthProvider, but their kitchen sink example doesn't? 
- * ??? Where should this file go? hooks?
+ * [x] ??? Where should this file go? hooks?
  * 
  * ??? Will we eventually use an authentication library like better auth?
  */
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
-import type { AuthState, User } from '../types/users'
+import type { AuthState, User } from '../utils/types/users'
 // TODO: replace mock auth with real auth
 import { auth } from '../mocks/auth'
 

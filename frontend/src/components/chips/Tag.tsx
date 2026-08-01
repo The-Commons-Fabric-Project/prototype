@@ -1,4 +1,4 @@
-import type { TagVariant } from "../../types/variants";
+import type { TagVariant } from "../../utils/types/variants";
 
 const VARIANT_MAPS: Record<TagVariant, string> = {
   // NOTE: maybe someday we'll bring back colors?

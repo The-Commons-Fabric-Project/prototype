@@ -1,4 +1,4 @@
-import type {Org as Organization} from '../../types/orgs';
+import type {Org as Organization} from '../../utils/types/orgs';
 import LogoPlaceholder from '../../assets/LogoPlaceholder';
 
 type OrgCardProps = {

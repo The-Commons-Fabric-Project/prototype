@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Event } from '../../types/events'
+import type { Event } from '../../utils/types/events'
 import EventCard from './EventCard'
 import EventDetailModal from '../modals/EventDetailModal'
 

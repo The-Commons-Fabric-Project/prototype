@@ -28,5 +28,6 @@ export type Event = {
   thumbnailUrl?: string;
   registrationLink?: string;
   registerUrl?: string;
+  volunteerContact?: string;
   // [prop: string]: unknown; // in case we need to add other properties, ref: https://www.typescriptlang.org/docs/handbook/2/objects.html#excess-property-checks
 };

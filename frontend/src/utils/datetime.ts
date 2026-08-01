@@ -2,7 +2,7 @@
  * Helper functions for parsing and formatting dates and times
  */
 
-import { MONTHS, MONTHS_FULL, DOW, DOW_FULL } from "../types/dates";
+import { MONTHS, MONTHS_FULL, DOW, DOW_FULL } from "./types/dates";
 
 export function parseDate(d: string) { 
   const [y, m, day] = d.split("-").map(Number); 

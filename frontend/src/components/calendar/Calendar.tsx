@@ -7,10 +7,10 @@ This might be more of an issue once we have to integrate with Google Calendar/Ou
 **/
 
 import { useState, useMemo } from 'react'
-import type { Event } from '../../types/events'
+import type { Event } from '../../utils/types/events'
 
 import { parseDate, fmtTime } from '../../utils/datetime';
-import { MONTHS_FULL as MONTH_NAMES, DOW as DAY_HEADERS } from '../../types/dates';
+import { MONTHS_FULL as MONTH_NAMES, DOW as DAY_HEADERS } from '../../utils/types/dates';
 
 type CalendarViewProps = {
   /** List of Events to view in the calendar */
