@@ -11,10 +11,10 @@ import Button from "../controls/Button";
 import Summary from "../cards/Summary";
 
 import { useToast } from "../../hooks/useOverlayContext";
+import { addUser } from "../../mocks/auth";
 
 type CreateAccountModalProps = {
   onClose: () => void;
-  // onCreate: (e: any) => void;
 }
 
 type CreateAccountFormData = {
@@ -24,10 +24,7 @@ type CreateAccountFormData = {
   org: string
 }
 
-export default function CreateAccountModal({ 
-  onClose, 
-  // onCreate, 
-}: CreateAccountModalProps) {
+export default function CreateAccountModal({ onClose }: CreateAccountModalProps) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<CreateAccountFormData>({ 
     name: "", 
@@ -48,9 +45,23 @@ export default function CreateAccountModal({
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // onCreate({...formData});
+  }
+
+  const handleCreate = () => {
+    try {
+      addUser({
+        username: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+    } catch (err) {
+      toast(err instanceof Error ? err.message : "Could not create account.");
+      return;
+    }
+    toast("Account created — check your email to confirm.");
+    onClose();
   }
 
   return (
@@ -84,11 +95,7 @@ export default function CreateAccountModal({
             <p className="text-sm font-semibold text-slate-900 mb-[14px]">Is this information correct?</p>
             <div className="flex gap-2.5">
               <Button variant="ghost" className="flex-1" onClick={() => setStep(1)}>No, edit</Button>
-              <Button className="flex-1" onClick={() => {
-                onCreate({ name: formData.name, email: formData.email, password: formData.password });
-                toast("Account created — check your email to confirm.");
-                onClose();
-              }}>Yes, create</Button>
+              <Button className="flex-1" onClick={handleCreate}>Yes, create</Button>
             </div>
           </>
         )}

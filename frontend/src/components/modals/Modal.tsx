@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import type { ReactElement } from "react";
+import type { ReactNode } from "react";
 
 export type ModalProps = {
-  children: ReactElement[],
+  children: ReactNode,
   onClose: () => void,
   width?: number,
 }

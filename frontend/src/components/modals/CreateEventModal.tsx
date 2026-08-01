@@ -126,7 +126,7 @@ export default function CreateEventModal({
               <Summary label="Title" value={form.title} />
               <Summary label="When" value={`${fmtPlainDate(form.date)} · ${fmtTime(form.time)}`} />
               <Summary label="Where" value={form.location as string} />
-              <Summary label="Host" value={session.name} />
+              <Summary label="Host" value={session.username} />
               <Summary label="Registration" value={form.registrationRequired ? form.registrationLink as string : "Not required"} />
               <Summary label="Volunteers" value={form.volunteersNeeded ? form.volunteerContact as string : "Not recruiting"} last />
             </div>
@@ -138,7 +138,7 @@ export default function CreateEventModal({
             >
               <Button variant="ghost" className="flex-1" onClick={() => setStep(1)}>No, edit</Button>
               <Button className="flex-1" onClick={() => {
-                onCreate({ ...form, org: session.name });
+                onCreate({ ...form, org: session.username });
                 toast("Event created and confirmed.");
                 onClose();
               }}>Yes, publish</Button>
