@@ -8,9 +8,12 @@ import { EXAMPLE_EVENTS } from '../mocks/events'
 import { useAuth } from '../hooks/useAuth'
 import { useModal } from '../hooks/useOverlayContext';
 import CreateEventModal from '../components/modals/CreateEventModal';
+import EventDetailModal from '../components/modals/EventDetailModal';
+import type { Event } from '../utils/types/events';
 
 function Index() {
   const [view, setView] = useState<'cards' | 'calendar'>('cards')
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const { user } = useAuth();
   const { modal, setModal } = useModal();
 
@@ -49,9 +52,13 @@ function Index() {
         {view === 'cards' ? (
           <EventCardGrid events={EXAMPLE_EVENTS} />
         ) : (
-          <CalendarView events={EXAMPLE_EVENTS} />
+          <CalendarView events={EXAMPLE_EVENTS} onSelect={setSelectedEvent} />
         )}
       </div>
+
+      {selectedEvent && (
+        <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+      )}
 
       {modal === "create_event" && (
         <CreateEventModal 
