@@ -16,7 +16,7 @@ import { fmtTime, fmtPlainDate } from "../../utils/datetime";
 import { useToast } from "../../hooks/useOverlayContext";
 import type { User } from "../../utils/types/users";
 
-type CreateEventFormData = Pick<Event, 
+export type CreateEventFormData = Pick<Event,
   'title' | 'date' | 'time' | 'location' | 'description' | 
   'registrationRequired' | 'registrationLink' |
   'volunteersNeeded' | 'volunteerContact'
@@ -27,7 +27,7 @@ type EventFormErrors = Partial<CreateEventFormData>;
 type CreateEventModalProps = {
   onClose: () => void,
   session: User,
-  onCreate: () => void,
+  onCreate: (event: CreateEventFormData & { org: string }) => void,
 }
 
 export default function CreateEventModal({ 

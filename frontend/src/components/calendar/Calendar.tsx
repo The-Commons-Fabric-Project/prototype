@@ -16,7 +16,7 @@ type CalendarViewProps = {
   /** List of Events to view in the calendar */
   events: Event[];
   /** callback for selected event */
-  onSelect: () => void;
+  onSelect: (event: Event) => void;
 };
 
 function formatTimeShort(time: string): string {
