@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../controls/Button";
 import Field from "../controls/Field";
 import type { TextInputVariant as InputVariant } from "../../utils/types/variants";
+import type { ModalHeaderProps } from "./Modal";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useToast } from "../../hooks/useOverlayContext";
@@ -16,10 +17,19 @@ function inputStyle (err: React.ErrorInfo | boolean): InputVariant {
  * 
  * TODO: this should probably be three separate forms? changing credentials could also be located in user profile (out of scope)
  */
+export type LoginFormHeader = Pick<ModalHeaderProps, "title" | "subtitle">;
+
+export type LoginFormProps = {
+  /** called once the user is authenticated (or dismisses the form) */
+  onClose: () => void,
+  /** lets the parent update its heading as the form switches modes */
+  onChangeMode: (header: LoginFormHeader) => void,
+}
+
 export default function LoginForm({
   onClose,
   onChangeMode,
-}) {
+}: LoginFormProps) {
   // state
   const [mode, setMode] = useState("login"); // login | password | email
   /** @state login form data */

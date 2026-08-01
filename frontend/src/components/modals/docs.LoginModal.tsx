@@ -12,6 +12,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  args: {
+    onClose: () => {},
+  },
   parameters: {
     docs: {
       story: { height: "800px"}
