@@ -1,11 +1,9 @@
-import { 
-  // createRootRoute, 
-  createRootRouteWithContext, 
-  Outlet, 
-  useRouteContext} from '@tanstack/react-router';
+import {
+  // createRootRoute,
+  createRootRouteWithContext,
+  Outlet } from '@tanstack/react-router';
 import type { MyRouterContext } from '../main'
 import Header from '../components/nav/Header'
-import type { AuthState } from '../utils/types/users'
 import Toast from '../components/modals/Toast'
 import { useToast } from '../hooks/useOverlayContext'
 

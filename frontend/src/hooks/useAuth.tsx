@@ -7,7 +7,7 @@
  * ??? Will we eventually use an authentication library like better auth?
  */
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 
 import type { AuthAttemptStatus, AuthState, User } from '../utils/types/users'
 // TODO: replace mock auth with real auth

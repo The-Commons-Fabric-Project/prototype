@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
 import { CalendarView } from './Calendar';
-import { Route } from '../../routes/index';
 
 import { EXAMPLE_EVENTS } from '../../mocks/events';
 
