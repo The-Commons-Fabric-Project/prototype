@@ -126,6 +126,31 @@ paths:
                   ok: { type: boolean }
         default: { $ref: '#/components/responses/Problem' }
 
+  /auth/profile:
+    get:
+      # No `security: []` override - this route is only reachable with a session
+      # cookie, enforced by requireAuth (src/middleware/auth.ts). See the
+      # `security` TODO at the top of this document for why that is not yet
+      # expressed as a security scheme.
+      operationId: getProfile
+      tags: [Auth]
+      summary: Get the signed-in user
+      description: >-
+        Returns the user identified by the session cookie. The `id` is taken
+        from the signed cookie payload and never from the request, so a caller
+        can only ever read their own profile. A cookie that is missing,
+        malformed or expired is answered with 401; a well-formed session whose
+        user no longer exists is answered with 404.
+      responses:
+        '200':
+          description: The signed-in user
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/Problem' }
+        default: { $ref: '#/components/responses/Problem' }
+
   /events:
     get:
       security: [] #public
@@ -590,7 +615,10 @@ components:
           schema: { $ref: '#/components/schemas/Problem' }
 
     Unauthorized:
-      description: The supplied email or password did not match an existing account.
+      description: >-
+        The caller could not be authenticated - either the supplied email and
+        password did not match an existing account, or the session cookie was
+        missing, malformed or expired.
       content:
         application/problem+json:
           schema: { $ref: '#/components/schemas/Problem' }
