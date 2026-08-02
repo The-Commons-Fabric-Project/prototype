@@ -4,7 +4,7 @@ import { openApiValidator } from './middleware/openapi.js';
 import { problemDetails } from './middleware/problemDetails.js';
 import { eventsRouter } from './endpoints/events.js';
 import { organizationsRouter } from './endpoints/organizations.js';
-import { authRouter } from './endpoints/auth/index.js';
+import { authRouter } from './endpoints/auth.js';
 import path from 'path'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
