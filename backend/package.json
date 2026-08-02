@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch --env-file=.env src/main.ts",
-    "build": "tsc",
+    "build": "tsc && node scripts/copy-openapi.mjs",
     "start": "node --env-file=.env dist/main.js",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
@@ -25,7 +25,8 @@
     "argon2": "^0.45.1",
     "better-sqlite3": "^12.11.1",
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-openapi-validator": "^5.6.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",

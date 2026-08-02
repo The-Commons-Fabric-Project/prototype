@@ -11,7 +11,10 @@ export default tseslint.config(
 
   ...baseConfig,
   {
-    files: ['**/*.ts'],
+    // Everything here runs on Node: the TypeScript sources, this config, and the
+    // plain-ESM build scripts under scripts/. Without .mjs/.js in this list those
+    // scripts are linted with no Node globals, so `console` reads as undefined.
+    files: ['**/*.ts', '**/*.mjs', '**/*.js'],
     languageOptions: {
       globals: globals.node,
       sourceType: 'module',
