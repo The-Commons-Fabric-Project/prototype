@@ -5,6 +5,7 @@ import { problemDetails } from './middleware/problemDetails.js';
 import { usersRouter } from './endpoints/users.js';
 import { eventsRouter } from './endpoints/events.js';
 import { organizationsRouter } from './endpoints/organizations.js';
+import { authRouter } from './endpoints/auth/index.js';
 import path from 'path'
 import cors from 'cors'
 
@@ -50,6 +51,7 @@ export function createApp() {
   // Everything below is validated against src/docs/api/openapi.yaml. That document's
   // server URL ends in /v1, which is where the validator expects these to live.
   app.use(openApiValidator(isDevelopment));
+  app.use('/v1', authRouter);
   app.use('/v1', eventsRouter);
   app.use('/v1', organizationsRouter);
 

@@ -32,3 +32,6 @@ export const badRequest = (detail: string, pointer?: string) =>
 
 /** Documented in the spec but not built yet. */
 export const notImplemented = (detail: string) => new HttpProblem(501, 'Not Implemented', detail);
+
+/** The request conflicts with the current state of a resource - e.g. a duplicate email. */
+export const conflict = (detail: string) => new HttpProblem(409, 'Conflict', detail);
