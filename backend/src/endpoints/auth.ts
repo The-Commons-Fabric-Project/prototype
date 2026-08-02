@@ -44,6 +44,7 @@ const toUser = (row: {
  * POST /v1/auth/create-user
  *
  * Creates a new user with a name, email, password and organization id
+ * Currently nothing stopping anybody from creating an account.
  */
 authRouter.post('/auth/create-user', async (req: Request, res: Response, next: NextFunction) => {
   try {
