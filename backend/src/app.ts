@@ -2,12 +2,12 @@ import express from 'express'
 import { requestLoggingMiddleware } from './middleware/logging.js';
 import { openApiValidator } from './middleware/openapi.js';
 import { problemDetails } from './middleware/problemDetails.js';
-import { usersRouter } from './endpoints/users.js';
 import { eventsRouter } from './endpoints/events.js';
 import { organizationsRouter } from './endpoints/organizations.js';
 import { authRouter } from './endpoints/auth/index.js';
 import path from 'path'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 /**
  * App factory for initializing middleware, setting CORS policy and establishing routes
@@ -33,6 +33,8 @@ export function createApp() {
   }
 
   app.use(express.json());
+  // Express does not parse cookie's on it's own - needed for auth
+  app.use(cookieParser());
   app.use(requestLoggingMiddleware);
 
   if (isDevelopment) {
@@ -43,10 +45,6 @@ export function createApp() {
   }
 
   // route assignment
-  //
-  // /users is mounted before the validator on purpose: it is not described in
-  // openapi.yaml, and the validator refuses paths its document does not contain.
-  app.use('/users', usersRouter);
 
   // Everything below is validated against src/docs/api/openapi.yaml. That document's
   // server URL ends in /v1, which is where the validator expects these to live.
@@ -56,8 +54,8 @@ export function createApp() {
   app.use('/v1', organizationsRouter);
 
   if (!isDevelopment) {
-    // Serves the built vite project. Registered after the routers so a request that
-    // matches a real endpoint is never swallowed by the SPA fallback.
+    // Serves the built vite project.
+    // Registered after the routers to prevent a valid route being superseded.
     app.use(express.static(path.join(__dirname, '../../frontend/dist')));
     app.get('/{*splat}', (_req, res) => {
       res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
