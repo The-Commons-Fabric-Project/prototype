@@ -1,0 +1,412 @@
+openapi: 3.1.1
+info:
+  title: Commons Fabric API
+  version: 0.1.0
+  description: |-
+    Events published by participating organizations.
+
+    Errors use RFC 9457 problem details, served as `application/problem+json`.
+
+    Two error responses apply to every path but are deliberately not attached to
+    any operation, because they are returned precisely when a request matches no
+    documented operation - so there is no operation under which to list them:
+
+    - `404` - the requested path does not appear in this document.
+    - `405` - the path is documented, but not for the method used.
+  license:
+    name: GNU Affero General Public License v3.0 or later
+    identifier: AGPL-3.0-or-later
+servers:
+  - url: http://localhost:3000/v1 #TODO: use environment variables for this? - requires some setup in the code that parses this file. [Where?]
+
+security: [] #TODO: figure out how to configure this from @marcus-wrrn once auth is implemented
+
+tags:
+  - name: Events
+    description: Events on the shared calendar, published by participating organizations.
+  - name: Organizations
+    description: The organizations participating in the calendar.
+
+paths:
+  /events:
+    get:
+      security: [] #public
+      operationId: listEvents
+      tags: [Events]
+      summary: List events overlapping a time window
+      description: >-
+        Returns events whose `[startsAt, endsAt]` interval overlaps the requested
+        window, ordered by `startsAt`. `startDate` defaults to the current time
+        and `endDate` is unbounded when omitted. `endDate` must be later than
+        `startDate` - that relationship cannot be expressed in the schema, so the
+        server enforces it and answers an inverted window with 400.
+
+
+        The response is deliberately unpaginated and uncapped: the time window is
+        what bounds the result set.
+      parameters:
+        - $ref: '#/components/parameters/StartDate'
+        - $ref: '#/components/parameters/EndDate'
+        - $ref: '#/components/parameters/OrganizationIdFilter'
+      responses:
+        '200':
+          description: A list of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Event' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        default: { $ref: '#/components/responses/Problem' }
+
+    post:
+      operationId: createEvent
+      tags: [Events]
+      summary: Create an event
+      description: >-
+        `endsAt` must be later than `startsAt`. JSON Schema cannot compare two
+        fields, so the server enforces it and rejects an inverted interval with
+        400 - mirroring the `ends_at > starts_at` CHECK in schema.dbml.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              description: URI of the newly created event.
+              required: true
+              schema: { type: string, format: uri-reference }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Event' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        default: { $ref: '#/components/responses/Problem' }
+
+
+  /events/{eventId}:
+    parameters:
+      - $ref: '#/components/parameters/EventId'
+    get:
+      security: [] #public
+      operationId: getEvent
+      tags: [Events]
+      summary: Get a single event
+      responses:
+        '200':
+          description: The event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '404': { $ref: '#/components/responses/Problem' }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /organizations:
+    get:
+      security: [] #public
+      operationId: listOrganizations
+      tags: [Organizations]
+      summary: List all participating organizations
+      description: >-
+        Returns every participating organization, ordered by `name`. Like
+        `/events`, the response is unpaginated - the directory is bounded by the
+        number of participating organizations, which is small.
+      responses:
+        '200':
+          description: A list of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Organization' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /organizations/{organizationId}:
+    parameters:
+      - $ref: '#/components/parameters/OrganizationId'
+    get:
+      security: [] #public
+      operationId: getOrganization
+      tags: [Organizations]
+      summary: Get a single organization
+      responses:
+        '200':
+          description: The organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '404': { $ref: '#/components/responses/Problem' }
+        default: { $ref: '#/components/responses/Problem' }
+
+components:
+  parameters:
+    StartDate:
+      name: startDate
+      in: query
+      description: Start of the time window. Defaults to the current time when omitted.
+      schema: { $ref: '#/components/schemas/Timestamp' }
+
+    EndDate:
+      name: endDate
+      in: query
+      description: End of the time window. Unbounded when omitted. Must be later than `startDate`.
+      schema: { $ref: '#/components/schemas/Timestamp' }
+
+    OrganizationIdFilter:
+      name: organizationId
+      in: query
+      description: Only return events published under this organization.
+      schema: { $ref: '#/components/schemas/OrganizationId' }
+
+    EventId:
+      name: eventId
+      in: path
+      required: true
+      schema: { $ref: '#/components/schemas/EventId' }
+
+    OrganizationId:
+      name: organizationId
+      in: path
+      required: true
+      schema: { $ref: '#/components/schemas/OrganizationId' }
+
+  schemas:
+    Timestamp:
+      type: string
+      format: date-time
+
+    OrganizationId:
+      type: integer
+      minimum: 1
+      description: Identifier of an organization (an `organizations` row).
+
+    UserId:
+      type: integer
+      minimum: 1
+      description: Identifier of a user.
+
+    EventId:
+      type: integer
+      minimum: 1
+      description: Identifier of an event.
+
+    OrganizationTag:
+      type: string
+      description: >-
+        A category an organization can be listed under. Mirrors the `org_tags`
+        enum in db/schema.dbml; SQLite has no enum type, so the same values are
+        held by the `IN (...)` CHECK on `organizations_tags.tag`.
+      enum:
+        - Advocacy
+        - Civic
+        - Community
+        - Culture
+        - Education
+        - Equity
+        - Indigenous
+        - Makers
+        - Policy
+        - Research
+        - Seniors
+        - Settlement
+        - Tech
+        - Volunteer
+        - Youth
+
+    Organization:
+      type: object
+      description: A participating organization. Mirrors the `organizations` table.
+      required: [id, name]
+      properties:
+        id: { $ref: '#/components/schemas/OrganizationId', readOnly: true }
+        name:
+          type: string
+          minLength: 1
+          pattern: '\S'
+          description: >-
+            The `pattern` matches the `length(trim(name)) > 0` CHECK in
+            schema.dbml.
+        logo:
+          type: [string, 'null']
+          format: uri-reference
+          description: >-
+            Server-relative path to the logo image, e.g.
+            `./public/organization_logos/example.jpg` - not an absolute URL.
+        blurb: { type: [string, 'null'] }
+        contact:
+          type: [string, 'null']
+          format: email
+          maxLength: 255
+          pattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+          description: >-
+            SQLite stores this unconstrained (see the note at the top of
+            schema.prisma). `pattern` mirrors the DBML CHECK and `format` applies
+            ajv's own rule - neither subsumes the other, so both are declared and
+            a value has to satisfy both.
+        website:
+          type: [string, 'null']
+          format: uri
+          maxLength: 2048
+          pattern: '^https?://[^\s/$.?#].[^\s]*$'
+          description: >-
+            Restricted to http(s), mirroring the CHECK in schema.dbml. See the
+            case-sensitivity note on `Event.registrationLink`.
+        tags:
+          type: array
+          uniqueItems: true
+          items: { $ref: '#/components/schemas/OrganizationTag' }
+          description: >-
+            The organization's categories. An organization with no tags yields
+            an empty array.
+
+    EventCore:
+      type: object
+      description: >-
+        The client-supplied half of an event. Everything the server assigns -
+        `id`, `ownerId`, `organizationId`, `createdAt` - lives on `Event`
+        instead, so none of it can be supplied on a create.
+      required: [title, startsAt, endsAt]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          pattern: '\S'
+          description: >-
+            The `pattern` requires at least one non-whitespace character,
+            matching the `length(trim(title)) > 0` CHECK in schema.dbml -
+            `minLength` alone would admit `"   "`.
+        startsAt: { $ref: '#/components/schemas/Timestamp' }
+        endsAt:
+          $ref: '#/components/schemas/Timestamp'
+          description: >-
+            Must be later than `startsAt`. Enforced server-side rather than in
+            the schema, since JSON Schema cannot compare two fields.
+        location: { type: [string, 'null'] }
+        description: { type: [string, 'null'] }
+        thumbnail:
+          type: [string, 'null']
+          format: uri-reference
+          description: >-
+            Server-relative path to the event image, e.g.
+            `./public/event_images/example.jpg` - not an absolute URL.
+        registrationLink:
+          type: [string, 'null']
+          format: uri
+          pattern: '^https?://[^\s/$.?#].[^\s]*$'
+          description: >-
+            Restricted to http(s), mirroring the CHECK in schema.dbml. That
+            CHECK is case-insensitive (`~*`) while JSON Schema patterns are not,
+            so an uppercase scheme is rejected here though the database would
+            accept it - normalise the scheme before insert.
+        volunteerContact:
+          type: [string, 'null']
+          format: email
+          maxLength: 255
+          pattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+          description: >-
+            `pattern` mirrors the DBML CHECK and `format` applies ajv's own rule;
+            see the note on `Organization.contact`.
+
+    EventCreate:
+      $ref: '#/components/schemas/EventCore'
+      description: >-
+        Unknown properties are rejected rather than ignored, so a request that
+        tries to smuggle in `ownerId` (or any other server-assigned field) fails
+        validation instead of being silently dropped.
+      unevaluatedProperties: false
+
+    Event:
+      allOf:
+        - $ref: '#/components/schemas/EventCore'
+        - type: object
+          required: [id, ownerId, organizationId, createdAt]
+          properties:
+            id: { $ref: '#/components/schemas/EventId', readOnly: true }
+            ownerId:
+              $ref: '#/components/schemas/UserId'
+              readOnly: true
+              description: >-
+                The user who owns the event, resolved from the authenticated
+                caller at creation time - never from the request body.
+            organizationId:
+              $ref: '#/components/schemas/OrganizationId'
+              readOnly: true
+              description: >-
+                The owning user's organization, resolved server-side by
+                following `ownerId` - the `events` table has no organization
+                column of its own. Clients match this against the organizations
+                they hold rather than fetching per event; it is also what the
+                `organizationId` query parameter filters on.
+
+
+                Because the link is derived rather than stored, it tracks the
+                owner's *current* organization - if a user moves organizations,
+                their past events move with them. Storing the publishing
+                organization on the event instead would be a schema change.
+            createdAt: { $ref: '#/components/schemas/Timestamp', readOnly: true }
+
+    Problem:
+      type: object
+      description: RFC 9457 problem details.
+      required: [type, title, status]
+      properties:
+        type: { type: string, format: uri, default: 'about:blank' }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string, format: uri-reference }
+
+    ValidationProblem:
+      description: >-
+        A `Problem` carrying the RFC 9457 `errors` extension. `errors` is present
+        whenever the failure can be attributed to specific fields, and absent
+        when it cannot - a body that is not parseable as JSON, for instance, has
+        no field to point at.
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+        - type: object
+          properties:
+            errors:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                required: [pointer, detail]
+                properties:
+                  pointer:
+                    type: string
+                    description: >-
+                      JSON Pointer to the offending value, prefixed with the part
+                      of the request it came from - e.g. `/body/startsAt`,
+                      `/query/startDate`, `/params/eventId`.
+                  detail: { type: string }
+
+  responses:
+    Problem:
+      description: Error
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+
+    ValidationError:
+      description: >-
+        The request failed validation - body, query, or path parameters.
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/ValidationProblem' }
+
+    UnsupportedMediaType:
+      description: The request body was sent as something other than `application/json`.
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }

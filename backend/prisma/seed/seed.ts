@@ -30,37 +30,11 @@ import { fileURLToPath } from 'node:url';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 
 import { PrismaClient } from '../../src/generated/prisma/client.js';
+import { EMAIL_RE, URL_RE } from '../../src/models/constraints.js';
+import { ORG_TAGS, isOrgTag, type OrgTag } from '../../src/models/orgTags.js';
 import { hashPassword } from '../../src/utils/encryption.js';
 
 const SEED_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'dev-organizations-seed.json');
-
-/**
- * Allowed organizations_tags.tag values. Mirrors the org_tags enum in db/schema.dbml
- * and the IN (...) CHECK in the initial migration.
- */
-const ORG_TAGS = [
-  'Advocacy',
-  'Civic',
-  'Community',
-  'Culture',
-  'Education',
-  'Equity',
-  'Indigenous',
-  'Makers',
-  'Policy',
-  'Research',
-  'Seniors',
-  'Settlement',
-  'Tech',
-  'Volunteer',
-  'Youth',
-] as const;
-
-type OrgTag = (typeof ORG_TAGS)[number];
-
-/** The two regex CHECKs from db/schema.dbml, which SQLite cannot enforce. */
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-const URL_RE = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
 
 interface SeedOrganization {
   id: number;
@@ -157,7 +131,7 @@ function validate(raw: unknown): string[] {
     } else {
       const seenTags = new Set<unknown>();
       for (const tag of org.tags) {
-        if (typeof tag !== 'string' || !(ORG_TAGS as readonly string[]).includes(tag)) {
+        if (!isOrgTag(tag)) {
           problems.push(`${at}: unknown tag ${JSON.stringify(tag)} (allowed: ${ORG_TAGS.join(', ')})`);
         } else if (seenTags.has(tag)) {
           // organizations_tags is keyed on (organization_id, tag), so a repeat would

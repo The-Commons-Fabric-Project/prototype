@@ -1,4 +1,8 @@
-export const EMAIL_RE = /\S+@\S+\.\S+/;
+/**
+ * Mirrors the CHECK on users.email in backend/src/docs/db/schema.dbml, and
+ * EMAIL_PATTERN in backend/src/models/constraints.ts.
+ */
+export const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 export const ORG_TAGS = [
   "Advocacy",

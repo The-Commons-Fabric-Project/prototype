@@ -66,9 +66,10 @@ model Organization {
 }
 
 // org_tags in the DBML is a Postgres enum. SQLite has no enums, so `tag` is a
-// String. Allowed values (Advocacy, Civic, Community, Culture, Education, Equity,
-// Indigenous, Makers, Policy, Research, Seniors, Settlement, Tech, Volunteer, Youth)
-// are enforced in the application layer and via a CHECK added in the migration.
+// String. The allowed values are the org_tags enum in src/docs/db/schema.dbml,
+// enforced by a CHECK in the initial migration and by ORG_TAGS in
+// src/models/orgTags.ts. They are deliberately not restated here - that would be
+// another copy to keep in sync, and src/models/orgTags.ts explains the rest.
 model OrganizationTag {
   organizationId Int          @map("organization_id")
   tag            String

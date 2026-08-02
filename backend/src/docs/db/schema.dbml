@@ -2,7 +2,7 @@
 // Docs: https://dbml.dbdiagram.io/docs
 
 Project cfp {
-    database_type: 'PostgreSQL'
+    database_type: 'SQLite'
 }
 
 enum org_tags {

@@ -14,7 +14,7 @@
     "db:seed": "tsx --env-file=.env prisma/seed/seed.ts",
     "db:studio": "prisma studio",
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsx --test test/*.test.ts"
   },
   "keywords": [],
   "author": "",
@@ -34,6 +34,7 @@
     "@types/node": "^24.12.3",
     "dotenv": "^17.4.2",
     "prisma": "^7.8.0",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "yaml": "^2.9.0"
   }
 }
