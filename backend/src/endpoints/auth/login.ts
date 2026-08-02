@@ -27,9 +27,7 @@ const toUser = (row: {
 /**
  * POST /v1/auth/login
  *
- * Verifies email/password against the stored argon2id hash. No session or
- * token is issued yet - see the security TODO in openapi.yaml - this only
- * confirms the credentials are valid and returns the matching user.
+ * Verifies email/password against the stored argon2id hash
  */
 router.post('/auth/login', async (req: Request, res: Response, next: NextFunction) => {
   try {

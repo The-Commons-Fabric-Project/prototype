@@ -100,6 +100,32 @@ paths:
         '415': { $ref: '#/components/responses/UnsupportedMediaType' }
         default: { $ref: '#/components/responses/Problem' }
 
+  /auth/logout:
+    post:
+      security: [] #public
+      operationId: logout
+      tags: [Auth]
+      summary: Log out
+      description: >-
+        Clears the session cookie. Succeeds even when the caller has no
+        session - there is nothing server-side to invalidate, since sessions
+        are stateless signed cookies (see src/utils/userSessions.ts).
+      responses:
+        '200':
+          description: Logged out
+          headers:
+            Set-Cookie:
+              description: Session cookie cleared.
+              schema: { type: string }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok]
+                properties:
+                  ok: { type: boolean }
+        default: { $ref: '#/components/responses/Problem' }
+
   /events:
     get:
       security: [] #public
