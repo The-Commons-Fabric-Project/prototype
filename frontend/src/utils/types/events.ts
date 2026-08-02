@@ -19,7 +19,8 @@ export type Event = {
   title: string;
   date: string;
   time: string;
-  org?: string;
+  // owner: User - will need this eventually, but not for the prototype
+  org?: string; //TODO: will have to be changed to a reference to a full org object, then referenced as event.org.name (or something like that)
   description?: string;
   location?: string;
   tags?: EventTag[];
