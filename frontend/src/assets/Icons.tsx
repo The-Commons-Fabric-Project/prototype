@@ -13,7 +13,7 @@ const svgBase = {
   strokeLinejoin: "round" 
 } as Partial<SVGProps<SVGSVGElement>>;
 
-type IconProps = {name?: string, size: number}
+type IconProps = {name?: IconName, size: number}
 type IconComponent = (args: IconProps) => ReactElement<SVGProps<any>, any>;
 
 function ClockIcon({ size = 14 }: IconProps) { 
@@ -45,7 +45,7 @@ function LinkIcon({ size = 14 }: IconProps) { return (<svg width={size} height={
 
 function SearchIcon({ size = 15 }: IconProps) { return (<svg width={size} height={size} viewBox="0 0 24 24" {...svgBase} aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.2-3.2" /></svg>); }
 
-const ICON_MAP: { [k: string]: IconComponent } = {
+const ICON_MAP = {
   clock: ClockIcon,
   pin: PinIcon,
   calendar: CalendarIcon,
@@ -54,7 +54,9 @@ const ICON_MAP: { [k: string]: IconComponent } = {
   mail: MailIcon,
   link: LinkIcon,
   search: SearchIcon,
-}
+};
+
+type IconName = keyof typeof ICON_MAP;
 
 export default function Icon({ name, size }: Required<IconProps>) {
   return ICON_MAP[name]({ size });

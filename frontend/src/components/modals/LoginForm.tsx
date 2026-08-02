@@ -13,9 +13,9 @@ function inputStyle (err: boolean): InputVariant {
 
 /** 
  * 
- * HACK: I (S) decided to separate the form from the modal so that the user could directly navigate to the URL /login but IDK if that's even useful...
+ * ???: I (S) decided to separate the form from the modal so that the user could directly navigate to the URL /login but IDK if that's even useful...
  * 
- * TODO: this should probably be three separate forms? changing credentials could also be located in user profile (out of scope)
+ * SOMEDAY: this should probably be three separate forms? changing credentials could also be located in user profile (out of scope)
  */
 export type LoginFormHeader = Pick<ModalHeaderProps, "title" | "subtitle">;
 

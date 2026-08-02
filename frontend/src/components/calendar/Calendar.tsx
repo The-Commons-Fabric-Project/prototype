@@ -54,20 +54,20 @@ export function CalendarView({ events, onSelect }: CalendarViewProps) {
   ];
 
   return (
-    <div className="bg-white border border-line rounded-[16px] p-[18px]">
-      <div className="flex justify-between items-center mb-[14px]">
+    <div className="bg-white border border-line rounded-2xl p-4.5">
+      <div className="flex justify-between items-center mb-3.5">
         <h3 className="font-display text-[20px] font-semibold text-ink m-0">
           {MONTH_NAMES[month]} {year}
         </h3>
         <div className="flex gap-2">
           <button
-            className="cf-press font-semibold text-[14px] px-3 py-[6px] rounded-[10px] cursor-pointer border border-line leading-[1.1] tracking-[0.1px] bg-transparent text-primary"
+            className="cf-press font-semibold text-[14px] px-3 py-1.5 rounded-md cursor-pointer border border-line leading-[1.1] tracking-[0.1px] bg-transparent text-primary"
             onClick={goToPrev}
           >
             ‹
           </button>
           <button
-            className="cf-press font-semibold text-[14px] px-3 py-[6px] rounded-[10px] cursor-pointer border border-line leading-[1.1] tracking-[0.1px] bg-transparent text-primary"
+            className="cf-press font-semibold text-[14px] px-3 py-1.5 rounded-md cursor-pointer border border-line leading-[1.1] tracking-[0.1px] bg-transparent text-primary"
             onClick={goToNext}
           >
             ›
@@ -75,7 +75,7 @@ export function CalendarView({ events, onSelect }: CalendarViewProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-[6px]">
+      <div className="grid grid-cols-7 gap-1.5">
         {DAY_HEADERS.map(d => (
           <div key={d} className="text-center text-[11px] font-bold text-muted tracking-[0.5px] pb-1">
             {d}
@@ -85,7 +85,7 @@ export function CalendarView({ events, onSelect }: CalendarViewProps) {
         {cells.map((day, i) => (
           <div
             key={i}
-            className={`min-h-[76px] min-w-0 rounded-[10px] p-[6px] border ${
+            className={`min-h-19 min-w-0 rounded-md p-1.5 border ${
               day === null
                 ? 'border-transparent bg-transparent'
                 : 'border-line bg-paper'
@@ -97,7 +97,7 @@ export function CalendarView({ events, onSelect }: CalendarViewProps) {
                 {(byDay[day] || []).map(event => (
                   <div
                     key={event.id}
-                    className="cf-press bg-primary text-white text-[10.5px] font-semibold rounded-[6px] px-[6px] py-[3px] mb-[3px] cursor-pointer truncate max-w-full"
+                    className="cf-press bg-primary text-white text-[10.5px] font-semibold rounded-sm px-1.5 py-0.75 mb-0.75 cursor-pointer truncate max-w-full"
                     title={`${fmtTime(event.time)} ${event.title}`}
                     onClick={() => onSelect(event)} // setSelectedEvent(event)}
                   >

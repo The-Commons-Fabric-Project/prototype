@@ -23,7 +23,7 @@ type HeaderProps = {
 /**
  * Header bar appearing on top of all pages.
  * 
- * TODO: replace CF logo with RCH logo, move CF logo to a new footer element -- blocked: need RCH logo asset
+ * SOMEDAY: replace CF logo with RCH logo, move CF logo to a new footer element -- blocked: need RCH logo asset
  */
 export default function Header({}: HeaderProps) {
   const [hidden, setHidden] = useState(false);

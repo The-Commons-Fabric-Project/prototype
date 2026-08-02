@@ -4,86 +4,33 @@ import type { Org } from '../utils/types/orgs'
 import type { Event } from '../utils/types/events'
 import { SEED_ORGS } from '../mocks/orgs'
 import { EXAMPLE_EVENTS } from '../mocks/events'
-import { fmtDateChip } from '../utils/datetime'
 
 import EventDetailModal from '../components/modals/EventDetailModal'
-import OrgCard from '../components/cards/OrgCard'
+import OrgCard, { OrgTag } from '../components/cards/OrgCard'
+import DateChip from '../components/chips/DateChip'
 import LogoPlaceholder from '../assets/LogoPlaceholder';
+import Icon from '../assets/Icons'
 
 export const Route = createFileRoute('/directory')({
   component: Directory,
 })
 
-// function LogoPlaceholder({ size = 72 }: { size?: number }) {
-//   return (
-//     <div
-//       className="shrink-0 flex items-center justify-center text-muted font-semibold font-body leading-[1.2] tracking-[0.2px]"
-//       style={{
-//         width: size,
-//         height: size,
-//         borderRadius: size <= 80 ? 12 : 16,
-//         background: 'rgb(231, 238, 247)',
-//         border: '1px dashed rgb(224, 228, 235)',
-//         fontSize: Math.max(8.5, size * 0.12),
-//       }}
-//     >
-//       [logo]
-//     </div>
-//   )
-// }
-
-function OrgTag({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-block py-[3px] px-[9px] rounded-full text-[10.5px] font-bold tracking-[0.8px] uppercase bg-surface text-primary font-body">
-      {children}
-    </span>
-  )
-}
-
-// FIXME: OrgCard.tsx missing organization tags
-// function OrgCard({ org, onClick, idx }: { org: Org; onClick: () => void; idx: number }) {
-//   return (
-//     <div
-//       onClick={onClick}
-//       className="flex gap-[18px] items-start bg-white border border-line rounded-2xl p-5 cursor-pointer hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(65,65,66,0.10)] active:scale-[0.99]"
-//       style={{
-//         transition: 'transform .18s ease, box-shadow .18s ease',
-//         animation: `cf-stagger .4s ease ${idx * 0.05}s both`,
-//       }}
-//     >
-//       <LogoPlaceholder size={72} />
-//       <div className="flex-1 min-w-0">
-//         <div className="flex gap-2 flex-wrap mb-[10px]">
-//           {org.tags.map((t) => <OrgTag key={t}>{t}</OrgTag>)}
-//         </div>
-//         <h3 className="font-display text-[19px] font-semibold text-ink m-0 mb-[6px] leading-[1.2]">
-//           {org.name}
-//         </h3>
-//         <p className="text-[13.5px] text-muted leading-[1.5] m-0 font-body">
-//           {org.blurb}
-//         </p>
-//       </div>
-//     </div>
-//   )
-// }
-
 function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
-  const { month, day } = fmtDateChip(event.date)
-
   return (
     <div
       onClick={onClick}
-      className="flex gap-[14px] items-center bg-white border border-line rounded-xl p-[14px] cursor-pointer hover:shadow-[0_4px_12px_rgba(65,65,66,0.08)] active:scale-[0.99]"
+      className="flex gap-3.5 items-center bg-white border border-line rounded-xl p-3.5 cursor-pointer hover:shadow-[0_4px_12px_rgba(65,65,66,0.08)] active:scale-[0.99]"
       style={{ transition: 'box-shadow .18s ease, transform .08s ease' }}
     >
-      <div className="flex flex-col items-center justify-center w-[52px] h-[52px] rounded-xl bg-white border border-line shrink-0">
+      {/* <div className="flex flex-col items-center justify-center w-13 h-13 rounded-xl bg-white border border-line shrink-0">
         <span className="text-[10px] font-bold text-secondary tracking-[0.6px] font-body">
           {month}
         </span>
         <span className="font-display text-[22px] font-semibold text-ink leading-none">
           {day}
         </span>
-      </div>
+      </div> */}
+      <DateChip date={event.date} large={false}/>
       <div className="flex-1 min-w-0">
         <h4 className="font-display text-[16px] font-semibold text-ink m-0 leading-[1.2]">
           {event.title}
@@ -111,7 +58,7 @@ function ProfileView({
     <div style={{ animation: 'cf-fade .3s ease' }}>
       <button
         onClick={onBack}
-        className="bg-transparent border-0 text-primary font-semibold text-[14px] cursor-pointer p-0 mb-[18px] block font-body"
+        className="bg-transparent border-0 text-primary font-semibold text-[14px] cursor-pointer p-0 mb-4.5 block font-body"
         style={{ transition: 'color .15s ease' }}
       >
         ‹ Back to directory
@@ -120,25 +67,25 @@ function ProfileView({
       {/* Org header card */}
       <div className="bg-white border border-line rounded-2xl p-7 mb-6 flex gap-6 items-start flex-wrap">
         <LogoPlaceholder size={104} />
-        <div className="flex-1 min-w-[260px]">
+        <div className="flex-1 min-w-65">
           <div className="flex gap-2 flex-wrap mb-3">
             {org.tags.map((t) => <OrgTag key={t}>{t}</OrgTag>)}
           </div>
-          <h1 className="font-display text-[30px] font-semibold text-ink m-0 mb-3 leading-[1.15]">
+          <h1 className="font-display text-3xl font-semibold text-ink m-0 mb-3 leading-[1.15]">
             {org.name}
           </h1>
-          <p className="text-[15px] text-ink leading-[1.6] m-0 mb-[18px] max-w-[640px] font-body">
+          <p className="text-[15px] text-ink leading-[1.6] m-0 mb-4.5 max-w-160 font-body">
             {org.blurb}
           </p>
-          <div className="flex gap-6 flex-wrap text-[13.5px] text-muted font-body">
-            <span>
-              ✉️{' '}
+          <div className="flex gap-6 flex-wrap text-sm text-muted font-body">
+            <span className="flex gap-1 items-center">
+              <Icon name="mail" size={14} />
               <a href={`mailto:${org.contact}`} className="text-primary no-underline hover:underline">
                 {org.contact}
               </a>
             </span>
-            <span>
-              🔗{' '}
+            <span className='flex gap-1 items-center'>
+              <Icon name="link" size={14}/>
               <a
                 href="#"
                 onClick={(e) => e.preventDefault()}
@@ -152,7 +99,7 @@ function ProfileView({
       </div>
 
       {/* Upcoming events */}
-      <h2 className="font-display text-[22px] font-semibold text-ink m-0 mb-[14px]">
+      <h2 className="font-display text-[22px] font-semibold text-ink m-0 mb-3.5">
         Upcoming events
       </h2>
       {orgEvents.length === 0 ? (
@@ -160,7 +107,7 @@ function ProfileView({
           No upcoming events from this organization yet.
         </div>
       ) : (
-        <div className="flex flex-col gap-[10px]">
+        <div className="flex flex-col gap-2.5">
           {orgEvents.map((e) => (
             <EventRow key={e.id} event={e} onClick={() => onSelectEvent(e)} />
           ))}
@@ -185,7 +132,7 @@ function Directory() {
   }
 
   return (
-    <div className="w-full max-w-[1040px] pt-9 px-6 pb-20">
+    <div className="w-full max-w-260 pt-9 px-6 pb-20">
       {activeOrg ? (
         <ProfileView
           org={activeOrg}

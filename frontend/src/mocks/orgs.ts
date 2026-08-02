@@ -49,6 +49,15 @@ export const SEED_ORGS: Org[] = [
     contact: "hi@ottawacivictech.example",
     website: "ottawacivictech.example",
   },
+  {
+    // an org with no events associated
+    id: 7,
+    name: "Fresh Face Club",
+    blurb: "A new organization in the building.",
+    tags: ["Policy"],
+    contact: "someone@ffc.co",
+    website: "ffc.co"
+  }
 ]
 
 export const DEMO_ACCOUNTS = [

@@ -14,7 +14,7 @@ type EventDetailModalProps = {
 };
 
 /** Pop-up with event details when clicked */
-export default function EventDetailModal({
+export default function EventDetailModal({ 
   event, onClose
 }: EventDetailModalProps) {
   const { toast } = useToast();
@@ -27,7 +27,7 @@ export default function EventDetailModal({
         subtitle={event.org} />
       <div className="px-6 pt-6 pb-6">
         {event.description && <p className="text-[14.5px] text-slate-900 leading-[1.6] mb-4">{event.description}</p>}
-        <div className="flex flex-col gap-[10px] mb-[18px] border-t border-slate-200 pt-4">
+        <div className="flex flex-col gap-2.5 mb-4.5 border-t border-slate-200 pt-4">
           <DetailRow 
             icon={<Icon name="calendar" size={15} />}  
             text={fmtPlainDate(event.date)} /> 
@@ -46,15 +46,16 @@ export default function EventDetailModal({
             } />
           {event.volunteersNeeded && (
             <DetailRow icon={<Icon name="user" size={15}/>} text={<>Volunteers wanted — <a href={
-              // FIXME: event properties doesn't have volunteerContact
+              // [x] FIXME: event properties doesn't have volunteerContact
               `mailto:${event.volunteerContact}`} className="text-slate-900 font-semibold underline">{event.volunteerContact}</a></>} />
           )}
           {event.registrationRequired && (
             <a href={event.registrationLink || "#"} target="_blank" rel="noreferrer"
-              onClick={(e) => { if (!event.registrationLink) e.preventDefault();
+              onClick={(e) => { if (!event.registrationLink) e.preventDefault(); 
+                // [x] FIXME: fix toast pop-ups
               toast("Opening registration…"); }}
               className="no-underline">
-                {/* FIXME: button doesn't work */}
+                {/* TODO: add real functionality*/}
               <Button className="w-full" onClick={() => {}}>Register on host's site ↗</Button>
             </a>
           )}

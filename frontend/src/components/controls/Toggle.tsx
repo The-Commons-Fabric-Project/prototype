@@ -17,22 +17,13 @@ export default function Toggle({
 }: ToggleProps) {
   return (
     <div 
-      className="outline-border-default rounded-md" 
-      style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", 
-        gap: 1, padding: "12px 14px", 
-        // border: `1px solid ${C.line}`, 
-        marginBottom: 14 }}
-    >
+      className="flex rounded-md justify-between align-start mb-[14px] px-[12px] py-[14px]">
       <div>
-        <span className="text-sm font-semibold text-text-primary">{label}</span>
+        <span className="text-sm font-semibold text-ink">{label}</span>
         {hint && <span className="text-xs text-muted" style={{ display: "block", marginTop: 2 }}>{hint}</span>}
       </div>
-      <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(!checked)} className={`relative cf-press rounded-full border-accent-soft bg-${checked ? "bg-primary" : "bg-muted"} w-12 h-7 p-0.75`} style={{
-        cursor: "pointer",
-        // background: checked ? C.accent : C.line, 
-        transition: "background .18s ease", marginTop: 1,
-      }}>
-        <span className={`bg-surface rounded-full size-5 absolute top-1 left-1 ${checked ? "translate-x-5" : ""}`}
+      <button type="button" role="switch" aria-checked={checked} onClick={() => onChange(!checked)} className={`relative rounded-full ${checked ? "bg-accent border-ink" : "bg-line border-muted"} w-12 h-7 p-0.75 mt-[1px] cursor-pointer`}>
+        <span className={`bg-white rounded-full size-5 absolute top-1 left-1 ${checked ? "translate-x-5" : ""}`}
         style={{ 
           transition: "translate 0.18s ease", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" 
         }} />

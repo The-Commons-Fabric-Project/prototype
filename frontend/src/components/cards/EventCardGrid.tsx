@@ -12,7 +12,7 @@ export default function EventsGrid({ events }: EventsGridProps) {
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[18px] w-full">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4.5 w-full">
         {events.map((event, i) => (
           <EventCard
             event={event}

@@ -23,7 +23,7 @@ function Login() {
   //   }).catch(() => setErr("Authentication failed"));
   // };
 
-  // TODO: redirect to events page after successful login
+  // TODO: redirect to events/index page after successful login
   // ???: merge with LoginModal?
   
 

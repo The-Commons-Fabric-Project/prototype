@@ -1,8 +1,8 @@
 import type { Preview } from '@storybook/tanstack-react';
 import {INITIAL_VIEWPORTS } from 'storybook/viewport';
 
-import '../src/styles/index.css';
-import { AuthProvider } from '../src/auth'
+import '../src/index.css';
+import { AuthProvider } from '../src/hooks/useAuth'
 
 const preview: Preview = {
   parameters: {
