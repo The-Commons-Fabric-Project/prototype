@@ -9,7 +9,6 @@ type EventCardGridProps = {
 };
 
 export default function EventCardGrid({ events, onSelect }: EventCardGridProps) {
-  // const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
 
@@ -27,18 +26,18 @@ export default function EventCardGrid({ events, onSelect }: EventCardGridProps) 
       rangeStart={rangeStart} rangeEnd={rangeEnd}
       setRangeStart={setRangeStart} setRangeEnd={setRangeEnd}
     />
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] my-4.5 gap-4.5 w-full">
-        {gridEvents.map((event, i) => (
-          <EventCard
-            event={event}
-            onClick={() => onSelect(event)}
-            idx={i}
-          />
-        ))}
-      </div>
-
-      { gridEvents.length == 0 && (
-        <div>No events match the filter criteria</div>
+      { gridEvents.length === 0 ? (
+        <div>No events match the filter criteria.</div>
+      ) : (
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] my-4.5 gap-4.5 w-full">
+          {gridEvents.map((event, i) => (
+            <EventCard
+              event={event}
+              onClick={() => onSelect(event)}
+              idx={i}
+            />
+          ))}
+        </div>
       )}
     </>
   );
