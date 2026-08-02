@@ -64,7 +64,11 @@ export const problemDetails: ErrorRequestHandler = (err, req: Request, res, next
   // (response-validation failures arrive here as 500s).
   const isDeliberate = err instanceof HttpProblem;
 
-  if (status >= 500) {
+  // Only unanticipated failures are logged as errors. A deliberate 5xx - the 501
+  // from createEvent, say - is expected behaviour, and printing a stack trace for
+  // it trains readers to ignore this log. requestLoggingMiddleware still records
+  // the status of every response.
+  if (status >= 500 && !isDeliberate) {
     console.error(`[SERVER] ${req.method} ${req.originalUrl} failed:`, err);
   }
 
