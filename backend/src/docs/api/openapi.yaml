@@ -26,8 +26,43 @@ tags:
     description: Events on the shared calendar, published by participating organizations.
   - name: Organizations
     description: The organizations participating in the calendar.
+  - name: Auth
+    description: Account creation and authentication.
 
 paths:
+  /auth/create-user:
+    post:
+      security: [] #public - self-registration -> might require some form of security later, keeping public for now 
+      operationId: createUser
+      tags: [Auth]
+      summary: Create a user account
+      description: >-
+        Registers a new user under the given organization. `email` must be
+        unique - a request reusing an existing address is rejected with 409.
+        `password` is received as plaintext over TLS and hashed server-side
+        (argon2id) before storage; it is never echoed back in a response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              description: URI of the newly created user.
+              required: true
+              schema: { type: string, format: uri-reference }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        default: { $ref: '#/components/responses/Problem' }
+
   /events:
     get:
       security: [] #public
@@ -269,6 +304,59 @@ components:
             The organization's categories. An organization with no tags yields
             an empty array.
 
+    UserCore:
+      type: object
+      description: The client-supplied half of a user. Mirrors the `users` table.
+      required: [fullname, email, organizationId]
+      properties:
+        fullname:
+          type: string
+          minLength: 1
+          pattern: '\S'
+          description: >-
+            The `pattern` matches the `length(trim(fullname)) > 0` CHECK in
+            schema.dbml.
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          pattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+          description: >-
+            Must be unique across users; a request reusing an existing address
+            is rejected with 409. `pattern` mirrors the DBML CHECK and `format`
+            applies ajv's own rule - see the note on `Organization.contact`.
+        organizationId: { $ref: '#/components/schemas/OrganizationId' }
+
+    UserCreate:
+      allOf:
+        - $ref: '#/components/schemas/UserCore'
+        - type: object
+          required: [password]
+          properties:
+            password:
+              type: string
+              minLength: 8
+              writeOnly: true
+              description: >-
+                Plaintext password, sent once over TLS and hashed (argon2id)
+                server-side before storage. Mirrors the
+                `length(password) > 0` CHECK in schema.dbml, with a minimum
+                length enforced at the application layer.
+      description: >-
+        Unknown properties are rejected rather than ignored, so a request that
+        tries to smuggle in `id` or `createdAt` (or any other server-assigned
+        field) fails validation instead of being silently dropped.
+      unevaluatedProperties: false
+
+    User:
+      allOf:
+        - $ref: '#/components/schemas/UserCore'
+        - type: object
+          required: [id, createdAt]
+          properties:
+            id: { $ref: '#/components/schemas/UserId', readOnly: true }
+            createdAt: { $ref: '#/components/schemas/Timestamp', readOnly: true }
+
     EventCore:
       type: object
       description: >-
@@ -407,6 +495,14 @@ components:
 
     UnsupportedMediaType:
       description: The request body was sent as something other than `application/json`.
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+
+    Conflict:
+      description: >-
+        The request conflicts with the current state of the resource - e.g. an
+        `email` that is already registered to another user.
       content:
         application/problem+json:
           schema: { $ref: '#/components/schemas/Problem' }
