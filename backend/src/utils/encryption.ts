@@ -1,4 +1,4 @@
-import { hash, argon2id } from 'argon2';
+import { hash, verify, argon2id } from 'argon2';
 
 /**
  * Hashes a plaintext password for storage in users.password_hash.
@@ -8,4 +8,11 @@ import { hash, argon2id } from 'argon2';
  */
 export async function hashPassword(plaintext: string): Promise<string> {
   return hash(plaintext, { type: argon2id });
+}
+
+/**
+ * Verifies a plaintext password against a stored users.password_hash.
+ */
+export async function verifyPassword(passwordHash: string, plaintext: string): Promise<boolean> {
+  return verify(passwordHash, plaintext);
 }

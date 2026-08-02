@@ -35,3 +35,6 @@ export const notImplemented = (detail: string) => new HttpProblem(501, 'Not Impl
 
 /** The request conflicts with the current state of a resource - e.g. a duplicate email. */
 export const conflict = (detail: string) => new HttpProblem(409, 'Conflict', detail);
+
+/** Credentials were missing or did not match an existing account. */
+export const unauthorized = (detail: string) => new HttpProblem(401, 'Unauthorized', detail);

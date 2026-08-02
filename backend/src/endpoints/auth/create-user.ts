@@ -4,6 +4,7 @@ import { prisma } from '../../db/client.js';
 import { Prisma } from '../../generated/prisma/client.js';
 import { hashPassword } from '../../utils/encryption.js';
 import { conflict } from '../../utils/problems.js';
+import { startSession } from '../../utils/userSessions.js';
 
 const router = Router();
 
@@ -46,6 +47,7 @@ router.post('/auth/create-user', async (req: Request, res: Response, next: NextF
       select: { id: true, fullname: true, email: true, organizationId: true, createdAt: true },
     });
 
+    startSession(res, user.id);
     res.status(201).location(`/v1/users/${user.id}`).json(toUser(user));
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {

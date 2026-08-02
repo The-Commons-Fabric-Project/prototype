@@ -40,7 +40,9 @@ paths:
         Registers a new user under the given organization. `email` must be
         unique - a request reusing an existing address is rejected with 409.
         `password` is received as plaintext over TLS and hashed server-side
-        (argon2id) before storage; it is never echoed back in a response.
+        (argon2id) before storage; it is never echoed back in a response. On
+        success a signed, httpOnly session cookie is set, logging the new user
+        in immediately.
       requestBody:
         required: true
         content:
@@ -55,11 +57,46 @@ paths:
               description: URI of the newly created user.
               required: true
               schema: { type: string, format: uri-reference }
+            Set-Cookie:
+              description: Signed, httpOnly session cookie (see src/utils/userSessions.ts).
+              schema: { type: string }
           content:
             application/json:
               schema: { $ref: '#/components/schemas/User' }
         '400': { $ref: '#/components/responses/ValidationError' }
         '409': { $ref: '#/components/responses/Conflict' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /auth/login:
+    post:
+      security: [] #public - credentials are the login mechanism itself
+      operationId: login
+      tags: [Auth]
+      summary: Log in with email and password
+      description: >-
+        Verifies `email` and `password` against the stored argon2id hash and
+        returns the matching user. On success a signed, httpOnly session
+        cookie is set - see the `security` TODO at the top of this document
+        for why routes do not yet require it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Authenticated
+          headers:
+            Set-Cookie:
+              description: Signed, httpOnly session cookie (see src/utils/userSessions.ts).
+              schema: { type: string }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
         '415': { $ref: '#/components/responses/UnsupportedMediaType' }
         default: { $ref: '#/components/responses/Problem' }
 
@@ -357,6 +394,25 @@ components:
             id: { $ref: '#/components/schemas/UserId', readOnly: true }
             createdAt: { $ref: '#/components/schemas/Timestamp', readOnly: true }
 
+    UserLogin:
+      type: object
+      description: >-
+        Unknown properties are rejected rather than ignored, so a request that
+        tries to smuggle in extra fields fails validation instead of being
+        silently dropped.
+      required: [email, password]
+      unevaluatedProperties: false
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        password:
+          type: string
+          minLength: 1
+          writeOnly: true
+          description: Plaintext password, sent once over TLS and checked against the stored argon2id hash.
+
     EventCore:
       type: object
       description: >-
@@ -503,6 +559,12 @@ components:
       description: >-
         The request conflicts with the current state of the resource - e.g. an
         `email` that is already registered to another user.
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+
+    Unauthorized:
+      description: The supplied email or password did not match an existing account.
       content:
         application/problem+json:
           schema: { $ref: '#/components/schemas/Problem' }
