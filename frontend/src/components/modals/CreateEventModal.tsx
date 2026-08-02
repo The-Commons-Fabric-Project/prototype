@@ -8,7 +8,7 @@ import Modal, { ModalHeader } from "./Modal";
 import Field from "../controls/Field";
 import Button from "../controls/Button";
 import Toggle from "../controls/Toggle";
-import Summary from "../cards/Summary";
+import Summary from "../chips/Summary";
 
 import type { Event } from "../../utils/types/events";
 import { EMAIL_RE } from "../../utils/types/orgs";

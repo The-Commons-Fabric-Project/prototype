@@ -3,6 +3,7 @@ import {INITIAL_VIEWPORTS } from 'storybook/viewport';
 
 import '../src/index.css';
 import { AuthProvider } from '../src/hooks/useAuth'
+import { OverlayProvider } from '../src/hooks/useOverlayContext';
 
 const preview: Preview = {
   parameters: {
@@ -54,7 +55,9 @@ const preview: Preview = {
       const { theme = 'light' } = parameters;
       return (
         <AuthProvider>
-          <Story />
+          <OverlayProvider>
+            <Story />
+          </OverlayProvider>
         </AuthProvider>
       );
     },

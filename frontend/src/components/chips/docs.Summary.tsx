@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react';
 
-import Summary from './Summary';
+import Summary from '../cards/Summary';
 
 const meta: Meta<typeof Summary> = {
   component: Summary,

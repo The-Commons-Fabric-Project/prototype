@@ -17,7 +17,7 @@ type ModalOption = keyof typeof Modals | undefined;
 
 type ToastTimer = RefObject<ReturnType<typeof setTimeout> | undefined>;
 
-type OverlayState = {
+export type OverlayState = {
   modal: { modal: ModalOption, setModal: Dispatch<SetStateAction<ModalOption>> },
   toast: { toastMsg: string, toastTimer: ToastTimer, toast: (msg: string) => void},
 }

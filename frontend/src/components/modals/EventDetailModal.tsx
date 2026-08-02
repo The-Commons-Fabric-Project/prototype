@@ -1,6 +1,6 @@
 import type { Event } from '../../utils/types/events'
 import { fmtPlainDate, fmtTime } from '../../utils/datetime';
-import DetailRow from '../cards/DetailRow';
+import DetailRow from '../chips/DetailRow';
 import Icon from '../../assets/Icons';
 import Modal, { ModalHeader } from './Modal';
 import Button from '../controls/Button';

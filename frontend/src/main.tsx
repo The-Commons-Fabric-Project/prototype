@@ -6,7 +6,7 @@ import { AuthProvider, useAuth } from './hooks/useAuth'
 import { routeTree } from './routeTree.gen'
 
 import './index.css'
-import { OverlayProvider } from './hooks/useOverlayContext'
+import { OverlayProvider, type OverlayState } from './hooks/useOverlayContext'
 
 import type { AuthState } from './utils/types/users'
 
@@ -16,8 +16,7 @@ import type { AuthState } from './utils/types/users'
 
 export interface MyRouterContext {
   auth: AuthState,
-  overlay?: any, // FIXME: narrow type
-  modal?: string
+  overlay: OverlayState,
 }
 
 // combines https://tanstack.com/router/v1/docs/how-to/setup-authentication#2-configure-router (step 2) and step 3 because they have separate router.tsx and App.tsx files
@@ -27,7 +26,6 @@ const router = createRouter({
     // auth will be passed down from App component
     auth: undefined!,
     overlay: undefined!,
-    modal: "",
   },
 })
 

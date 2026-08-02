@@ -8,7 +8,7 @@ import { EMAIL_RE } from "../../utils/types/orgs";
 import Modal, { ModalHeader } from "./Modal";
 import Field from "../controls/Field";
 import Button from "../controls/Button";
-import Summary from "../cards/Summary";
+import Summary from "../chips/Summary";
 
 import { useToast } from "../../hooks/useOverlayContext";
 import { addUser } from "../../mocks/auth";
