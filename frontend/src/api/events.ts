@@ -6,7 +6,7 @@
  * step, the types have drifted from the document and that is the thing to fix.
  */
 
-import { get } from './client';
+import { get, post } from './client';
 import type { Event } from '../utils/types/events';
 
 /** Time window and organization filter for listEvents. All optional. */
@@ -66,3 +66,31 @@ export const listEvents = (query?: EventQuery) => get<Event[]>(`/events${querySt
 
 /** GET /v1/events/{eventId} */
 export const getEvent = (eventId: number) => get<Event>(`/events/${eventId}`);
+
+/**
+ * The body `POST /v1/events` accepts - the `EventCreate` schema.
+ *
+ * Note what is *not* here. `ownerId` comes from the session cookie and
+ * `organizationId` is derived from that owner, so neither can be sent; the
+ * document rejects a body carrying them rather than ignoring them, which is what
+ * stops a caller publishing as somebody else. `id` and `createdAt` are likewise
+ * the server's to assign.
+ */
+export interface EventCreate {
+  title: string;
+  /** RFC 3339. */
+  startsAt: string;
+  location?: string | null;
+  description?: string | null;
+  thumbnail?: string | null;
+  registrationLink?: string | null;
+  volunteerContact?: string | null;
+}
+
+/**
+ * POST /v1/events - publishes an event owned by the signed-in user.
+ *
+ * Requires a session: throws ApiError 401 when there is none, or when the cookie
+ * does not verify.
+ */
+export const createEvent = (input: EventCreate) => post<Event>('/events', input);

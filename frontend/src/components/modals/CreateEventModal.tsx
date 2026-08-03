@@ -11,8 +11,11 @@ import Toggle from "../controls/Toggle";
 import Summary from "../chips/Summary";
 
 import { EMAIL_RE } from "../../utils/types/orgs";
-import { fmtTime, fmtPlainDate } from "../../utils/datetime";
+import { fmtTime, fmtPlainDate, fromDateAndTime } from "../../utils/datetime";
 import { useToast } from "../../hooks/useOverlayContext";
+import { useCreateEvent } from "../../hooks/useEvents";
+import { ApiError } from "../../api/client";
+import type { Event } from "../../utils/types/events";
 import type { User } from "../../utils/types/users";
 
 /**
@@ -22,8 +25,8 @@ import type { User } from "../../utils/types/users";
  * mirror the API. The two are genuinely different shapes: the form takes a date
  * and a time in separate inputs and asks whether registration is needed, while
  * the API takes a single `startsAt` timestamp and infers registration from the
- * presence of a link. Converting between them is the job of the submit handler,
- * which is out of scope until event creation is wired up.
+ * presence of a link. Converting between them is the job of the submit handler
+ * below.
  */
 export type CreateEventFormData = {
   title: string;
@@ -44,7 +47,8 @@ type EventFormErrors = Partial<CreateEventFormData>;
 type CreateEventModalProps = {
   onClose: () => void,
   session: User,
-  onCreate: (event: CreateEventFormData & { org: string }) => void,
+  /** Called with the published event once the server has accepted it. */
+  onCreate: (event: Event) => void,
 }
 
 export default function CreateEventModal({ 
@@ -60,6 +64,45 @@ export default function CreateEventModal({
   });
   const [errors, setErrors] = useState<EventFormErrors>({});
   const { toast } = useToast();
+  const createEvent = useCreateEvent();
+
+  /**
+   * Maps the form onto the API's `EventCreate` and publishes it.
+   *
+   * The two shapes differ in three ways, all resolved here: the separate date
+   * and time inputs become one `startsAt` timestamp; the optional text fields
+   * become null rather than "" so an untouched field is stored as absent instead
+   * of as an empty string; and the registration/volunteer toggles disappear
+   * entirely, since the server infers both from whether the corresponding field
+   * is set. `ownerId` is not sent at all - the session decides it.
+   */
+  const publish = () => {
+    const blank = (value: string) => (value.trim() === "" ? null : value.trim());
+
+    createEvent.mutate(
+      {
+        title: form.title.trim(),
+        startsAt: fromDateAndTime(form.date, form.time),
+        location: blank(form.location),
+        description: blank(form.description),
+        registrationLink: form.registrationRequired ? blank(form.registrationLink) : null,
+        volunteerContact: form.volunteersNeeded ? blank(form.volunteerContact) : null,
+      },
+      {
+        onSuccess: (created) => {
+          onCreate(created);
+          toast("Event created and confirmed.");
+          onClose();
+        },
+        onError: (err: unknown) => {
+          // ApiError.detail is the server's own wording, so a rejected
+          // registration link says which field is wrong instead of "failed".
+          toast(err instanceof ApiError ? err.detail : "Could not publish the event.");
+        },
+      },
+    );
+  };
+
   const setF = (patch: Partial<CreateEventFormData>) => setForm((f) => ({ ...f, ...patch }));
 
   const validate = () => {
@@ -155,12 +198,11 @@ export default function CreateEventModal({
             <div className="flex gap-[10px]"
             // {{ display: "flex", gap: 10 }}
             >
-              <Button variant="ghost" className="flex-1" onClick={() => setStep(1)}>No, edit</Button>
-              <Button className="flex-1" onClick={() => {
-                onCreate({ ...form, org: session.fullname });
-                toast("Event created and confirmed.");
-                onClose();
-              }}>Yes, publish</Button>
+              <Button variant="ghost" className="flex-1" onClick={() => setStep(1)}
+                disabled={createEvent.isPending}>No, edit</Button>
+              <Button className="flex-1" onClick={publish} disabled={createEvent.isPending}>
+                {createEvent.isPending ? "Publishing…" : "Yes, publish"}
+              </Button>
             </div>
           </>
         )}

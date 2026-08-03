@@ -10,7 +10,7 @@ import { useOrgLookup } from '../hooks/useOrganizations'
 import { useModal } from '../hooks/useOverlayContext';
 import CreateEventModal from '../components/modals/CreateEventModal';
 import EventDetailModal from '../components/modals/EventDetailModal';
-import { monthBounds } from '../utils/datetime';
+import { monthBounds, toDateKey } from '../utils/datetime';
 import type { Event } from '../utils/types/events';
 
 function Index() {
@@ -111,7 +111,16 @@ function Index() {
         <CreateEventModal
           onClose={() => setModal(undefined)}
           session={user}
-          onCreate={() => console.log("created event")}
+          // The modal publishes and invalidates the event cache itself, so the
+          // list refreshes without anything here. Jump the grid to the new
+          // event's day so it is visible rather than possibly outside the
+          // current window.
+          onCreate={(created) => {
+            const day = toDateKey(created.startsAt);
+            setView('cards');
+            setGridStart(day);
+            setGridEnd(day);
+          }}
         />
       )}
     </div>
