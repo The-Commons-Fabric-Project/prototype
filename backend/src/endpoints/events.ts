@@ -1,7 +1,9 @@
 import { Router, type Request, type Response, type NextFunction } from 'express';
 
 import { prisma } from '../db/client.js';
-import { badRequest, notFound, notImplemented } from '../utils/problems.js';
+import { Prisma } from '../generated/prisma/client.js';
+import { requireAuth } from '../middleware/auth.js';
+import { badRequest, notFound, unauthorized } from '../utils/problems.js';
 
 /**
  * Routes for the `events` table. Mounted under /v1 in app.ts.
@@ -86,22 +88,73 @@ eventsRouter.get('/events', async (req: Request, res: Response, next: NextFuncti
   }
 });
 
+/** The body EventCreate admits. Optional fields are absent or null, never undefined-as-a-value. */
+type EventCreateBody = {
+  title: string;
+  startsAt: string;
+  endsAt: string;
+  location?: string | null;
+  description?: string | null;
+  thumbnail?: string | null;
+  registrationLink?: string | null;
+  volunteerContact?: string | null;
+};
+
 /**
  * POST /v1/events
  *
- * Deliberately unimplemented. The document states that ownerId comes from the
- * authenticated caller and never from the request body, and there is no
- * authentication yet - so there is no honest way to decide who owns a new event.
- * Writing one under a guessed or configured user would put rows in the database
- * attributed to someone who did not create them.
- *
- * When auth lands, this becomes: resolve the caller, build the row from named
- * fields plus that caller's id, and return 201 with a Location header. Never
- * spread req.body into Prisma - EventCreate rejects a client-supplied ownerId,
- * but only a handler that picks fields explicitly keeps that guarantee.
+ * The owner is the signed-in user and nothing else: requireAuth resolves it from
+ * the signed session cookie, and EventCreate's `unevaluatedProperties: false`
+ * rejects a body that tries to name a different one. Fields are copied across by
+ * name rather than spreading req.body - the schema is what makes the spread safe
+ * today, and picking fields explicitly is what keeps it safe if the schema ever
+ * loosens.
  */
-eventsRouter.post('/events', (_req: Request, _res: Response, next: NextFunction) => {
-  next(notImplemented('Creating events requires authentication, which is not implemented yet.'));
+eventsRouter.post('/events', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const ownerId = req.user?.userId;
+    if (ownerId === undefined) {
+      next(unauthorized('Authentication is required to access this resource.'));
+      return;
+    }
+
+    const body = req.body as EventCreateBody;
+    const startsAt = new Date(body.startsAt);
+    const endsAt = new Date(body.endsAt);
+
+    // The schema cannot compare two fields, so the document promises the server
+    // enforces this and answers 400. Mirrors the ends_at > starts_at CHECK, which
+    // would otherwise surface as an opaque 500 from the database.
+    if (endsAt <= startsAt) {
+      throw badRequest('endsAt must be later than startsAt.', '/body/endsAt');
+    }
+
+    const row = await prisma.event.create({
+      data: {
+        title: body.title,
+        ownerId,
+        startsAt,
+        endsAt,
+        location: body.location ?? null,
+        description: body.description ?? null,
+        thumbnail: body.thumbnail ?? null,
+        registrationLink: body.registrationLink ?? null,
+        volunteerContact: body.volunteerContact ?? null,
+      },
+      include: withOwnerOrganization,
+    });
+
+    res.status(201).location(`/v1/events/${row.id}`).json(toEvent(row));
+  } catch (err) {
+    // The session is signed and unexpired, but names a user who has since been
+    // deleted - so events.owner_id has nothing to point at. That is a dead
+    // session rather than a bad request, hence 401 and not 500.
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2003') {
+      next(unauthorized('The user for this session no longer exists.'));
+      return;
+    }
+    next(err);
+  }
 });
 
 /**

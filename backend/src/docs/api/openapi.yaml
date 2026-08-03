@@ -19,7 +19,11 @@ info:
 servers:
   - url: http://localhost:3000/v1 #TODO: use environment variables for this? - requires some setup in the code that parses this file. [Where?]
 
-security: [] #TODO: figure out how to configure this from @marcus-wrrn once auth is implemented
+# Authentication is required by default, so an operation added without a thought
+# about auth fails closed rather than open. The public ones opt out individually
+# with `security: []` - grep for it to see the full list at a glance.
+security:
+  - cookieAuth: []
 
 tags:
   - name: Events
@@ -128,10 +132,9 @@ paths:
 
   /auth/profile:
     get:
-      # No `security: []` override - this route is only reachable with a session
-      # cookie, enforced by requireAuth (src/middleware/auth.ts). See the
-      # `security` TODO at the top of this document for why that is not yet
-      # expressed as a security scheme.
+      # No `security: []` override, so the document-wide cookieAuth requirement
+      # applies. Enforced by the validator (cookie present) and requireAuth
+      # (src/middleware/auth.ts - signature and expiry).
       operationId: getProfile
       tags: [Auth]
       summary: Get the signed-in user
@@ -183,10 +186,17 @@ paths:
         default: { $ref: '#/components/responses/Problem' }
 
     post:
+      # No `security: []` override, so the document-wide cookieAuth requirement
+      # applies - this is the only write operation that is not self-service auth.
       operationId: createEvent
       tags: [Events]
       summary: Create an event
       description: >-
+        Creates an event owned by the signed-in user. `ownerId` is taken from the
+        session cookie and is rejected if sent in the body, so a caller can only
+        ever publish as themselves; `organizationId` follows from that owner.
+
+
         `endsAt` must be later than `startsAt`. JSON Schema cannot compare two
         fields, so the server enforces it and rejects an inverted interval with
         400 - mirroring the `ends_at > starts_at` CHECK in schema.dbml.
@@ -208,6 +218,7 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Event' }
         '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
         '415': { $ref: '#/components/responses/UnsupportedMediaType' }
         default: { $ref: '#/components/responses/Problem' }
 
@@ -272,16 +283,50 @@ paths:
         default: { $ref: '#/components/responses/Problem' }
 
 components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
+      description: >-
+        The signed, httpOnly session cookie set by `/auth/create-user` and
+        `/auth/login` (see src/utils/userSessions.ts).
+
+
+        Declaring this does two things. It documents which operations need a
+        session - previously only discoverable by reading the routers - and it
+        makes the validator reject a request that carries no session cookie
+        before any handler runs. The validator only checks that the cookie is
+        *present*; `requireAuth` (src/middleware/auth.ts) is what verifies the
+        signature and expiry, and is still what puts `userId` on the request. The
+        two are complementary rather than redundant, and neither is sufficient
+        alone: a forged cookie passes the first and fails the second.
+
+
+        One ordering consequence worth knowing: the validator checks security
+        before it validates the body, so an unauthenticated request gets 401
+        rather than a 400 describing what else was wrong with it. That is the
+        better answer - a caller with no session should not be able to probe the
+        schema - but it does mean 401 can mask a body that would also have failed.
+
   parameters:
+    # allowReserved on both date parameters: an RFC 3339 timestamp contains colons
+    # (`2026-08-01T00:00:00Z`), and RFC 3986 permits a bare colon in the query
+    # component. Without this the validator insists every colon arrive as %3A and
+    # answers 400 otherwise - which rejects the ordinary form of the calendar's own
+    # request, and the form axios produces, since it leaves `:` unescaped.
+    # Percent-encoded values keep working; this only stops the raw ones being refused.
     StartDate:
       name: startDate
       in: query
+      allowReserved: true
       description: Start of the time window. Defaults to the current time when omitted.
       schema: { $ref: '#/components/schemas/Timestamp' }
 
     EndDate:
       name: endDate
       in: query
+      allowReserved: true
       description: End of the time window. Unbounded when omitted. Must be later than `startDate`.
       schema: { $ref: '#/components/schemas/Timestamp' }
 

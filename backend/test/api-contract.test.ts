@@ -10,8 +10,9 @@
  * silently. These tests fail all at once instead, and name the real cause.
  *
  * Nothing here reaches the database: every request is rejected before a handler
- * runs, and the one that does reach a handler (POST, which is 501 until auth
- * exists) returns before querying. So these need no seeded data.
+ * queries it. The create tests stop at the auth gate or at the interval check,
+ * both of which run before the insert, so these need no seeded data. The happy
+ * path of POST /events is the one thing they therefore cannot cover.
  */
 import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -21,13 +22,25 @@ import type { Server } from 'node:http';
 
 let server: Server;
 let base: string;
+/** A Cookie header carrying a session for a user who need not exist - see sessionFor. */
+let session: string;
 
 before(async () => {
   // createApp refuses to build without an explicit mode, and development is what
   // turns response validation on - so these run against the stricter configuration.
   process.env.NODE_ENV ??= 'development';
+  // `npm test` runs without --env-file, so nothing has loaded .env. Signing refuses
+  // to fall back to a default secret, which is the point - supply one for the run.
+  process.env.SESSION_SECRET ??= 'test-secret-not-used-outside-this-process';
 
   const { createApp } = await import('../src/app.js');
+  const { SESSION_COOKIE_NAME, signSessionToken } = await import('../src/utils/userSessions.js');
+
+  // Signed with the same secret the server verifies against, so this is a genuine
+  // session rather than a stub. The userId is never dereferenced: every test using
+  // it is answered before the insert that would need the row to exist.
+  session = `${SESSION_COOKIE_NAME}=${signSessionToken({ userId: 1 })}`;
+
   server = createApp().listen(0); // port 0: let the OS pick, so tests never collide
   await once(server, 'listening');
   base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
@@ -41,9 +54,16 @@ after(async () => {
   await prisma.$disconnect();
 });
 
-const json = (body: unknown) => ({
+/**
+ * A JSON POST, optionally signed in.
+ *
+ * Most of these assert something about body or parameter validation, and the
+ * validator checks security first - so without a cookie they would all be
+ * answered 401 before reaching the rule under test.
+ */
+const json = (body: unknown, cookie?: string) => ({
   method: 'POST',
-  headers: { 'content-type': 'application/json' },
+  headers: { 'content-type': 'application/json', ...(cookie ? { cookie } : {}) },
   body: JSON.stringify(body),
 });
 
@@ -77,7 +97,7 @@ test('a path parameter of the wrong type is rejected', async () => {
 test('a server-assigned field cannot be smuggled into a create', async () => {
   // The guarantee that EventCreate's unevaluatedProperties: false provides. If this
   // regresses, a client can choose which user owns an event it created.
-  const response = await fetch(`${base}/v1/events`, json({ ...validEvent, ownerId: 9 }));
+  const response = await fetch(`${base}/v1/events`, json({ ...validEvent, ownerId: 9 }, session));
   const body = await expectProblem(response, 400);
   assert.match(String(body.detail), /unevaluated properties/i);
 
@@ -91,6 +111,26 @@ test('an undeclared query parameter is rejected', async () => {
   assert.match(String(body.detail), /bogus/);
 });
 
+test('a timestamp with unencoded colons is accepted', async () => {
+  // The validator rejects reserved characters in a query value unless the parameter
+  // sets allowReserved, and every RFC 3339 timestamp contains colons - so without it
+  // the calendar's own request is a 400 unless the client writes %3A. Both windows
+  // here are inverted on purpose: that is refused by the handler, after the
+  // validator has passed the value through, and before anything reaches the
+  // database. So the assertion is about which 400 comes back, not whether one does.
+  const window = (start: string, end: string) => `${base}/v1/events?startDate=${start}&endDate=${end}`;
+
+  const raw = await expectProblem(await fetch(window('2026-12-01T00:00:00Z', '2026-08-01T00:00:00Z')), 400);
+  assert.match(String(raw.detail), /endDate must be later/, 'a raw colon must reach the handler, not be refused as unencoded');
+
+  // Percent-encoded values must keep working - allowReserved permits, it does not require.
+  const encoded = await expectProblem(
+    await fetch(window(encodeURIComponent('2026-12-01T00:00:00Z'), encodeURIComponent('2026-08-01T00:00:00Z'))),
+    400,
+  );
+  assert.match(String(encoded.detail), /endDate must be later/);
+});
+
 test('a path outside the document is a problem+json 404', async () => {
   await expectProblem(await fetch(`${base}/v1/nope`), 404);
 });
@@ -102,16 +142,49 @@ test('a method the document does not describe is a 405', async () => {
 test('a request body that is not JSON is a 415', async () => {
   const response = await fetch(`${base}/v1/events`, {
     method: 'POST',
-    headers: { 'content-type': 'text/plain' },
+    headers: { 'content-type': 'text/plain', cookie: session },
     body: 'hi',
   });
   await expectProblem(response, 415);
 });
 
-test('a valid create is accepted by the document and refused by the handler', async () => {
-  // Pins the deliberate gap: the body passes validation, so this 501 is the handler
-  // declining to invent an owner rather than the document rejecting the request.
-  // When auth lands this becomes a 201 and this test should be rewritten, not deleted.
-  const body = await expectProblem(await fetch(`${base}/v1/events`, json(validEvent)), 501);
-  assert.match(String(body.detail), /authentication/i);
+test('a create with no session cookie is refused by the document', async () => {
+  // The outer of the two auth layers: cookieAuth in the document, enforced by the
+  // validator, which only asks whether a session cookie is there at all.
+  const body = await expectProblem(await fetch(`${base}/v1/events`, json(validEvent)), 401);
+  assert.match(String(body.detail), /cookie/i);
+});
+
+test('a create with a forged session is refused by the handler', async () => {
+  // The inner layer. This cookie has the right name, so it satisfies the document
+  // and gets past the validator; requireAuth then rejects it because the signature
+  // does not verify. That this fails differently from the test above is the whole
+  // point - neither layer is sufficient alone, so neither is redundant.
+  const response = await fetch(`${base}/v1/events`, json(validEvent, 'session=not.a.real.token'));
+  const body = await expectProblem(response, 401);
+  assert.match(String(body.detail), /invalid or has expired/i);
+});
+
+test('the auth gate runs ahead of body validation', async () => {
+  // No session and a body the document also rejects: the answer is 401, and says
+  // nothing about the body. This is ordering inside the validator - security is
+  // checked before the request - and it is the behaviour we want: an anonymous
+  // caller cannot use validation errors to probe the schema. The cost is that a
+  // 401 can hide a body that would have failed too, which is why every test above
+  // that targets body validation sends a session.
+  const body = await expectProblem(await fetch(`${base}/v1/events`, json({ ...validEvent, ownerId: 9 })), 401);
+  assert.doesNotMatch(String(body.detail), /ownerId|unevaluated/i, 'an unauthenticated 401 must not describe the body');
+});
+
+test('a create whose interval is inverted is refused', async () => {
+  // endsAt <= startsAt is the rule JSON Schema cannot express, so it is the one the
+  // handler still owns. Reaching it proves the session above was accepted.
+  const response = await fetch(`${base}/v1/events`, {
+    ...json({ ...validEvent, startsAt: '2026-09-01T20:00:00Z', endsAt: '2026-09-01T17:00:00Z' }),
+    headers: { 'content-type': 'application/json', cookie: session },
+  });
+  const body = await expectProblem(response, 400);
+
+  const errors = body.errors as { pointer: string }[];
+  assert.equal(errors[0]!.pointer, '/body/endsAt', 'the pointer names the offending field');
 });
