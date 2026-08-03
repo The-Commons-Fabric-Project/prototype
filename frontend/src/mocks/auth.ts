@@ -1,7 +1,7 @@
 /**
  * What is left of the mock auth client.
  *
- * Logging in is real now - see utils/api/auth.ts and hooks/useAuth.tsx. Account
+ * Logging in is real now - see api/auth.ts and hooks/useAuth.tsx. Account
  * creation is not, and cannot be yet: `POST /v1/auth/create-user` requires an
  * `organizationId` for an organization that already exists, and the API has no
  * operation for creating one. The form in components/modals/CreateAccountModal.tsx

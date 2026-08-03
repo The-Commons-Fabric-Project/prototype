@@ -8,7 +8,7 @@
  */
 
 import { get, post } from './client';
-import type { User } from '../types/users';
+import type { User } from '../utils/types/users';
 
 /** POST /v1/auth/login - sets the session cookie. Throws ApiError 401 if the credentials do not match. */
 export const login = (email: string, password: string) => post<User>('/auth/login', { email, password });
