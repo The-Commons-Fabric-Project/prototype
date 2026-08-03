@@ -5,8 +5,8 @@
  * declares have to be restated wherever they are enforced - in SQL, in TypeScript,
  * and in JSON Schema. This test pins the restatements that are checkable:
  *
- *   - src/models/orgTags.ts      ORG_TAGS, used by the seed and the application layer
- *   - src/models/constraints.ts  the regex CHECKs SQLite cannot run
+ *   - src/utils/orgTags.ts      ORG_TAGS, used by the seed and the application layer
+ *   - src/utils/constraints.ts  the regex CHECKs SQLite cannot run
  *   - src/docs/api/openapi.yaml  the OrganizationTag enum and the `pattern` keywords
  *
  * The CHECK in prisma/migrations/**\/migration.sql is deliberately NOT asserted.
@@ -27,8 +27,8 @@ import { fileURLToPath } from 'node:url';
 
 import YAML from 'yaml';
 
-import { EMAIL_PATTERN, URL_PATTERN } from '../src/models/constraints.js';
-import { ORG_TAGS } from '../src/models/orgTags.js';
+import { EMAIL_PATTERN, URL_PATTERN } from '../src/utils/constraints.js';
+import { ORG_TAGS } from '../src/utils/orgTags.js';
 
 const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (relative: string) => readFileSync(path.join(backendRoot, relative), 'utf8');

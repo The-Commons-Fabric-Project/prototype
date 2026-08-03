@@ -30,8 +30,8 @@ import { fileURLToPath } from 'node:url';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 
 import { PrismaClient } from '../../src/generated/prisma/client.js';
-import { EMAIL_RE, URL_RE } from '../../src/models/constraints.js';
-import { ORG_TAGS, isOrgTag, type OrgTag } from '../../src/models/orgTags.js';
+import { EMAIL_RE, URL_RE } from '../../src/utils/constraints.js';
+import { ORG_TAGS, isOrgTag, type OrgTag } from '../../src/utils/orgTags.js';
 import { hashPassword } from '../../src/utils/encryption.js';
 
 const SEED_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'dev-organizations-seed.json');

@@ -1,6 +1,6 @@
 /**
  * Mirrors the CHECK on users.email in backend/src/docs/db/schema.dbml, and
- * EMAIL_PATTERN in backend/src/models/constraints.ts.
+ * EMAIL_PATTERN in backend/src/utils/constraints.ts.
  */
 export const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 

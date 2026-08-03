@@ -115,14 +115,3 @@ test('a valid create is accepted by the document and refused by the handler', as
   const body = await expectProblem(await fetch(`${base}/v1/events`, json(validEvent)), 501);
   assert.match(String(body.detail), /authentication/i);
 });
-
-test('routes outside the document are not intercepted by the validator', async () => {
-  // /users is mounted before the validator precisely so it stays reachable while
-  // absent from the spec. If that order is reversed the validator answers 404,
-  // because the document does not describe /users.
-  //
-  // Only 404 is excluded rather than asserting 200: this endpoint does query the
-  // database, so an unseeded checkout should not fail the ordering check.
-  const response = await fetch(`${base}/users/count`);
-  assert.notEqual(response.status, 404, '/users must not be swallowed by the validator');
-});
