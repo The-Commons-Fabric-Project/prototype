@@ -3,14 +3,14 @@
     "purpose": "Development-only seed data for the Rideau Community Hub prototype. Sourced from frontend/src/mocks/orgs.ts and frontend/src/mocks/events.ts.",
     "editing": "Flat arrays mirroring the Prisma models in prisma/schema.prisma. Cross-references use the explicit `id` fields below (users.organizationId -> organizations.id, events.ownerId -> users.id). Ids are only meaningful inside this file; the seed script is responsible for mapping them onto real autoincrement primary keys.",
     "passwords": "`devPassword` is plaintext and exists only so the seed script can hash it with argon2 before writing to users.password_hash. Each user is hashed separately, so users sharing a password still get distinct hashes (argon2 salts per call). Never ship this file to a non-development environment.",
-    "datetimes": "ISO 8601 with an explicit UTC offset. -04:00 is Ottawa local time (EDT) for these June dates. The frontend derives month/day/year/time for display.",
+    "datetimes": "ISO 8601 with an explicit UTC offset. Ottawa is -04:00 (EDT) until DST ends on 1 November 2026 and -05:00 (EST) after it, so both appear below. Events are dated relative to 2026-08-03: a couple in the past, the rest running about four months forward. GET /v1/events defaults startDate to now, so past events are excluded unless a window explicitly asks for them - which is why a few are kept here.",
     "organizationTags": "Must be one of: Advocacy, Civic, Community, Culture, Education, Equity, Indigenous, Makers, Policy, Research, Seniors, Settlement, Tech, Volunteer, Youth. Enforced by a CHECK in the initial migration.",
     "images": "organizations.logo uses a shared placeholder path; no logo assets exist in the repo yet. events.thumbnail is left null for the same reason.",
-    "eventTags": "The frontend's `Registration` / `Volunteers wanted` chips have no column in the schema, so they are represented by the presence of registrationLink / volunteerContact respectively."
+    "eventTags": "The frontend's `Registration` / `Volunteers wanted` chips have no column in the schema, so they are represented by the presence of registrationLink / volunteerContact respectively.",
+    "events": "Events have a start time only; ends_at was removed at the UX team's request. The cluster sharing one day exists to exercise a full calendar cell.",
+    "organizations": "These are real Ottawa-area organizations. Do not invent new ones to fill out the data - names, contacts and websites here stand in for real entities and the .example domains keep them inert."
   },
-
   "defaultDevPassword": "devpassword123",
-
   "organizations": [
     {
       "id": 1,
@@ -19,7 +19,11 @@
       "blurb": "A neighbourhood anchor offering settlement, employment, family, and seniors programming across Ottawa's east end.",
       "contact": "hello@rrcrc.example",
       "website": "https://rrcrc.example",
-      "tags": ["Community", "Settlement", "Seniors"]
+      "tags": [
+        "Community",
+        "Settlement",
+        "Seniors"
+      ]
     },
     {
       "id": 2,
@@ -28,7 +32,10 @@
       "blurb": "Advocacy and convening for older adults, championing age-friendly policy and connection across the city.",
       "contact": "info@coaottawa.example",
       "website": "https://coaottawa.example",
-      "tags": ["Seniors", "Advocacy"]
+      "tags": [
+        "Seniors",
+        "Advocacy"
+      ]
     },
     {
       "id": 3,
@@ -37,7 +44,11 @@
       "blurb": "A welcoming gathering place delivering culturally grounded programs and supports for the urban Indigenous community.",
       "contact": "reception@odawa.example",
       "website": "https://odawa.example",
-      "tags": ["Indigenous", "Culture", "Community"]
+      "tags": [
+        "Indigenous",
+        "Culture",
+        "Community"
+      ]
     },
     {
       "id": 4,
@@ -46,7 +57,11 @@
       "blurb": "Research, policy, and community development working toward a more equitable and inclusive Ottawa.",
       "contact": "spc@spcottawa.example",
       "website": "https://spcottawa.example",
-      "tags": ["Policy", "Research", "Equity"]
+      "tags": [
+        "Policy",
+        "Research",
+        "Equity"
+      ]
     },
     {
       "id": 5,
@@ -55,7 +70,11 @@
       "blurb": "Hands-on science, tech, engineering, art, and math workshops for curious makers of every age.",
       "contact": "build@steamakers.example",
       "website": "https://steamakers.example",
-      "tags": ["Education", "Makers", "Youth"]
+      "tags": [
+        "Education",
+        "Makers",
+        "Youth"
+      ]
     },
     {
       "id": 6,
@@ -64,10 +83,13 @@
       "blurb": "Volunteers building open, public-interest technology with and for the Ottawa community.",
       "contact": "hi@ottawacivictech.example",
       "website": "https://ottawacivictech.example",
-      "tags": ["Tech", "Civic", "Volunteer"]
+      "tags": [
+        "Tech",
+        "Civic",
+        "Volunteer"
+      ]
     }
   ],
-
   "users": [
     {
       "id": 1,
@@ -126,14 +148,12 @@
       "organizationId": 6
     }
   ],
-
   "events": [
     {
       "id": 1,
       "title": "Newcomer Welcome Morning",
       "ownerId": 1,
-      "startsAt": "2026-06-16T10:00:00-04:00",
-      "endsAt": "2026-06-16T12:00:00-04:00",
+      "startsAt": "2026-07-13T10:00:00-04:00",
       "location": "RCH Room 1",
       "description": "A relaxed drop-in for newcomers to the neighbourhood. Meet settlement workers, learn what programs are running this summer, and connect with other families over coffee.",
       "thumbnail": null,
@@ -142,10 +162,9 @@
     },
     {
       "id": 2,
-      "title": "Commons Fabric Meetup",
+      "title": "Commons Fabric Meetup (July)",
       "ownerId": 7,
-      "startsAt": "2026-06-18T18:00:00-04:00",
-      "endsAt": "2026-06-18T20:00:00-04:00",
+      "startsAt": "2026-07-25T18:00:00-04:00",
       "location": "RCH Room 2",
       "description": "Monthly working session for the Commons Fabric project. Newcomers welcome — we'll walk through the calendar prototype and pick up open tasks together.",
       "thumbnail": null,
@@ -154,46 +173,163 @@
     },
     {
       "id": 3,
+      "title": "Summer Lunch Drop-in",
+      "ownerId": 2,
+      "startsAt": "2026-08-03T12:00:00-04:00",
+      "location": "RCH Main Hall",
+      "description": "A free community lunch, every Monday through the summer. No sign-up, no cost — just come and share a table with your neighbours.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteer@rrcrc.example"
+    },
+    {
+      "id": 4,
+      "title": "Evening Craft Circle",
+      "ownerId": 6,
+      "startsAt": "2026-08-03T18:30:00-04:00",
+      "location": "RCH Workshop",
+      "description": "Wind down the day with a laid-back making session — bring a project or start something new. Materials provided while they last.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteer@steamakers.example"
+    },
+    {
+      "id": 5,
+      "title": "Tech Help Desk for Seniors",
+      "ownerId": 3,
+      "startsAt": "2026-08-04T14:00:00-04:00",
+      "location": "RCH Room 1",
+      "description": "Bring your phone, tablet or laptop and a question. Volunteers sit with you one-to-one for as long as it takes — no question too small.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteers@coaottawa.example"
+    },
+    {
+      "id": 6,
+      "title": "Housing Data Working Group",
+      "ownerId": 5,
+      "startsAt": "2026-08-06T09:30:00-04:00",
+      "location": "RCH Room 2",
+      "description": "Monthly working session on the neighbourhood housing dashboard. We review new data, agree what it says, and decide what to publish.",
+      "thumbnail": null,
+      "registrationLink": "https://spcottawa.example/working-groups/housing-data",
+      "volunteerContact": null
+    },
+    {
+      "id": 7,
+      "title": "Beading Circle",
+      "ownerId": 4,
+      "startsAt": "2026-08-08T11:00:00-04:00",
+      "location": "RCH Grounds",
+      "description": "An open beading circle for all skill levels. Bring your own work or learn a starter pattern with us. Tea and bannock provided.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "programs@odawa.example"
+    },
+    {
+      "id": 8,
+      "title": "Fall Program Registration Opens",
+      "ownerId": 1,
+      "startsAt": "2026-08-15T09:00:00-04:00",
+      "location": "RCH Main Hall",
+      "description": "In-person registration for autumn programming — language classes, employment workshops, after-school care and seniors' fitness. Staff on hand to help you choose.",
+      "thumbnail": null,
+      "registrationLink": "https://rrcrc.example/register/fall",
+      "volunteerContact": "volunteer@rrcrc.example"
+    },
+    {
+      "id": 9,
       "title": "Age-Friendly Ottawa Town Hall",
       "ownerId": 3,
-      "startsAt": "2026-06-19T13:30:00-04:00",
-      "endsAt": "2026-06-19T15:30:00-04:00",
-      "location": "RCH Main Hall",
+      "startsAt": "2026-08-15T12:30:00-04:00",
+      "location": "RCH Room 1",
       "description": "An open conversation about making Ottawa more age-friendly. Bring your ideas on transit, housing, and connection — your input shapes this year's advocacy priorities.",
       "thumbnail": null,
       "registrationLink": "https://coaottawa.example/events/age-friendly-town-hall",
       "volunteerContact": null
     },
     {
-      "id": 4,
-      "title": "Odawa Annual Powwow (Day 1)",
+      "id": 10,
+      "title": "Family Maker Lab: Circuits",
+      "ownerId": 6,
+      "startsAt": "2026-08-15T15:30:00-04:00",
+      "location": "RCH Workshop",
+      "description": "Hands-on electronics for curious makers aged 8 and up. Build a working circuit you can take home — no experience needed, just bring your curiosity.",
+      "thumbnail": null,
+      "registrationLink": "https://steamakers.example/register/circuits-lab",
+      "volunteerContact": "volunteer@steamakers.example"
+    },
+    {
+      "id": 11,
+      "title": "Open Data Night",
+      "ownerId": 8,
+      "startsAt": "2026-08-15T18:00:00-04:00",
+      "location": "RCH Room 2",
+      "description": "Bring a dataset or a question. We poke at open civic data together and see what the city is quietly telling us.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteers@ottawacivictech.example"
+    },
+    {
+      "id": 12,
+      "title": "Powwow Planning Circle",
       "ownerId": 4,
-      "startsAt": "2026-06-20T11:00:00-04:00",
-      "endsAt": "2026-06-20T13:00:00-04:00",
+      "startsAt": "2026-08-20T10:00:00-04:00",
       "location": "RCH Grounds",
-      "description": "Day one of our annual powwow — a celebration of culture, dance, and community. Grand entry at noon, followed by drumming, dancing, craft and food vendors. All are welcome.",
+      "description": "Open planning session for the autumn powwow. Dancers, drummers, vendors and volunteers all welcome — come hear the plan and find your place in it.",
       "thumbnail": null,
       "registrationLink": null,
       "volunteerContact": "powwow@odawa.example"
     },
     {
-      "id": 5,
-      "title": "Odawa Annual Powwow (Day 2)",
+      "id": 13,
+      "title": "Commons Fabric Meetup",
+      "ownerId": 7,
+      "startsAt": "2026-08-22T18:00:00-04:00",
+      "location": "RCH Room 2",
+      "description": "Monthly working session for the Commons Fabric project. Newcomers welcome — we'll walk through the calendar prototype and pick up open tasks together.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteers@ottawacivictech.example"
+    },
+    {
+      "id": 14,
+      "title": "Employment Skills Workshop",
+      "ownerId": 2,
+      "startsAt": "2026-08-27T13:00:00-04:00",
+      "location": "RCH Room 1",
+      "description": "A practical afternoon on résumés, Canadian workplace norms and interview practice, with one-to-one review at the end.",
+      "thumbnail": null,
+      "registrationLink": "https://rrcrc.example/register/employment-skills",
+      "volunteerContact": null
+    },
+    {
+      "id": 15,
+      "title": "Autumn Powwow (Day 1)",
       "ownerId": 4,
-      "startsAt": "2026-06-21T11:00:00-04:00",
-      "endsAt": "2026-06-21T13:00:00-04:00",
+      "startsAt": "2026-09-05T11:00:00-04:00",
       "location": "RCH Grounds",
-      "description": "Day two of our annual powwow, closing on National Indigenous Peoples Day. Grand entry at noon, special performances, honour songs, and a community feast to close the weekend.",
+      "description": "Day one of our autumn powwow — a celebration of culture, dance, and community. Grand entry at noon, followed by drumming, dancing, craft and food vendors. All are welcome.",
       "thumbnail": null,
       "registrationLink": null,
       "volunteerContact": "powwow@odawa.example"
     },
     {
-      "id": 6,
+      "id": 16,
+      "title": "Autumn Powwow (Day 2)",
+      "ownerId": 4,
+      "startsAt": "2026-09-06T11:00:00-04:00",
+      "location": "RCH Grounds",
+      "description": "Day two of our autumn powwow. Grand entry at noon, special performances, honour songs, and a community feast to close the weekend.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "powwow@odawa.example"
+    },
+    {
+      "id": 17,
       "title": "Poverty & Policy Briefing",
       "ownerId": 5,
-      "startsAt": "2026-06-23T12:00:00-04:00",
-      "endsAt": "2026-06-23T13:00:00-04:00",
+      "startsAt": "2026-09-12T12:00:00-04:00",
       "location": "RCH Room 2",
       "description": "A lunchtime briefing on the latest local data around income, housing, and food security, with time for discussion on where research can drive change.",
       "thumbnail": null,
@@ -201,16 +337,81 @@
       "volunteerContact": null
     },
     {
-      "id": 7,
-      "title": "Family Maker Lab: Circuits",
-      "ownerId": 6,
-      "startsAt": "2026-06-26T15:30:00-04:00",
-      "endsAt": "2026-06-26T17:30:00-04:00",
-      "location": "RCH Workshop",
-      "description": "Hands-on electronics for curious makers aged 8 and up. Build a working circuit you can take home — no experience needed, just bring your curiosity.",
+      "id": 18,
+      "title": "Falls Prevention Clinic",
+      "ownerId": 3,
+      "startsAt": "2026-09-19T14:00:00-04:00",
+      "location": "RCH Main Hall",
+      "description": "A practical session on balance, strength and making your home safer, run with a physiotherapist. Free, and repeated each season.",
       "thumbnail": null,
-      "registrationLink": "https://steamakers.example/register/circuits-lab",
+      "registrationLink": "https://coaottawa.example/events/falls-prevention",
+      "volunteerContact": "volunteers@coaottawa.example"
+    },
+    {
+      "id": 19,
+      "title": "Repair Cafe",
+      "ownerId": 6,
+      "startsAt": "2026-10-03T18:30:00-04:00",
+      "location": "RCH Workshop",
+      "description": "Bring something broken — a lamp, a toaster, a wobbly chair — and fix it alongside a volunteer who knows how. Free, and the parts bin is open.",
+      "thumbnail": null,
+      "registrationLink": null,
       "volunteerContact": "volunteer@steamakers.example"
+    },
+    {
+      "id": 20,
+      "title": "Community Potluck Brunch",
+      "ownerId": 1,
+      "startsAt": "2026-10-10T10:00:00-04:00",
+      "location": "RCH Main Hall",
+      "description": "Bring a dish to share and meet your neighbours over a relaxed brunch. Vegetarian and halal options always welcome.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteer@rrcrc.example"
+    },
+    {
+      "id": 21,
+      "title": "Civic Tech Show & Tell",
+      "ownerId": 8,
+      "startsAt": "2026-10-17T18:00:00-04:00",
+      "location": "RCH Room 2",
+      "description": "Five-minute demos of things people have built for the city, followed by questions and the usual arguing about maps.",
+      "thumbnail": null,
+      "registrationLink": "https://ottawacivictech.example/events/show-and-tell",
+      "volunteerContact": null
+    },
+    {
+      "id": 22,
+      "title": "Winter Readiness for Seniors",
+      "ownerId": 3,
+      "startsAt": "2026-11-07T13:30:00-05:00",
+      "location": "RCH Room 1",
+      "description": "What to line up before the snow arrives: snow-clearing help, transport options, grocery delivery and check-in calls.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteers@coaottawa.example"
+    },
+    {
+      "id": 23,
+      "title": "Winter Solstice Feast",
+      "ownerId": 4,
+      "startsAt": "2026-11-21T17:00:00-05:00",
+      "location": "RCH Grounds",
+      "description": "A shared meal to mark the turning of the year, with storytelling and a round dance to follow. All are welcome; bring a dish if you can.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "programs@odawa.example"
+    },
+    {
+      "id": 24,
+      "title": "Holiday Hamper Packing",
+      "ownerId": 2,
+      "startsAt": "2026-12-11T11:00:00-05:00",
+      "location": "RCH Main Hall",
+      "description": "Volunteers pack and sort hampers for delivery across the neighbourhood. Two-hour shifts, all ages welcome with an adult.",
+      "thumbnail": null,
+      "registrationLink": null,
+      "volunteerContact": "volunteer@rrcrc.example"
     }
   ]
 }
