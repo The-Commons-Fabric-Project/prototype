@@ -14,12 +14,20 @@ const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(file
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [tanstackRouter({
-    target: 'react',
-    autoCodeSplitting: true
-  }), tailwindcss(), react(), babel({
-    presets: [reactCompilerPreset()]
-  })],
+  plugins: [
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true
+    }), 
+    tailwindcss(), 
+    react({ 
+      // exclude the Claude artifact, ref: https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#exclude
+      exclude: [/\/design\//, /\/node_modules\//] 
+    }),
+    babel({
+      presets: [reactCompilerPreset()]
+    }),
+  ],
   test: {
     projects: [{
       extends: true,

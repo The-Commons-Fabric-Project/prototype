@@ -1,7 +1,7 @@
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
-import Modal, { ModalHeader } from './Modal';
+import Modal, { ModalHeader, type ModalProps } from './Modal';
 import type { ReactElement } from "react";
 
 const meta = {
@@ -14,7 +14,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const modalFiller: ReactElement<any> = (
+const modalFiller: ReactElement<ModalProps, typeof Modal> = (
   <>
   <ModalHeader 
     title="blank modal" 

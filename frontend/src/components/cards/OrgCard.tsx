@@ -3,7 +3,7 @@ import LogoPlaceholder from '../../assets/LogoPlaceholder';
 
 type OrgCardProps = {
   org: Organization,
-  onClick: (args: any) => void,
+  onClick: () => void,
   idx: number,
 }
 

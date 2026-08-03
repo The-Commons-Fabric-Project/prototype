@@ -22,14 +22,6 @@ function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
       className="flex gap-3.5 items-center bg-white border border-line rounded-xl p-3.5 cursor-pointer hover:shadow-[0_4px_12px_rgba(65,65,66,0.08)] active:scale-[0.99]"
       style={{ transition: 'box-shadow .18s ease, transform .08s ease' }}
     >
-      {/* <div className="flex flex-col items-center justify-center w-13 h-13 rounded-xl bg-white border border-line shrink-0">
-        <span className="text-[10px] font-bold text-secondary tracking-[0.6px] font-body">
-          {month}
-        </span>
-        <span className="font-display text-[22px] font-semibold text-ink leading-none">
-          {day}
-        </span>
-      </div> */}
       <DateChip date={event.date} large={false}/>
       <div className="flex-1 min-w-0">
         <h4 className="font-display text-[16px] font-semibold text-ink m-0 leading-[1.2]">

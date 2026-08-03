@@ -50,9 +50,11 @@ const preview: Preview = {
   
   decorators: [
     // 👇 Defining the decorator in the preview file applies it to all stories
-    (Story, { parameters }) => {
+    (Story, 
+      // { parameters }
+    ) => {
       // 👇 Make it configurable by reading the theme value from parameters
-      const { theme = 'light' } = parameters;
+      // const { theme = 'light' } = parameters;
       return (
         <AuthProvider>
           <OverlayProvider>

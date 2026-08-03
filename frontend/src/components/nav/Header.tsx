@@ -9,15 +9,6 @@ import { useAuth } from '../../hooks/useAuth';
 import { useModal } from '../../hooks/useOverlayContext';
 import CreateAccountModal from '../modals/CreateAccountModal';
 
-type HeaderProps = {
-//   view: string;
-//   setView: Dispatch<SetStateAction<string>>;
-  // session: AuthState
-//   onLogin: () => void;
-//   onCreateAccount: () => void;
-//   onLogout: () => void;
-}
-
 // ref for user auth in a Header component: https://github.com/david4473/Reciped/blob/main/src/components/Header.tsx
 
 /**
@@ -25,7 +16,7 @@ type HeaderProps = {
  * 
  * SOMEDAY: replace CF logo with RCH logo, move CF logo to a new footer element -- blocked: need RCH logo asset
  */
-export default function Header({}: HeaderProps) {
+export default function Header() {
   const [hidden, setHidden] = useState(false);
   const session = useAuth();
   const { location,  } = useRouterState();
@@ -64,10 +55,10 @@ export default function Header({}: HeaderProps) {
   return (
     <>
     <header className={`sticky top-0 z-50 w-full border-b border-line bg-paper/80 backdrop-blur-[10px] transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
-      <div className="max-w-[1040px] mx-auto px-6 py-3 flex items-center justify-between gap-4">
+      <div className="max-w-260 mx-auto px-6 py-3 flex items-center justify-between gap-4">
 
         {/* Logo */}
-        <Link to="/" className="no-underline flex items-center gap-[10px] p-0">
+        <Link to="/" className="no-underline flex items-center gap-2.5 p-0">
           <CommonsFabricLogo />
           <span className="text-left leading-[1.1]">
             <span className="block font-display text-[16px] font-semibold text-ink">Commons Fabric</span>
@@ -76,18 +67,18 @@ export default function Header({}: HeaderProps) {
         </Link>
 
         {/* Nav */}
-        <nav className="flex gap-[22px] ml-auto mr-2">
+        <nav className="flex gap-5.5 ml-auto mr-2">
           <Link to="/" className={navClass(path === '/')}>Events</Link>
           <Link to="/directory" className={navClass(path === '/directory')}>Directory</Link>
         </nav>
 
         {/* Auth buttons */}
-        <div className="flex items-center gap-[10px]">
+        <div className="flex items-center gap-2.5">
           {session.isAuthenticated ? (
             <>
-              <span className="text-[13px] text-ink font-semibold max-w-[160px] truncate">{session.user?.username}</span>
+              <span className="text-[13px] text-ink font-semibold max-w-40 truncate">{session.user?.username}</span>
               <button 
-                className="font-sans font-semibold text-[14px] px-[14px] py-2 rounded-[10px] cursor-pointer border border-line bg-transparent text-primary leading-[1.1] tracking-[0.1px]"
+                className="font-sans font-semibold text-[14px] px-3.5 py-2 rounded-md cursor-pointer border border-line bg-transparent text-primary leading-[1.1] tracking-[0.1px]"
                 onClick={handleLogout}
               >
                 Log out
@@ -95,8 +86,8 @@ export default function Header({}: HeaderProps) {
             </>
           ) : (
             <>
-              <Button variant="ghost" onClick={handleLogin} className="font-sans font-semibold text-[14px] px-[14px] py-2 rounded-[10px] cursor-pointer border border-line bg-transparent text-primary leading-[1.1] tracking-[0.1px]">Log in</Button>
-              <Button className="font-sans font-semibold text-[14px] px-[14px] py-2 rounded-[10px] cursor-pointer border border-primary bg-primary text-white leading-[1.1] tracking-[0.1px]" onClick={handleCreateAccount}>
+              <Button variant="ghost" onClick={handleLogin} className="font-sans font-semibold text-[14px] px-3.5 py-2 rounded-md cursor-pointer border border-line bg-transparent text-primary leading-[1.1] tracking-[0.1px]">Log in</Button>
+              <Button className="font-sans font-semibold text-[14px] px-3.5 py-2 rounded-md cursor-pointer border border-primary bg-primary text-white leading-[1.1] tracking-[0.1px]" onClick={handleCreateAccount}>
                 Create account
               </Button>
             </>

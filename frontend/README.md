@@ -2,7 +2,7 @@
 
 ## Installation
 
-If you're in the root folder, `cd frontend` to do anything related to the prototype.
+If you're in the root folder, `cd frontend` to do anything related to the prototype's front end.
 
 Make sure your Node.js version is upgraded. Vite requires Node.js version 20.19+ or 22.12+.
 
@@ -18,19 +18,11 @@ This project is using Storybook (at least for now). Storybook runs separately fr
 
 ## To-do List
 
-- Components to add:
-  - [] Toast
-  - [] Organization cards
-- [] fix close button on modals
-- [] implement modal switching (might need refactor?)
-- [] implement header feedback for user logged-in or not
-- [] populate Calendar component with test events
-- [] add "Create Event" form (pop-up)
-- [] footer
-- [] components for filtering tags
+- [] footer?
 
-# React + TypeScript + Vite
+## Template: React + TypeScript + Vite
 
+Based on [Vite's default template for React + Typescript](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts).
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
@@ -38,13 +30,13 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+### React Compiler
 
 The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
 
 Note: This will impact Vite dev & build performances.
 
-## Expanding the ESLint configuration
+### Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 

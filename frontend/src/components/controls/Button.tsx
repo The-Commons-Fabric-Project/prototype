@@ -10,7 +10,7 @@ const VARIANT_MAPS: Record<ButtonVariant, string> = {
   link: "bg-transparent text-bg-subtle underline"
 }
 
-type ButtonProps = Partial<ButtonHTMLAttributes<any>> &{
+type ButtonProps = Partial<ButtonHTMLAttributes<HTMLButtonElement>> & {
   /** Variations on button styling */
   variant?: ButtonVariant;
   /** Label for the button, used for accessibility and default display text unless otherwise specified */
