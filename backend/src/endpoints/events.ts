@@ -11,7 +11,7 @@ import { badRequest, notFound, unauthorized } from '../utils/problems.js';
  * Request shapes are not re-checked here - express-openapi-validator has already
  * rejected anything the document does not allow, and has coerced query and path
  * parameters to their declared types. What is left is the rules JSON Schema cannot
- * express (endsAt > startsAt) and resolving the owner's organization.
+ * express (an inverted query window) and resolving the owner's organization.
  */
 export const eventsRouter = Router();
 
@@ -37,7 +37,6 @@ const toEvent = (row: EventRow) => ({
   organizationId: row.owner.organizationId,
   title: row.title,
   startsAt: row.startsAt.toISOString(),
-  endsAt: row.endsAt.toISOString(),
   location: row.location,
   description: row.description,
   thumbnail: row.thumbnail,
@@ -51,7 +50,7 @@ const withOwnerOrganization = { owner: { select: { organizationId: true } } } as
 
 /**
  * GET /v1/events
- * Events overlapping a time window, ordered by startsAt.
+ * Events starting within a time window, ordered by startsAt.
  */
 eventsRouter.get('/events', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -64,18 +63,20 @@ eventsRouter.get('/events', async (req: Request, res: Response, next: NextFuncti
     const start = startDate ? new Date(startDate) : new Date();
     const end = endDate ? new Date(endDate) : undefined;
 
-    // The schema cannot compare two fields, so the document promises the server
-    // enforces this and answers 400. Mirrors the ends_at > starts_at CHECK.
+    // The schema cannot compare two parameters, so the document promises the
+    // server enforces this and answers 400. This is about the query window, not
+    // about any property of an event - events have only a start.
     if (end && end <= start) {
       throw badRequest('endDate must be later than startDate.', '/query/endDate');
     }
 
-    // Overlap, not containment: an event that began before the window but is still
-    // running belongs in it. endsAt >= start AND startsAt <= end.
+    // Events start in the window. This used to be an overlap test - endsAt >= start
+    // AND startsAt <= end - so a long event that began earlier and was still running
+    // was included. Events no longer have an end, so there is no interval to overlap
+    // and the only question left is where the event starts.
     const rows = await prisma.event.findMany({
       where: {
-        endsAt: { gte: start },
-        ...(end ? { startsAt: { lte: end } } : {}),
+        startsAt: { gte: start, ...(end ? { lte: end } : {}) },
         ...(organizationId !== undefined ? { owner: { organizationId } } : {}),
       },
       orderBy: { startsAt: 'asc' },
@@ -92,7 +93,6 @@ eventsRouter.get('/events', async (req: Request, res: Response, next: NextFuncti
 type EventCreateBody = {
   title: string;
   startsAt: string;
-  endsAt: string;
   location?: string | null;
   description?: string | null;
   thumbnail?: string | null;
@@ -119,22 +119,12 @@ eventsRouter.post('/events', requireAuth, async (req: Request, res: Response, ne
     }
 
     const body = req.body as EventCreateBody;
-    const startsAt = new Date(body.startsAt);
-    const endsAt = new Date(body.endsAt);
-
-    // The schema cannot compare two fields, so the document promises the server
-    // enforces this and answers 400. Mirrors the ends_at > starts_at CHECK, which
-    // would otherwise surface as an opaque 500 from the database.
-    if (endsAt <= startsAt) {
-      throw badRequest('endsAt must be later than startsAt.', '/body/endsAt');
-    }
 
     const row = await prisma.event.create({
       data: {
         title: body.title,
         ownerId,
-        startsAt,
-        endsAt,
+        startsAt: new Date(body.startsAt),
         location: body.location ?? null,
         description: body.description ?? null,
         thumbnail: body.thumbnail ?? null,

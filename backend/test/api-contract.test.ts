@@ -70,7 +70,6 @@ const json = (body: unknown, cookie?: string) => ({
 const validEvent = {
   title: 'Repair Cafe',
   startsAt: '2026-09-01T17:00:00Z',
-  endsAt: '2026-09-01T20:00:00Z',
 };
 
 /** Asserts the status and that the body is a problem+json document, and returns it. */
@@ -176,15 +175,30 @@ test('the auth gate runs ahead of body validation', async () => {
   assert.doesNotMatch(String(body.detail), /ownerId|unevaluated/i, 'an unauthenticated 401 must not describe the body');
 });
 
-test('a create whose interval is inverted is refused', async () => {
-  // endsAt <= startsAt is the rule JSON Schema cannot express, so it is the one the
-  // handler still owns. Reaching it proves the session above was accepted.
-  const response = await fetch(`${base}/v1/events`, {
-    ...json({ ...validEvent, startsAt: '2026-09-01T20:00:00Z', endsAt: '2026-09-01T17:00:00Z' }),
-    headers: { 'content-type': 'application/json', cookie: session },
-  });
+test('an event may no longer carry an end time', async () => {
+  // endsAt was removed from the schema, the database and the document. Sending it
+  // is now an unknown property rather than a second timestamp, so the same
+  // unevaluatedProperties rule that blocks a smuggled ownerId rejects it. This
+  // guards against the field creeping back in through one layer only.
+  const response = await fetch(
+    `${base}/v1/events`,
+    json({ ...validEvent, endsAt: '2026-09-01T20:00:00Z' }, session),
+  );
   const body = await expectProblem(response, 400);
 
   const errors = body.errors as { pointer: string }[];
   assert.equal(errors[0]!.pointer, '/body/endsAt', 'the pointer names the offending field');
+});
+
+test('an inverted query window is refused', async () => {
+  // The one remaining rule JSON Schema cannot express. It constrains the query
+  // window, not the event - which has no end to compare against.
+  const body = await expectProblem(
+    await fetch(`${base}/v1/events?startDate=2026-12-01T00:00:00Z&endDate=2026-08-01T00:00:00Z`),
+    400,
+  );
+  assert.match(String(body.detail), /endDate must be later/);
+
+  const errors = body.errors as { pointer: string }[];
+  assert.equal(errors[0]!.pointer, '/query/endDate', 'the pointer names the offending parameter');
 });

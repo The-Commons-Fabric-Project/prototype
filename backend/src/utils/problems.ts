@@ -23,7 +23,7 @@ export const notFound = (detail: string) => new HttpProblem(404, 'Not Found', de
 
 /**
  * The request was well-formed but violates a rule the schema cannot express -
- * `endsAt > startsAt`, for instance. `pointer` mirrors the validator's own
+ * an inverted query window, for instance. `pointer` mirrors the validator's own
  * convention (`/query/endDate`, `/body/startsAt`) so clients can treat every 400
  * the same way.
  */
