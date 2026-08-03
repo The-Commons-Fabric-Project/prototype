@@ -15,3 +15,14 @@ lerna-debug.log*
 node_modules
 dist
 *.code-workspace
+
+# Only the root lockfile is authoritative in an npm-workspaces monorepo. A lockfile
+# committed inside a workspace is never read by `npm install` and only misleads
+# tooling into treating that workspace as a standalone project.
+package-lock.json
+!/package-lock.json
+
+# Generated lint / coverage / analysis reports, e.g. `eslint -f html -o report.html`.
+coverage
+eslint-report.*
+*ESLINT_OUTPUT.html

@@ -31,6 +31,8 @@
     "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
+    "@prototype/eslint-config": "*",
+    "@prototype/typescript-config": "*",
     "@types/better-sqlite3": "^7.6.13",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
@@ -38,8 +40,12 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.12.3",
     "dotenv": "^17.4.2",
+    "eslint": "^10.3.0",
+    "globals": "^17.9.0",
     "prisma": "^7.8.0",
     "tsx": "^4.19.2",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.65.0",
     "yaml": "^2.9.0"
   }
 }

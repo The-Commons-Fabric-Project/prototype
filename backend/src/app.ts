@@ -5,7 +5,7 @@ import { problemDetails } from './middleware/problemDetails.js';
 import { eventsRouter } from './endpoints/events.js';
 import { organizationsRouter } from './endpoints/organizations.js';
 import { authRouter } from './endpoints/auth.js';
-import path from 'path'
+import path from 'node:path'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 

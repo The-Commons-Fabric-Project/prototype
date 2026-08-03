@@ -1,28 +1,7 @@
-// Shared ESLint 9+ flat-config base for the monorepo.
+// Root ESLint flat config, for repo-level files that live outside any workspace.
 //
-// Each workspace (frontend, backend) has its own `eslint.config.js` that imports
-// `baseConfig` from here and layers on environment-specific config (browser + React
-// for frontend, Node for backend). Keep only truly cross-cutting rules and ignores
-// in this file.
-import js from '@eslint/js'
-import tseslint from 'typescript-eslint'
-
-// Build outputs and vendored/generated trees that should never be linted anywhere.
-export const sharedIgnores = [
-  '**/dist/**',
-  '**/build/**',
-  '**/coverage/**',
-]
-
-// The common rule set every workspace starts from: ESLint's recommended JS rules
-// plus typescript-eslint's (non-type-checked) recommended rules.
-export const baseConfig = tseslint.config(
-  js.configs.recommended,
-  tseslint.configs.recommended,
-)
-
-// A usable standalone config (base rules + shared ignores) for any root-level files.
-export default tseslint.config(
-  { ignores: sharedIgnores },
-  ...baseConfig,
-)
+// The rules themselves live in the @prototype/eslint-config workspace; this file
+// only re-exports its ready-made config so editors have something to resolve at the
+// repo root. `npm run lint` does not use it - that delegates to each workspace's own
+// eslint.config.js.
+export { default } from '@prototype/eslint-config'

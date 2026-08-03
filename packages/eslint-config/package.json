@@ -1,0 +1,17 @@
+{
+    "name": "@prototype/eslint-config",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Shared ESLint flat-config base for the monorepo workspaces.",
+    "exports": {
+        ".": "./index.mjs"
+    },
+    "dependencies": {
+        "@eslint/js": "^10.0.1",
+        "typescript-eslint": "^8.65.0"
+    },
+    "peerDependencies": {
+        "eslint": "^10.3.0"
+    }
+}

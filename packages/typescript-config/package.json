@@ -1,0 +1,11 @@
+{
+    "name": "@prototype/typescript-config",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Shared TypeScript compiler options for the monorepo workspaces.",
+    "exports": {
+        "./base.json": "./base.json",
+        "./node.json": "./node.json",
+        "./vite.json": "./vite.json"
+    }
+}
