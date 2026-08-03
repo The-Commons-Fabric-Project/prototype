@@ -16,6 +16,7 @@ export const Default: Story = {
     "org": {
       "id": 0,
       "name": "name",
+      "logo": null,
       "blurb": "blurb",
       "tags": [],
       "contact": "contact",

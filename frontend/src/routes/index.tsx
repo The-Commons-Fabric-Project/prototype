@@ -4,16 +4,43 @@ import { createFileRoute } from '@tanstack/react-router'
 import Button from '../components/controls/Button';
 import EventCardGrid from '../components/views/EventCardGrid'
 import { CalendarView } from '../components/views/Calendar'
-import { EXAMPLE_EVENTS } from '../mocks/events'
 import { useAuth } from '../hooks/useAuth'
+import { useEvents } from '../hooks/useEvents'
+import { useOrgLookup } from '../hooks/useOrganizations'
 import { useModal } from '../hooks/useOverlayContext';
 import CreateEventModal from '../components/modals/CreateEventModal';
 import EventDetailModal from '../components/modals/EventDetailModal';
+import { monthBounds } from '../utils/datetime';
 import type { Event } from '../utils/types/events';
 
 function Index() {
   const [view, setView] = useState<'cards' | 'calendar'>('cards')
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+
+  // A window per view, deliberately not shared.
+  //
+  // The two views ask different questions - the grid filters an open-ended list
+  // between two dates, the calendar always shows exactly one month - so a single
+  // window would make each one's navigation overwrite the other's filter. They
+  // are held here rather than inside the views so that toggling between them,
+  // which unmounts one, does not throw its window away.
+  //
+  // The grid starts unbounded: "" is read by the API as "from now" and
+  // "no end". The calendar starts on the month it is about to display, so its
+  // first request is already scoped to what is on screen.
+  const [gridStart, setGridStart] = useState("");
+  const [gridEnd, setGridEnd] = useState("");
+  const [calendarWindow, setCalendarWindow] = useState(() => monthBounds(new Date()));
+
+  // Only the visible view's window is fetched. Toggling swaps the query key, and
+  // the other view's events are usually still cached from last time.
+  const activeWindow = view === 'cards'
+    ? { startDate: gridStart, endDate: gridEnd }
+    : { startDate: calendarWindow.start, endDate: calendarWindow.end };
+
+  const { data: events, isLoading, error } = useEvents(activeWindow);
+  const orgName = useOrgLookup();
+
   const { user } = useAuth();
   const { modal, setModal } = useModal();
 
@@ -49,20 +76,39 @@ function Index() {
       </div>
 
       <div className="w-full pt-6">
-        {view === 'cards' ? (
-          <EventCardGrid events={EXAMPLE_EVENTS} onSelect={setSelectedEvent}  />
+        {error ? (
+          <div className="text-muted">Could not load events. {error.message}</div>
+        ) : isLoading ? (
+          <div className="text-muted">Loading events…</div>
+        ) : view === 'cards' ? (
+          <EventCardGrid
+            events={events ?? []}
+            onSelect={setSelectedEvent}
+            orgName={orgName}
+            rangeStart={gridStart} rangeEnd={gridEnd}
+            setRangeStart={setGridStart} setRangeEnd={setGridEnd}
+          />
         ) : (
-          <CalendarView events={EXAMPLE_EVENTS} onSelect={setSelectedEvent} />
+          <CalendarView
+            events={events ?? []}
+            onSelect={setSelectedEvent}
+            rangeStart={calendarWindow.start}
+            onWindowChange={(start, end) => setCalendarWindow({ start, end })}
+          />
         )}
       </div>
 
       {selectedEvent && (
-        <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+        <EventDetailModal
+          event={selectedEvent}
+          orgName={orgName(selectedEvent.organizationId)}
+          onClose={() => setSelectedEvent(null)}
+        />
       )}
 
       {/* the create event flow is meaningless without a signed-in user */}
       {user && modal === "create_event" && (
-        <CreateEventModal 
+        <CreateEventModal
           onClose={() => setModal(undefined)}
           session={user}
           onCreate={() => console.log("created event")}

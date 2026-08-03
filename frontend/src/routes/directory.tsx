@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import type { Org } from '../utils/types/orgs'
 import type { Event } from '../utils/types/events'
-import { SEED_ORGS } from '../mocks/orgs'
-import { EXAMPLE_EVENTS } from '../mocks/events'
+import { useEvents } from '../hooks/useEvents'
+import { useOrganizations } from '../hooks/useOrganizations'
+import { toDateKey, toTimeKey } from '../utils/datetime'
+import { fmtTime } from '../utils/datetime'
 
 import EventDetailModal from '../components/modals/EventDetailModal'
 import OrgCard, { OrgTag } from '../components/cards/OrgCard'
@@ -22,13 +24,13 @@ function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
       className="flex gap-3.5 items-center bg-white border border-line rounded-xl p-3.5 cursor-pointer hover:shadow-[0_4px_12px_rgba(65,65,66,0.08)] active:scale-[0.99]"
       style={{ transition: 'box-shadow .18s ease, transform .08s ease' }}
     >
-      <DateChip date={event.date} large={false}/>
+      <DateChip date={toDateKey(event.startsAt)} large={false}/>
       <div className="flex-1 min-w-0">
         <h4 className="font-display text-[16px] font-semibold text-ink m-0 leading-[1.2]">
           {event.title}
         </h4>
         <p className="text-[12.5px] text-muted m-0 mt-1 font-body">
-          {event.time} · {event.location}
+          {fmtTime(toTimeKey(event.startsAt))} · {event.location}
         </p>
       </div>
     </div>
@@ -44,7 +46,10 @@ function ProfileView({
   onBack: () => void
   onSelectEvent: (e: Event) => void
 }) {
-  const orgEvents = EXAMPLE_EVENTS.filter((e) => e.org === org.name)
+  // Filtered by the server rather than by matching display names. The events
+  // table has no organization name to match on - it has an id - and two
+  // organizations are free to share a name.
+  const { data: orgEvents = [], isLoading } = useEvents({ organizationId: org.id })
 
   return (
     <div style={{ animation: 'cf-fade .3s ease' }}>
@@ -61,7 +66,7 @@ function ProfileView({
         <LogoPlaceholder size={104} />
         <div className="flex-1 min-w-65">
           <div className="flex gap-2 flex-wrap mb-3">
-            {org.tags.map((t) => <OrgTag key={t}>{t}</OrgTag>)}
+            {(org.tags ?? []).map((t) => <OrgTag key={t}>{t}</OrgTag>)}
           </div>
           <h1 className="font-display text-3xl font-semibold text-ink m-0 mb-3 leading-[1.15]">
             {org.name}
@@ -94,7 +99,11 @@ function ProfileView({
       <h2 className="font-display text-[22px] font-semibold text-ink m-0 mb-3.5">
         Upcoming events
       </h2>
-      {orgEvents.length === 0 ? (
+      {isLoading ? (
+        <div className="bg-surface rounded-xl p-6 text-center text-muted text-[14px] font-body">
+          Loading events…
+        </div>
+      ) : orgEvents.length === 0 ? (
         <div className="bg-surface rounded-xl p-6 text-center text-muted text-[14px] font-body">
           No upcoming events from this organization yet.
         </div>
@@ -112,6 +121,10 @@ function ProfileView({
 function Directory() {
   const [activeOrg, setActiveOrg] = useState<Org | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
+
+  // Served from the query cache after the first route that asks for it, so
+  // arriving here from the events page costs no request.
+  const { data: orgs, isLoading, error } = useOrganizations()
 
   const openProfile = (org: Org) => {
     setActiveOrg(org)
@@ -143,15 +156,25 @@ function Directory() {
             Browse member organizations of the Rideau Community Hub network.
           </p>
           <div className="flex flex-col gap-3 mt-6">
-            {SEED_ORGS.map((org, i) => (
-              <OrgCard key={org.id} org={org} idx={i} onClick={() => openProfile(org)} />
-            ))}
+            {error ? (
+              <div className="text-muted">Could not load organizations. {error.message}</div>
+            ) : isLoading ? (
+              <div className="text-muted">Loading organizations…</div>
+            ) : (
+              (orgs ?? []).map((org, i) => (
+                <OrgCard key={org.id} org={org} idx={i} onClick={() => openProfile(org)} />
+              ))
+            )}
           </div>
         </>
       )}
 
       {selectedEvent && (
-        <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+        <EventDetailModal
+          event={selectedEvent}
+          orgName={activeOrg?.name}
+          onClose={() => setSelectedEvent(null)}
+        />
       )}
     </div>
   )

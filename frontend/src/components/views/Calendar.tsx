@@ -9,7 +9,7 @@ This might be more of an issue once we have to integrate with Google Calendar/Ou
 import { useState, useMemo } from 'react'
 import type { Event } from '../../utils/types/events'
 
-import { parseDate, fmtTime } from '../../utils/datetime';
+import { parseDate, fmtTime, toTimeKey, monthBounds } from '../../utils/datetime';
 import { MONTHS_FULL as MONTH_NAMES, DOW as DAY_HEADERS } from '../../utils/types/dates';
 
 type CalendarViewProps = {
@@ -17,8 +17,17 @@ type CalendarViewProps = {
   events: Event[];
   /** callback for selected event */
   onSelect: (event: Event) => void;
+  /**
+   * Start of the calendar's own fetch window, "YYYY-MM-DD". Owned by
+   * routes/index.tsx and separate from the card grid's range, so paging months
+   * here does not disturb the grid's filter. Falls back to today if empty.
+   */
+  rangeStart: string;
+  /** Asks the route to fetch a new month. Called on every month navigation. */
+  onWindowChange: (start: string, end: string) => void;
 };
 
+/** Takes the 12-hour string produced by fmtTime and drops a `:00`. */
 function formatTimeShort(time: string): string {
   const match = time.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
   if (!match) return time;
@@ -26,8 +35,14 @@ function formatTimeShort(time: string): string {
   return m === '00' ? `${h} ${period.toUpperCase()}` : `${h}:${m} ${period.toUpperCase()}`;
 }
 
-export function CalendarView({ events, onSelect }: CalendarViewProps) {
-  const [cursor, setCursor] = useState(() => parseDate(events[0]?.date || "2026-06-01"));
+export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: CalendarViewProps) {
+  // Seeded from the current window, falling back to today.
+  //
+  // This used to read events[0]?.date, which inverted the dependency: the data
+  // decided which month you were looking at. That only worked because the mock
+  // events all sat in one month. Now the month decides which data is fetched, so
+  // it has to come from the window - or from today, on a first visit.
+  const [cursor, setCursor] = useState(() => (rangeStart ? parseDate(rangeStart) : new Date()));
   const year = cursor.getFullYear(), month = cursor.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -35,18 +50,26 @@ export function CalendarView({ events, onSelect }: CalendarViewProps) {
   const byDay = useMemo(() => {
     const map: Event[][] = [];
     events.forEach((e) => {
-      const d = parseDate(e.date);
+      const d = new Date(e.startsAt);
       if (d.getFullYear() === year && d.getMonth() === month) {
         (map[d.getDate()] = map[d.getDate()] || []).push(e);
       }
     });
-    Object.values(map).forEach((list) => list.sort((a, b) => a.time.localeCompare(b.time)));
+    Object.values(map).forEach((list) => list.sort((a, b) => a.startsAt.localeCompare(b.startsAt)));
     return map;
   }, [events, year, month]);
 
-  const goToPrev = () => {setCursor(new Date(year, month - 1, 1))};
+  // Moving the cursor also moves the fetch window, so the events for the month
+  // being shown are the events that get requested.
+  const goToMonth = (next: Date) => {
+    setCursor(next);
+    const { start, end } = monthBounds(next);
+    onWindowChange(start, end);
+  };
 
-  const goToNext = () => {setCursor(new Date(year, month + 1, 1))};
+  const goToPrev = () => { goToMonth(new Date(year, month - 1, 1)) };
+
+  const goToNext = () => { goToMonth(new Date(year, month + 1, 1)) };
 
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
@@ -98,10 +121,13 @@ export function CalendarView({ events, onSelect }: CalendarViewProps) {
                   <div
                     key={event.id}
                     className="cf-press bg-primary text-white text-[10.5px] font-semibold rounded-sm px-1.5 py-0.75 mb-0.75 cursor-pointer truncate max-w-full"
-                    title={`${fmtTime(event.time)} ${event.title}`}
+                    title={`${fmtTime(toTimeKey(event.startsAt))} ${event.title}`}
                     onClick={() => onSelect(event)} // setSelectedEvent(event)}
                   >
-                    {formatTimeShort(event.time)} {event.title}
+                    {/* formatTimeShort matches a 12-hour string, so it needs fmtTime's
+                        output. It used to be handed the raw 24-hour value, where the
+                        regex never matched and "18:30" was rendered unformatted. */}
+                    {formatTimeShort(fmtTime(toTimeKey(event.startsAt)))} {event.title}
                   </div>
                 ))}
               </>

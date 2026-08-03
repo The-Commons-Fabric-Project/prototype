@@ -17,5 +17,10 @@ export const Default: Story = {
   args: {
     "events": EXAMPLE_EVENTS,
     onSelect: () => {},
+    // The fixtures are all in June 2026, so pin the calendar there. In the app
+    // this comes from the route's fetch window; a story has no window, and
+    // without it the calendar would open on the current month and look empty.
+    rangeStart: "2026-06-01",
+    onWindowChange: () => {},
   },
 };

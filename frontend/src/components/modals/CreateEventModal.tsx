@@ -10,17 +10,34 @@ import Button from "../controls/Button";
 import Toggle from "../controls/Toggle";
 import Summary from "../chips/Summary";
 
-import type { Event } from "../../utils/types/events";
 import { EMAIL_RE } from "../../utils/types/orgs";
 import { fmtTime, fmtPlainDate } from "../../utils/datetime";
 import { useToast } from "../../hooks/useOverlayContext";
 import type { User } from "../../utils/types/users";
 
-export type CreateEventFormData = Pick<Event,
-  'title' | 'date' | 'time' | 'location' | 'description' | 
-  'registrationRequired' | 'registrationLink' |
-  'volunteersNeeded' | 'volunteerContact'
-  >;
+/**
+ * What this form collects - deliberately not derived from `Event`.
+ *
+ * It used to be `Pick<Event, ...>`, which stopped working once `Event` came to
+ * mirror the API. The two are genuinely different shapes: the form takes a date
+ * and a time in separate inputs and asks whether registration is needed, while
+ * the API takes a single `startsAt` timestamp and infers registration from the
+ * presence of a link. Converting between them is the job of the submit handler,
+ * which is out of scope until event creation is wired up.
+ */
+export type CreateEventFormData = {
+  title: string;
+  /** "YYYY-MM-DD", straight from <input type="date">. */
+  date: string;
+  /** "HH:MM", straight from <input type="time">. */
+  time: string;
+  location: string;
+  description: string;
+  registrationRequired: boolean;
+  registrationLink: string;
+  volunteersNeeded: boolean;
+  volunteerContact: string;
+};
 
 type EventFormErrors = Partial<CreateEventFormData>;
 
@@ -43,7 +60,6 @@ export default function CreateEventModal({
   });
   const [errors, setErrors] = useState<EventFormErrors>({});
   const { toast } = useToast();
-
   const setF = (patch: Partial<CreateEventFormData>) => setForm((f) => ({ ...f, ...patch }));
 
   const validate = () => {

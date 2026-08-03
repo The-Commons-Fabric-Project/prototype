@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import { routeTree } from './routeTree.gen'
@@ -43,13 +44,33 @@ function InnerApp() {
   />
 }
 
+/**
+ * Server data lives in this cache - see hooks/useOrganizations.ts and useEvents.ts.
+ *
+ * The defaults are set explicitly because Query's own are tuned for apps that
+ * want aggressive freshness: staleTime 0, refetchOnWindowFocus true and three
+ * retries. For a community calendar that means refetching every time the user
+ * alt-tabs back, and a failed request taking four round trips to report itself.
+ */
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+})
+
 function App() {
   return (
-    <AuthProvider>
-      <OverlayProvider>
-        <InnerApp />
-      </OverlayProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <OverlayProvider>
+          <InnerApp />
+        </OverlayProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   )
 }
 

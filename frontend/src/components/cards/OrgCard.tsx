@@ -25,7 +25,7 @@ export default function OrgCard({ org, onClick, idx }: OrgCardProps) {
       <LogoPlaceholder size={72} />
       <div className="flex-1 min-w-0">
         <div className="flex gap-2 flex-wrap mb-2.5">
-        {org.tags.map((t) => <OrgTag key={t}>{t}</OrgTag>)}
+        {(org.tags ?? []).map((t) => <OrgTag key={t}>{t}</OrgTag>)}
       </div>
         <h3 className="font-sans text-lg font-bold text-gray-900 mb-1 leading-tight">{org.name}</h3>
         <p className="text-sm text-gray-500 leading-relaxed">{org.blurb}</p>

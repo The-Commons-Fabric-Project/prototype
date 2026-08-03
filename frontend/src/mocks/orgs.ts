@@ -4,6 +4,7 @@ export const SEED_ORGS: Org[] = [
   {
     id: 1,
     name: "Rideau-Rockcliffe Community Resource Centre",
+    logo: null,
     blurb: "A neighbourhood anchor offering settlement, employment, family, and seniors programming across Ottawa's east end.",
     tags: ["Community", "Settlement", "Seniors"],
     contact: "hello@rrcrc.example",
@@ -12,6 +13,7 @@ export const SEED_ORGS: Org[] = [
   {
     id: 2,
     name: "Council on Aging of Ottawa",
+    logo: null,
     blurb: "Advocacy and convening for older adults, championing age-friendly policy and connection across the city.",
     tags: ["Seniors", "Advocacy"],
     contact: "info@coaottawa.example",
@@ -20,6 +22,7 @@ export const SEED_ORGS: Org[] = [
   {
     id: 3,
     name: "Odawa Native Friendship Centre",
+    logo: null,
     blurb: "A welcoming gathering place delivering culturally grounded programs and supports for the urban Indigenous community.",
     tags: ["Indigenous", "Culture", "Community"],
     contact: "reception@odawa.example",
@@ -28,6 +31,7 @@ export const SEED_ORGS: Org[] = [
   {
     id: 4,
     name: "Social Planning Council of Ottawa",
+    logo: null,
     blurb: "Research, policy, and community development working toward a more equitable and inclusive Ottawa.",
     tags: ["Policy", "Research", "Equity"],
     contact: "spc@spcottawa.example",
@@ -36,6 +40,7 @@ export const SEED_ORGS: Org[] = [
   {
     id: 5,
     name: "STEAMakers Guild",
+    logo: null,
     blurb: "Hands-on science, tech, engineering, art, and math workshops for curious makers of every age.",
     tags: ["Education", "Makers", "Youth"],
     contact: "build@steamakers.example",
@@ -44,6 +49,7 @@ export const SEED_ORGS: Org[] = [
   {
     id: 6,
     name: "Ottawa Civic Tech",
+    logo: null,
     blurb: "Volunteers building open, public-interest technology with and for the Ottawa community.",
     tags: ["Tech", "Civic", "Volunteer"],
     contact: "hi@ottawacivictech.example",
@@ -53,13 +59,10 @@ export const SEED_ORGS: Org[] = [
     // an org with no events associated
     id: 7,
     name: "Fresh Face Club",
+    logo: null,
     blurb: "A new organization in the building.",
     tags: ["Policy"],
     contact: "someone@ffc.co",
     website: "ffc.co"
   }
-]
-
-export const DEMO_ACCOUNTS = [
-  { name: "Ottawa Civic Tech", email: "hi@ottawacivictech.example", password: "demo123" },
 ]
