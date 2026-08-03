@@ -1,54 +1,46 @@
 /**
- * Mock react auth client, ref: https://github.com/better-auth/better-auth/blob/main/packages/better-auth/src/client/react/index.ts
+ * What is left of the mock auth client.
+ *
+ * Logging in is real now - see utils/api/auth.ts and hooks/useAuth.tsx. Account
+ * creation is not, and cannot be yet: `POST /v1/auth/create-user` requires an
+ * `organizationId` for an organization that already exists, and the API has no
+ * operation for creating one. The form in components/modals/CreateAccountModal.tsx
+ * asks for an organization *name*, so there is nothing to map it to.
+ *
+ * So this keeps that one flow working exactly as it did before, in memory and
+ * only in memory. Be aware of the gap it leaves: an account created here cannot
+ * be logged into, because login now asks the server, which has never heard of it.
+ * Deleting this file is part of finishing the create-account flow, not a
+ * prerequisite for it.
  */
 
-import type { AuthClient, User } from "../utils/types/users"
-
-type UserCredentials = User & { password: string };
-
-const accounts: UserCredentials[] = [{ 
-  id: "0",
-  username: "Ottawa Civic Tech", 
-  email: "hi@ottawacivictech.example", 
-  password: "demo123" 
-}];
-
-// copied from https://tanstack.com/router/latest/docs/framework/react/examples/kitchen-sink-react-query-file-based?path=examples%2Freact%2Fkitchen-sink-react-query-file-based%2Fsrc%2Futils%2Fauth.tsx
-export const auth: AuthClient = {
-  isAuthenticated: false,
-  user: null,
-  login: async (username: string, password: string) => {
-    const matches = accounts.filter(u => u.email === username);
-    if (matches.length == 1 && matches[0].password === password) {
-      const { id, username, email } = matches[0];
-      auth.isAuthenticated = true;
-      auth.user = { id: id, username: username, email: email } as User;
-    } else {
-      auth.isAuthenticated = false;
-    }
-  },
-  logout: async () => {
-    auth.isAuthenticated = false;
-    auth.user = null;
-  }
+/** Only the fields the create-account form collects - deliberately not the API's User. */
+export interface MockAccount {
+  id: string;
+  username: string;
+  email: string;
+  password: string;
 }
 
-export const addUser = (userInfo: Partial<UserCredentials>) => {
-  const { email, username, password } = {...userInfo};
-  const newUser: UserCredentials = {
-    id: "",
-    email: "",
-    username: "",
-    password: ""
-  };
-  if (email && password) {
-    newUser.email = email;
-    newUser.username = username ? username : email;
-    newUser.password = password;
-    newUser.id = (parseInt(accounts[accounts.length-1].id)+1).toString();
+const accounts: MockAccount[] = [
+  {
+    id: '0',
+    username: 'Ottawa Civic Tech',
+    email: 'hi@ottawacivictech.example',
+    password: 'demo123',
+  },
+];
 
-    accounts.push(newUser);
-  } else {
-    throw new Error("both email and password are required");
+export const addUser = (userInfo: Partial<MockAccount>) => {
+  const { email, username, password } = { ...userInfo };
+  if (!email || !password) {
+    throw new Error('both email and password are required');
   }
+
+  accounts.push({
+    id: (parseInt(accounts[accounts.length - 1].id) + 1).toString(),
+    email,
+    username: username ? username : email,
+    password,
+  });
 }

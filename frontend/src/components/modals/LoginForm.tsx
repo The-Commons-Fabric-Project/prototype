@@ -46,19 +46,25 @@ export default function LoginForm({
   // event handlers and effects
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    auth.login(creds.email, creds.password);
-  } 
+    // login rejects on a bad password so callers can react to it; this one reads
+    // the outcome off `status` in the effect below, so the rejection is expected
+    // and swallowed here. Without the catch it surfaces as an unhandled rejection.
+    void auth.login(creds.email, creds.password).catch(() => {});
+  }
 
   // handle when auth service successfully verifies the user
   useEffect(() => {
     // console.log("Login form effect!");
     switch (status) {
       case 'success': {
-        toast(`Welcome back, ${auth.user?.username}`);
+        toast(`Welcome back, ${auth.user?.fullname}`);
         onClose();
         return;
       } case 'fail': {
-        setErr("Authentication failed");
+        // The API's own wording - "Email or password is incorrect." - rather than
+        // a generic string, so a server that is down reads differently from a
+        // password that is wrong.
+        setErr(auth.error || "Authentication failed");
         return;
       } case 'pending': {
         setErr("Logging in...");
@@ -104,8 +110,11 @@ export default function LoginForm({
   // onChangeMode({ title: "Log in", subtitle: undefined});
   return (
     <form onSubmit={handleSubmit} className="py-2 px-6">
+      {/* A seeded account from backend/prisma/seed/dev-organizations-seed.json - these
+          are real credentials against a seeded dev database, not a mock. Run
+          `npm run db:seed -w backend` if they do not work. */}
       <div className="bg-accent-primary-soft text-shadow-text-primary rounded-md text-xs font-normal tracking-[0.8px] px-3 py-2 mb-4">
-        Demo hint: use <strong>hi@ottawacivictech.example</strong> / <strong>demo123</strong>
+        Demo hint: use <strong>jordan.lefebvre@ottawacivictech.example</strong> / <strong>devpassword123</strong>
       </div>
       <Field label="Email" error={err ? " " : ""}>
         <input className={`${baseInputStyles} ${inputStyle(!!err)}`}

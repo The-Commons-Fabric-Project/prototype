@@ -14,6 +14,22 @@ const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(file
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
+  // Proxy the API instead of calling http://localhost:3000 across origins.
+  //
+  // In production the backend serves this build from its own origin, so /v1 is
+  // same-origin there. Proxying in development makes the two match: the session
+  // cookie is sameSite: 'lax', which a cross-origin XHR would not send, and no
+  // request is ever preflighted. The alternative - absolute URLs plus CORS plus
+  // credentials: 'include' - only reproduces in development what production
+  // never does.
+  server: {
+    proxy: {
+      '/v1': {
+        target: process.env.VITE_API_TARGET || 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
+  },
   plugins: [
     tanstackRouter({
       target: 'react',

@@ -36,7 +36,8 @@ export default function Header() {
     }`
 
   const handleLogin = () => { setModal("login"); }
-  const handleLogout = () => { session.logout(); }
+  // logout clears local state before it awaits the server, so nothing here needs the promise
+  const handleLogout = () => { void session.logout(); }
   const handleCreateAccount = () => { setModal("create_account"); }
   const closeModal = () => { setModal(undefined) }
 
@@ -74,9 +75,14 @@ export default function Header() {
 
         {/* Auth buttons */}
         <div className="flex items-center gap-2.5">
-          {session.isAuthenticated ? (
+          {/* While the session is being restored we do not yet know which pair of
+              buttons is correct. Rendering the signed-out pair would flash "Log in"
+              at an already signed-in user on every refresh, so hold the space instead. */}
+          {session.isLoading ? (
+            <div className="h-[34px] w-40" aria-hidden />
+          ) : session.isAuthenticated ? (
             <>
-              <span className="text-[13px] text-ink font-semibold max-w-40 truncate">{session.user?.username}</span>
+              <span className="text-[13px] text-ink font-semibold max-w-40 truncate">{session.user?.fullname}</span>
               <button 
                 className="font-sans font-semibold text-[14px] px-3.5 py-2 rounded-md cursor-pointer border border-line bg-transparent text-primary leading-[1.1] tracking-[0.1px]"
                 onClick={handleLogout}

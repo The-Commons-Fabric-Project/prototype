@@ -1,97 +1,96 @@
 /**
+ * Session state, backed by the real API.
+ *
  * Source and reference project: https://tanstack.com/router/v1/docs/how-to/setup-authentication#create-authentication-context
- * 
- * ??? Tanstack's setup example uses an AuthProvider, but their kitchen sink example doesn't? 
- * [x] ??? Where should this file go? hooks?
- * 
- * ??? Will we eventually use an authentication library like better auth?
+ *
+ * There is no token here and nothing in localStorage. The session is an httpOnly
+ * cookie, which JavaScript cannot read by design - that is what stops an XSS bug
+ * from walking off with a session. The consequence is that the only way to learn
+ * whether we are signed in is to ask the server, which is what the mount effect
+ * below does.
  */
 
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 import type { AuthAttemptStatus, AuthState, User } from '../utils/types/users'
-// TODO: replace mock auth with real auth
-import { auth } from '../mocks/auth'
+import * as authApi from '../utils/api/auth'
+import { ApiError } from '../utils/api/client'
 
 const AuthContext = createContext<AuthState | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [status, setStatus] = useState<AuthAttemptStatus>('unsent');
-  // const [isLoading, setIsLoading] = useState(true)
+  const [status, setStatus] = useState<AuthAttemptStatus>('unsent')
+  const [error, setError] = useState('')
+  // Starts true: on first paint we genuinely do not know yet, and claiming
+  // "signed out" before asking is what causes the refresh flicker.
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Restore auth state on app load
-  // useEffect(() => {
-  //   const token = localStorage.getItem('auth-token')
-  //   if (token) {
-  //     // Validate token with your API
-  //     fetch('/api/validate-token', {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     })
-  //       .then((response) => response.json())
-  //       .then((userData) => {
-  //         if (userData.valid) {
-  //           setUser(userData.user)
-  //           setIsAuthenticated(true)
-  //         } else {
-  //           localStorage.removeItem('auth-token')
-  //         }
-  //       })
-  //       .catch(() => {
-  //         localStorage.removeItem('auth-token')
-  //       })
-  //       .finally(() => {
-  //         setIsLoading(false)
-  //       })
-  //   } else {
-  //     setIsLoading(false)
-  //   }
-  // }, [])
+  // Restore the session on load. A 401 is the expected answer for a visitor who
+  // is not signed in, so it clears state rather than surfacing an error; anything
+  // else is a real failure and worth a console entry, but still leaves the app
+  // usable signed-out.
+  useEffect(() => {
+    let cancelled = false
 
-  // // Show loading state while checking auth
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex items-center justify-center min-h-screen">
-  //       Loading...
-  //     </div>
-  //   )
-  // }
+    authApi
+      .getProfile()
+      .then((profile) => {
+        if (!cancelled) setUser(profile)
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return
+        setUser(null)
+        if (!(err instanceof ApiError) || !err.isUnauthorized) {
+          console.error('[auth] could not restore session:', err)
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false)
+      })
 
-  const login = async (username: string, password: string) => {
-    // Replace with your authentication logic
-    // const response = await fetch('/api/login', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ username, password }),
-    // })
-    setStatus('pending');
-    await auth.login(username, password);
-
-    if (auth.isAuthenticated) {
-      setStatus('success');
-      setUser(auth.user);
-      setIsAuthenticated(true);
-      console.log("Authentication successful");
-
-      // Store token for persistence
-      // localStorage.setItem('auth-token', userData.token)
-    } else {
-      setStatus('fail');
-      throw new Error('Authentication failed')
+    // StrictMode mounts effects twice in development; the flag keeps the first,
+    // discarded run from writing state after unmount.
+    return () => {
+      cancelled = true
     }
-  }
+  }, [])
 
-  const logout = () => {
+  const login = useCallback(async (email: string, password: string) => {
+    setStatus('pending')
+    setError('')
+    try {
+      const profile = await authApi.login(email, password)
+      setUser(profile)
+      setStatus('success')
+    } catch (err: unknown) {
+      setUser(null)
+      setStatus('fail')
+      // ApiError.detail is written by the API to be read by a person, so a bad
+      // password says so instead of showing a generic failure.
+      setError(err instanceof ApiError ? err.detail : 'Could not reach the server.')
+      throw err
+    }
+  }, [])
+
+  const logout = useCallback(async () => {
+    // Clear locally first, and regardless of what the server says: the button
+    // must sign you out of this tab even if the request fails. The cookie is
+    // cleared server-side, and /auth/logout succeeds even without a session.
     setUser(null)
-    setIsAuthenticated(false)
-    setStatus('unsent');
-    // TODO: add any additional logout logic
-    // localStorage.removeItem('auth-token')
-  }
+    setStatus('unsent')
+    setError('')
+    try {
+      await authApi.logout()
+    } catch (err: unknown) {
+      console.error('[auth] logout request failed; local session cleared anyway:', err)
+    }
+  }, [])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, status, user, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated: user !== null, isLoading, status, error, user, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   )

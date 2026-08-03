@@ -62,8 +62,11 @@ export default function CreateEventModal({
 
   return (
     <Modal onClose={onClose} width={500}>
+      {/* TODO: this should name the organization, not the person. The user carries
+          only organizationId, so resolving it to a name needs the organizations
+          endpoint - deferred with the rest of the data fetching. */}
       <ModalHeader title="Create event" onClose={onClose}
-        subtitle={`Hosting as ${session.username}`} />
+        subtitle={`Hosting as ${session.fullname}`} />
       <div className="px-[18px] py-[24px]">
         {step === 1 ? (
           <>
@@ -126,7 +129,7 @@ export default function CreateEventModal({
               <Summary label="Title" value={form.title} />
               <Summary label="When" value={`${fmtPlainDate(form.date)} · ${fmtTime(form.time)}`} />
               <Summary label="Where" value={form.location as string} />
-              <Summary label="Host" value={session.username} />
+              <Summary label="Host" value={session.fullname} />
               <Summary label="Registration" value={form.registrationRequired ? form.registrationLink as string : "Not required"} />
               <Summary label="Volunteers" value={form.volunteersNeeded ? form.volunteerContact as string : "Not recruiting"} last />
             </div>
@@ -138,7 +141,7 @@ export default function CreateEventModal({
             >
               <Button variant="ghost" className="flex-1" onClick={() => setStep(1)}>No, edit</Button>
               <Button className="flex-1" onClick={() => {
-                onCreate({ ...form, org: session.username });
+                onCreate({ ...form, org: session.fullname });
                 toast("Event created and confirmed.");
                 onClose();
               }}>Yes, publish</Button>

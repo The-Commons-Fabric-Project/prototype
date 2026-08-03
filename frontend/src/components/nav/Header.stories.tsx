@@ -29,9 +29,11 @@ export const LoggedIn: Story = {
         route: { path: '/'},
         routeOverrides: {
           "/": { loader: async () => ({
-            auth: { 
+            auth: {
               isAuthenticated: true,
-              user: { id: "0", username: "Ottawa Civic Tech"
+              isLoading: false,
+              user: { id: 1, fullname: "Jordan Lefebvre", email: "jordan.lefebvre@ottawacivictech.example",
+                organizationId: 1, createdAt: "2026-01-01T00:00:00Z"
               } as User
             } as AuthState
           })}
