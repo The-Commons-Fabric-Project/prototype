@@ -11,7 +11,6 @@ const svgBase = {
 } as Partial<SVGProps<SVGSVGElement>>;
 
 type IconProps = {name?: IconName, size: number}
-type IconComponent = (args: IconProps) => ReactElement<SVGProps<any>, any>;
 
 function ClockIcon({ size = 14 }: IconProps) { 
   return (
