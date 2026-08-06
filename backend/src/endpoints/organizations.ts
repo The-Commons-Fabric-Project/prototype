@@ -51,7 +51,6 @@ organizationsRouter.get('/organizations', async (_req: Request, res: Response, n
  */
 organizationsRouter.get('/organizations/:organizationId', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Already validated and coerced to an integer >= 1 by the document.
     const organizationId = Number(req.params.organizationId);
 
     const row = await prisma.organization.findUnique({

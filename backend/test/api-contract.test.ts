@@ -58,6 +58,7 @@ const json = (body: unknown, cookie?: string) => ({
 const validEvent = {
   title: 'Repair Cafe',
   startsAt: '2026-09-01T17:00:00Z',
+  endsAt: '2026-09-01T20:00:00Z',
 };
 
 /** Asserts the status and that the body is a problem+json document, and returns it. */
@@ -152,11 +153,12 @@ test('the auth gate runs ahead of body validation', async () => {
   assert.doesNotMatch(String(body.detail), /ownerId|unevaluated/i, 'an unauthenticated 401 must not describe the body');
 });
 
-test('an event may no longer carry an end time', async () => {
-  // Guards against endsAt creeping back in through one layer only.
+test('a create whose interval is inverted is refused', async () => {
+  // endsAt <= startsAt is the rule JSON Schema cannot express, so it is the one the
+  // handler still owns. Reaching it proves the session above was accepted.
   const response = await fetch(
     `${base}/v1/events`,
-    json({ ...validEvent, endsAt: '2026-09-01T20:00:00Z' }, session),
+    json({ ...validEvent, startsAt: '2026-09-01T20:00:00Z', endsAt: '2026-09-01T17:00:00Z' }, session),
   );
   const body = await expectProblem(response, 400);
 
@@ -165,7 +167,7 @@ test('an event may no longer carry an end time', async () => {
 });
 
 test('an inverted query window is refused', async () => {
-  // The one remaining rule JSON Schema cannot express.
+  // The query-window rule, which constrains the parameters rather than the event.
   const body = await expectProblem(
     await fetch(`${base}/v1/events?startDate=2026-12-01T00:00:00Z&endDate=2026-08-01T00:00:00Z`),
     400,

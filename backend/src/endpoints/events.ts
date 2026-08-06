@@ -24,6 +24,7 @@ const toEvent = (row: EventRow) => ({
   organizationId: row.owner.organizationId,
   title: row.title,
   startsAt: row.startsAt.toISOString(),
+  endsAt: row.endsAt.toISOString(),
   location: row.location,
   description: row.description,
   thumbnail: row.thumbnail,
@@ -36,7 +37,7 @@ const withOwnerOrganization = { owner: { select: { organizationId: true } } } as
 
 /**
  * GET /v1/events
- * Events starting within a time window, ordered by startsAt.
+ * Events overlapping a time window, ordered by startsAt.
  */
 eventsRouter.get('/events', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -49,15 +50,14 @@ eventsRouter.get('/events', async (req: Request, res: Response, next: NextFuncti
     const start = startDate ? new Date(startDate) : new Date();
     const end = endDate ? new Date(endDate) : undefined;
 
-    // JSON Schema cannot compare two parameters, so the document promises the
-    // server enforces this and answers 400.
     if (end && end <= start) {
       throw badRequest('endDate must be later than startDate.', '/query/endDate');
     }
 
     const rows = await prisma.event.findMany({
       where: {
-        startsAt: { gte: start, ...(end ? { lte: end } : {}) },
+        endsAt: { gte: start },
+        ...(end ? { startsAt: { lte: end } } : {}),
         ...(organizationId !== undefined ? { owner: { organizationId } } : {}),
       },
       orderBy: { startsAt: 'asc' },
@@ -73,6 +73,7 @@ eventsRouter.get('/events', async (req: Request, res: Response, next: NextFuncti
 type EventCreateBody = {
   title: string;
   startsAt: string;
+  endsAt: string;
   location?: string | null;
   description?: string | null;
   thumbnail?: string | null;
@@ -95,12 +96,19 @@ eventsRouter.post('/events', requireAuth, async (req: Request, res: Response, ne
     }
 
     const body = req.body as EventCreateBody;
+    const startsAt = new Date(body.startsAt);
+    const endsAt = new Date(body.endsAt);
+
+    if (endsAt <= startsAt) {
+      throw badRequest('endsAt must be later than startsAt.', '/body/endsAt');
+    }
 
     const row = await prisma.event.create({
       data: {
         title: body.title,
         ownerId,
-        startsAt: new Date(body.startsAt),
+        startsAt,
+        endsAt,
         location: body.location ?? null,
         description: body.description ?? null,
         thumbnail: body.thumbnail ?? null,
@@ -112,8 +120,6 @@ eventsRouter.post('/events', requireAuth, async (req: Request, res: Response, ne
 
     res.status(201).location(`/v1/events/${row.id}`).json(toEvent(row));
   } catch (err) {
-    // A valid session naming a user who has since been deleted, so owner_id has
-    // nothing to point at. A dead session rather than a bad request.
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2003') {
       next(unauthorized('The user for this session no longer exists.'));
       return;
@@ -125,7 +131,6 @@ eventsRouter.post('/events', requireAuth, async (req: Request, res: Response, ne
 /** GET /v1/events/{eventId} */
 eventsRouter.get('/events/:eventId', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Already validated and coerced to an integer >= 1 by the document.
     const eventId = Number(req.params.eventId);
 
     const row = await prisma.event.findUnique({

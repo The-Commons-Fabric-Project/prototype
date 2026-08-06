@@ -161,19 +161,15 @@ paths:
       tags: [Events]
       summary: List events overlapping a time window
       description: >-
-        Returns events whose `startsAt` falls within the requested window,
-        ordered by `startsAt`. `startDate` defaults to the current time and
-        `endDate` is unbounded when omitted. `endDate` must be later than
+        Returns events whose `[startsAt, endsAt]` interval overlaps the requested
+        window, ordered by `startsAt`. `startDate` defaults to the current time
+        and `endDate` is unbounded when omitted. `endDate` must be later than
         `startDate` - that relationship cannot be expressed in the schema, so the
         server enforces it and answers an inverted window with 400.
 
 
-        Note that `startDate`/`endDate` bound the *query*; they are unrelated to
-        any property of an event, which has only a start. Events used to carry an
-        end time and this filter used to match any event overlapping the window,
-        so an event that began before it but was still running was included.
-        Without an end time there is nothing to overlap with, and an event is in
-        the window only if it starts in it.
+        Overlap, not containment: an event that began before the window and is
+        still running is in it.
 
 
         The response is deliberately unpaginated and uncapped: the time window is
@@ -203,6 +199,11 @@ paths:
         Creates an event owned by the signed-in user. `ownerId` is taken from the
         session cookie and is rejected if sent in the body, so a caller can only
         ever publish as themselves; `organizationId` follows from that owner.
+
+
+        `endsAt` must be later than `startsAt`. JSON Schema cannot compare two
+        fields, so the server enforces it and rejects an inverted interval with
+        400 - mirroring the `ends_at > starts_at` CHECK in schema.dbml.
       requestBody:
         required: true
         content:
@@ -518,7 +519,7 @@ components:
         The client-supplied half of an event. Everything the server assigns -
         `id`, `ownerId`, `organizationId`, `createdAt` - lives on `Event`
         instead, so none of it can be supplied on a create.
-      required: [title, startsAt]
+      required: [title, startsAt, endsAt]
       properties:
         title:
           type: string
@@ -528,12 +529,12 @@ components:
             The `pattern` requires at least one non-whitespace character,
             matching the `length(trim(title)) > 0` CHECK in schema.dbml -
             `minLength` alone would admit `"   "`.
-        startsAt:
+        startsAt: { $ref: '#/components/schemas/Timestamp' }
+        endsAt:
           $ref: '#/components/schemas/Timestamp'
           description: >-
-            When the event starts. There is no end time: events are a single
-            instant on the calendar, at the UX team's decision, and `events` has
-            no `ends_at` column to carry one.
+            Must be later than `startsAt`. Enforced server-side rather than in
+            the schema, since JSON Schema cannot compare two fields.
         location: { type: [string, 'null'] }
         description: { type: [string, 'null'] }
         thumbnail:
