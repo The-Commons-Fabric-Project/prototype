@@ -1,10 +1,7 @@
-// ---------------------------------------------------------------------------
 // Icons (grayscale, stroke = currentColor)
-// this is S trying to be clever with typescript
 
 import type { ReactElement, SVGProps } from "react";
 
-// ---------------------------------------------------------------------------
 const svgBase = { 
   fill: "none", 
   stroke: "currentColor", 

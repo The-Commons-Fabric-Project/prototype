@@ -10,12 +10,9 @@ export function parseDate(d: string) {
 }
 
 /**
- * Splits an RFC 3339 timestamp into the two strings the rest of this file - and
- * DateChip, InlineDate and the calendar - already speak.
- *
- * Both read the date in the *viewer's* timezone rather than UTC. That matters:
- * an Ottawa event at 20:00 is 00:00 or 01:00 the next day in UTC, so
- * `toISOString().slice(0, 10)` would file every evening event under tomorrow.
+ * Splits an RFC 3339 timestamp into the "YYYY-MM-DD" and "HH:MM" strings the rest of
+ * this file speaks, read in the viewer's timezone - `toISOString().slice(0, 10)`
+ * would file an Ottawa evening event under tomorrow.
  */
 export function toDateKey(iso: string) {
   const dt = new Date(iso);
@@ -28,12 +25,8 @@ export function toTimeKey(iso: string) {
 }
 
 /**
- * The inverse of toDateKey/toTimeKey: builds an RFC 3339 timestamp from the
- * separate date and time an <input type="date"> and <input type="time"> produce.
- *
- * Interpreted in the viewer's timezone, because that is what they typed - "the
- * 14th at 7pm" means 7pm where the person entering it is. The returned string is
- * UTC, which is what the API stores.
+ * The inverse of toDateKey/toTimeKey. Interpreted in the viewer's timezone, because
+ * that is what they typed; returned as the UTC string the API stores.
  */
 export function fromDateAndTime(date: string, time: string) {
   const [y, m, d] = date.split("-").map(Number);

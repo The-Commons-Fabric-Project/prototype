@@ -3,10 +3,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { unauthorized } from '../utils/problems.js';
 import { SESSION_COOKIE_NAME, verifySessionToken, type SessionPayload } from '../utils/userSessions.js';
 
-/**
- * Appends an optional user field to the Request struct.
- * Allows us to pass a user field without needing to modify the (req, res) pattern
- */
+/** Carries the verified session payload from requireAuth to the handler. */
 declare module 'express-serve-static-core' {
   interface Request {
     user?: SessionPayload;

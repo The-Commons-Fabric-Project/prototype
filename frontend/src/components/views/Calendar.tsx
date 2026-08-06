@@ -1,10 +1,7 @@
 /**
-I used the html provided by the design team to create this. 
-It was easier to create the calendar from scratch vs. using react-big-calendar for the themeing
-
-Still unsure whether this is the right direction however, one of the pros of using AI is that you don't have to rely on dependencies as much.
-This might be more of an issue once we have to integrate with Google Calendar/Outlook but for the demo it's probably fine.
-**/
+ * Built from the design team's HTML rather than react-big-calendar, which was
+ * harder to theme. Revisit if we need Google Calendar/Outlook integration.
+ */
 
 import { useState, useMemo } from 'react'
 import type { Event } from '../../utils/types/events'
@@ -13,14 +10,11 @@ import { parseDate, fmtTime, toTimeKey, monthBounds } from '../../utils/datetime
 import { MONTHS_FULL as MONTH_NAMES, DOW as DAY_HEADERS } from '../../utils/types/dates';
 
 type CalendarViewProps = {
-  /** List of Events to view in the calendar */
   events: Event[];
-  /** callback for selected event */
   onSelect: (event: Event) => void;
   /**
    * Start of the calendar's own fetch window, "YYYY-MM-DD". Owned by
-   * routes/index.tsx and separate from the card grid's range, so paging months
-   * here does not disturb the grid's filter. Falls back to today if empty.
+   * routes/index.tsx and separate from the card grid's range. Falls back to today.
    */
   rangeStart: string;
   /** Asks the route to fetch a new month. Called on every month navigation. */
@@ -36,12 +30,8 @@ function formatTimeShort(time: string): string {
 }
 
 export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: CalendarViewProps) {
-  // Seeded from the current window, falling back to today.
-  //
-  // This used to read events[0]?.date, which inverted the dependency: the data
-  // decided which month you were looking at. That only worked because the mock
-  // events all sat in one month. Now the month decides which data is fetched, so
-  // it has to come from the window - or from today, on a first visit.
+  // Seeded from the current window, falling back to today. The month decides which
+  // data is fetched, so it cannot be derived from the events.
   const [cursor, setCursor] = useState(() => (rangeStart ? parseDate(rangeStart) : new Date()));
   const year = cursor.getFullYear(), month = cursor.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
@@ -59,8 +49,7 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
     return map;
   }, [events, year, month]);
 
-  // Moving the cursor also moves the fetch window, so the events for the month
-  // being shown are the events that get requested.
+  // Moving the cursor also moves the fetch window.
   const goToMonth = (next: Date) => {
     setCursor(next);
     const { start, end } = monthBounds(next);

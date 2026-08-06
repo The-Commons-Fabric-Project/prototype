@@ -1,23 +1,17 @@
 /**
  * Guards the constants derived from src/docs/db/schema.dbml against drift.
  *
- * The DBML is the source of truth, but nothing can import it, so the values it
- * declares have to be restated wherever they are enforced - in SQL, in TypeScript,
- * and in JSON Schema. This test pins the restatements that are checkable:
+ * Nothing can import the DBML, so its values are restated in SQL, TypeScript and
+ * JSON Schema. This pins the restatements that are checkable:
  *
- *   - src/utils/orgTags.ts      ORG_TAGS, used by the seed and the application layer
- *   - src/utils/constraints.ts  the regex CHECKs SQLite cannot run
+ *   - src/utils/orgTags.ts       ORG_TAGS
+ *   - src/utils/constraints.ts   the regex CHECKs SQLite cannot run
  *   - src/docs/api/openapi.yaml  the OrganizationTag enum and the `pattern` keywords
  *
- * The CHECK in prisma/migrations/**\/migration.sql is deliberately NOT asserted.
- * Migrations are an append-only history: changing a constraint means writing a new
- * migration, not editing the old one, so pinning to the initial migration would
- * fail the first time something legitimately changes. Covering the database means
- * querying a migrated schema, which needs a provisioned DB.
- *
- * frontend/src/types/orgs.ts holds its own copies of ORG_TAGS and EMAIL_RE and is
- * NOT covered here - that copy goes away when frontend types are generated from
- * the spec.
+ * Not covered: the CHECK in prisma/migrations, since migrations are append-only
+ * and pinning the initial one would fail on the first legitimate change; and
+ * frontend/src/utils/types/orgs.ts, whose copies go away once frontend types are
+ * generated from the spec.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -63,8 +57,7 @@ function openApiOrgTags(): string[] {
   return values;
 }
 
-// Membership is the contract, not declaration order, so both sides are sorted before
-// comparing - reordering a list for readability should not fail the build.
+// Membership is the contract, not declaration order, so both sides are sorted.
 const sorted = (values: readonly string[]) => [...values].sort();
 
 test('the OpenAPI OrganizationTag enum matches schema.dbml', () => {
@@ -96,8 +89,7 @@ test('the OpenAPI URL patterns match URL_PATTERN', () => {
 });
 
 test('the constraint patterns still match the CHECKs in schema.dbml', () => {
-  // The DBML spells them inside `~* '...'`; the quoted body should be character-for
-  // -character what the application layer and the spec use.
+  // The DBML spells them inside `~* '...'`; the quoted body should match exactly.
   const dbml = read('src/docs/db/schema.dbml');
   const checks = [...dbml.matchAll(/~\*\s*'([^']+)'/g)].map((match) => match[1]!);
   assert.ok(checks.includes(EMAIL_PATTERN), `no CHECK in schema.dbml spells ${EMAIL_PATTERN}`);

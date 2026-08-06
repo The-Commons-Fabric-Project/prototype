@@ -10,19 +10,17 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
 /**
- * App factory for initializing middleware, setting CORS policy and establishing routes
+ * App factory for initializing middleware, setting CORS policy and establishing routes.
  *
- * Registration order matters and is not arbitrary:
+ * Registration order is load-bearing:
  *
  *   1. body parsing and logging, which everything downstream depends on
  *   2. routers, so a real endpoint always wins over the SPA fallback
  *   3. the production static and catch-all handlers, which answer whatever is left
  *   4. the error handler, which must be last to see errors from all of the above
  *
- * The catch-all used to sit above the routers, so in production every GET was
- * answered with index.html before any router saw it.
- *
- * @returns
+ * With the catch-all above the routers, every production GET is answered with
+ * index.html before a router sees it.
  */
 export function createApp() {
   const app = express();
@@ -33,7 +31,7 @@ export function createApp() {
   }
 
   app.use(express.json());
-  // Express does not parse cookie's on it's own - needed for auth
+  // Express does not parse cookies on its own - needed for auth.
   app.use(cookieParser());
   app.use(requestLoggingMiddleware);
 
@@ -44,18 +42,15 @@ export function createApp() {
     app.use(cors({ origin: corsOrigin, credentials: true }));
   }
 
-  // route assignment
-
-  // Everything below is validated against src/docs/api/openapi.yaml. That document's
-  // server URL ends in /v1, which is where the validator expects these to live.
+  // Everything below is validated against src/docs/api/openapi.yaml, whose server
+  // URL ends in /v1.
   app.use(openApiValidator(isDevelopment));
   app.use('/v1', authRouter);
   app.use('/v1', eventsRouter);
   app.use('/v1', organizationsRouter);
 
   if (!isDevelopment) {
-    // Serves the built vite project.
-    // Registered after the routers to prevent a valid route being superseded.
+    // Serves the built vite project. After the routers, so a real route wins.
     app.use(express.static(path.join(__dirname, '../../frontend/dist')));
     app.get('/{*splat}', (_req, res) => {
       res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));

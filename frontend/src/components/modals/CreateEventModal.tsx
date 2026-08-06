@@ -1,6 +1,4 @@
-/** 
- * Create event modal (Org Admin only)
- */
+/** Create event modal (Org Admin only). */
 
 import { useState } from "react";
 
@@ -19,14 +17,9 @@ import type { Event } from "../../utils/types/events";
 import type { User } from "../../utils/types/users";
 
 /**
- * What this form collects - deliberately not derived from `Event`.
- *
- * It used to be `Pick<Event, ...>`, which stopped working once `Event` came to
- * mirror the API. The two are genuinely different shapes: the form takes a date
- * and a time in separate inputs and asks whether registration is needed, while
- * the API takes a single `startsAt` timestamp and infers registration from the
- * presence of a link. Converting between them is the job of the submit handler
- * below.
+ * What this form collects - deliberately not derived from `Event`. The form takes
+ * separate date and time inputs and registration toggles; the API takes one
+ * `startsAt` and infers registration from the link. The submit handler converts.
  */
 export type CreateEventFormData = {
   title: string;
@@ -67,14 +60,9 @@ export default function CreateEventModal({
   const createEvent = useCreateEvent();
 
   /**
-   * Maps the form onto the API's `EventCreate` and publishes it.
-   *
-   * The two shapes differ in three ways, all resolved here: the separate date
-   * and time inputs become one `startsAt` timestamp; the optional text fields
-   * become null rather than "" so an untouched field is stored as absent instead
-   * of as an empty string; and the registration/volunteer toggles disappear
-   * entirely, since the server infers both from whether the corresponding field
-   * is set. `ownerId` is not sent at all - the session decides it.
+   * Maps the form onto the API's `EventCreate` and publishes it. Untouched optional
+   * fields become null rather than "", the toggles are dropped, and `ownerId` is
+   * not sent - the session decides it.
    */
   const publish = () => {
     const blank = (value: string) => (value.trim() === "" ? null : value.trim());
@@ -95,8 +83,7 @@ export default function CreateEventModal({
           onClose();
         },
         onError: (err: unknown) => {
-          // ApiError.detail is the server's own wording, so a rejected
-          // registration link says which field is wrong instead of "failed".
+          // ApiError.detail is the server's own wording, so it names the field.
           toast(err instanceof ApiError ? err.detail : "Could not publish the event.");
         },
       },
@@ -121,9 +108,7 @@ export default function CreateEventModal({
 
   return (
     <Modal onClose={onClose} width={500}>
-      {/* TODO: this should name the organization, not the person. The user carries
-          only organizationId, so resolving it to a name needs the organizations
-          endpoint - deferred with the rest of the data fetching. */}
+      {/* TODO: name the organization, not the person - resolve it with useOrgLookup. */}
       <ModalHeader title="Create event" onClose={onClose}
         subtitle={`Hosting as ${session.fullname}`} />
       <div className="px-[18px] py-[24px]">
@@ -177,13 +162,11 @@ export default function CreateEventModal({
             )}
 
             <Button className="w-full mt-[4px]"
-            // {{ width: "100%", marginTop: 4 }} 
             onClick={() => { if (validate()) setStep(2); }}>Continue</Button>
           </>
         ) : (
           <>
             <div className="bg-paper border border-line rounded-sm p-[16px] mb-[16px]"
-            // {{ background: C.paper, border: `1px solid ${C.line}`, borderRadius: 6, padding: 16, marginBottom: 16 }}
             >
               <Summary label="Title" value={form.title} />
               <Summary label="When" value={`${fmtPlainDate(form.date)} · ${fmtTime(form.time)}`} />
@@ -193,10 +176,8 @@ export default function CreateEventModal({
               <Summary label="Volunteers" value={form.volunteersNeeded ? form.volunteerContact as string : "Not recruiting"} last />
             </div>
             <p className="text-[14px] font-[600] text-ink m-[0 0 14px]"
-            // {{ fontSize: 14, fontWeight: 600, color: C.ink, margin: "0 0 14px" }}
             >Is this information correct?</p>
             <div className="flex gap-[10px]"
-            // {{ display: "flex", gap: 10 }}
             >
               <Button variant="ghost" className="flex-1" onClick={() => setStep(1)}
                 disabled={createEvent.isPending}>No, edit</Button>

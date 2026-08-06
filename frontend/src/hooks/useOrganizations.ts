@@ -1,11 +1,6 @@
 /**
- * The organization directory, fetched once and shared by every component.
- *
- * There is no context provider here on purpose. A query cache keyed by
- * ['organizations'] already *is* a shared global store: every caller of this
- * hook, on any route, reads the same entry and only the first one causes a
- * request. Wrapping that in a provider would duplicate the cache rather than
- * add anything.
+ * The organization directory, fetched once and shared by every component. No
+ * provider: the query cache keyed by ['organizations'] already is the shared store.
  */
 
 import { useQuery } from '@tanstack/react-query';
@@ -20,25 +15,15 @@ export function useOrganizations() {
   return useQuery({
     queryKey: organizationsQueryKey,
     queryFn: listOrganizations,
-    // The directory changes about as often as the list of participating
-    // organizations does, which is to say rarely and never mid-session. 'static'
-    // means it is fetched once and then never refetched without an explicit
-    // invalidation - the closest thing to the "load it up front and hold it"
-    // model, without a provider.
     staleTime: 'static',
   });
 }
 
 /**
- * Resolves an organizationId to its name.
+ * Resolves an organizationId to its name, for parents to pass down as a prop -
+ * which keeps the presentational components working in Storybook.
  *
- * Events carry only `organizationId`; the components that display an
- * organization want its name. Rather than have each one fetch, they take a
- * resolved name as a prop and their parent uses this - so the presentational
- * components stay free of data dependencies and keep working in Storybook.
- *
- * Returns undefined while the directory is still loading, or for an id that is
- * not in it. Callers should render a fallback rather than an empty string.
+ * Returns undefined while the directory loads, or for an unknown id.
  */
 export function useOrgLookup() {
   const { data } = useOrganizations();

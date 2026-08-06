@@ -3,20 +3,17 @@ import type { ErrorRequestHandler, Request } from 'express';
 import { HttpProblem } from '../utils/problems.js';
 
 /**
- * Formats every error as RFC 9457 problem details, the only error shape the
- * OpenAPI document describes.
+ * Formats every error as RFC 9457 problem details.
  *
- * express-openapi-validator does not write an error body of its own - it throws
- * typed errors and leaves the response to us. Without this handler Express falls
- * back to its default renderer, which answers with an HTML page containing a stack
- * trace, so this is what stops internals leaking on any validation failure.
+ * express-openapi-validator writes no error body of its own, and Express' default
+ * renderer would answer with an HTML stack trace - so this is what stops internals
+ * leaking on a validation failure.
  *
- * Errors arrive here with `status`, `name`, `message` and sometimes
- * `errors: [{ path, message }]` - either from the validator or from
- * utils/problems.ts, which deliberately mirrors that shape.
+ * Errors arrive with `status`, `name`, `message` and sometimes
+ * `errors: [{ path, message }]`, from the validator or from utils/problems.ts.
  */
 
-/** Fallbacks for errors that reach us without a usable `name`. */
+/** Fallbacks for errors without a usable `name`. */
 const TITLES: Record<number, string> = {
   400: 'Bad Request',
   404: 'Not Found',
@@ -46,8 +43,7 @@ const fieldErrorsOf = (err: unknown): { path: string; message: string }[] => {
 };
 
 export const problemDetails: ErrorRequestHandler = (err, req: Request, res, next) => {
-  // Streaming already started - Express' default handler is the only thing that can
-  // salvage this, and it will destroy the connection.
+  // Streaming already started; only Express' default handler can salvage this.
   if (res.headersSent) {
     next(err);
     return;
@@ -56,24 +52,16 @@ export const problemDetails: ErrorRequestHandler = (err, req: Request, res, next
   const status = statusOf(err);
   const message = err instanceof Error ? err.message : String(err);
 
-  // An HttpProblem was raised deliberately, so its message was written to be read by
-  // a caller and is safe to send at any status - a 501 explaining that an endpoint
-  // needs auth is far more use than a bare "Not Implemented". Anything else at 5xx
-  // is a failure we did not anticipate: log it, but answer generically, because
-  // `detail` and the field errors can carry schema paths and internal messages
-  // (response-validation failures arrive here as 500s).
+  // Raised deliberately by the server, so its message is safe to send as-is.
   const isDeliberate = err instanceof HttpProblem;
 
-  // Only unanticipated failures are logged as errors. A deliberate 5xx - the 501
-  // from createEvent, say - is expected behaviour, and printing a stack trace for
-  // it trains readers to ignore this log. requestLoggingMiddleware still records
-  // the status of every response.
+  // Only unanticipated failures are logged as errors.
   if (status >= 500 && !isDeliberate) {
     console.error(`[SERVER] ${req.method} ${req.originalUrl} failed:`, err);
   }
 
-  // For 5xx the error's own name is withheld too: a PrismaClientKnownRequestError
-  // in `title` tells a caller which ORM we use and nothing they can act on.
+  // The error's own name is withheld at 5xx too - a PrismaClientKnownRequestError
+  // in `title` names the ORM and nothing the caller can act on.
   const name = (err as { name?: string })?.name;
   const withheld = status >= 500 && !isDeliberate;
   const body: ProblemBody = {

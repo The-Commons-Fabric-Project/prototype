@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from '@storybook/tanstack-react';
 import LoginModal from './LoginModal';
 
 const meta = {
-  // title: "Components/Pop-up/Log In",
   component: LoginModal,
 } satisfies Meta<typeof LoginModal>;
 

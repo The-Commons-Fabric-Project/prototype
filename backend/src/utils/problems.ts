@@ -1,10 +1,6 @@
 /**
  * Errors that carry an HTTP status, shaped like the ones express-openapi-validator
  * throws so that one error handler can format both.
- *
- * The validator's errors expose `status`, `name`, `message` and an optional
- * `errors: [{ path, message }]`; matching that shape here means
- * middleware/problemDetails.ts never has to ask where an error came from.
  */
 export class HttpProblem extends Error {
   readonly status: number;
@@ -18,23 +14,14 @@ export class HttpProblem extends Error {
   }
 }
 
-/** The requested resource does not exist. */
 export const notFound = (detail: string) => new HttpProblem(404, 'Not Found', detail);
 
-/**
- * The request was well-formed but violates a rule the schema cannot express -
- * an inverted query window, for instance. `pointer` mirrors the validator's own
- * convention (`/query/endDate`, `/body/startsAt`) so clients can treat every 400
- * the same way.
- */
+/** `pointer` follows the validator's convention (`/query/endDate`, `/body/startsAt`). */
 export const badRequest = (detail: string, pointer?: string) =>
   new HttpProblem(400, 'Bad Request', detail, pointer ? [{ path: pointer, message: detail }] : undefined);
 
-/** Documented in the spec but not built yet. */
 export const notImplemented = (detail: string) => new HttpProblem(501, 'Not Implemented', detail);
 
-/** The request conflicts with the current state of a resource - e.g. a duplicate email. */
 export const conflict = (detail: string) => new HttpProblem(409, 'Conflict', detail);
 
-/** Credentials were missing or did not match an existing account. */
 export const unauthorized = (detail: string) => new HttpProblem(401, 'Unauthorized', detail);

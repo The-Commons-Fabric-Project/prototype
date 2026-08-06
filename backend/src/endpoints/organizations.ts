@@ -3,13 +3,6 @@ import { Router, type Request, type Response, type NextFunction } from 'express'
 import { prisma } from '../db/client.js';
 import { notFound } from '../utils/problems.js';
 
-/**
- * Routes for the `organizations` table. Mounted under /v1 in app.ts.
- *
- * The frontend loads this list once and holds it, then resolves each event's
- * organizationId against it - which is why Event carries an id rather than an
- * embedded organization, and why neither of these routes is paginated.
- */
 export const organizationsRouter = Router();
 
 /** Prisma row plus its joined tag rows. */

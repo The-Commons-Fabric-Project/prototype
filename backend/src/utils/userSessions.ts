@@ -2,10 +2,9 @@ import jwt from 'jsonwebtoken';
 import type { Response } from 'express';
 
 /**
- * Signed-cookie session management. There is no server-side session store -
- * the information in the cookie verifies the session. This keeps auth stateless.
- * We might want to change this in the future
-*/
+ * Signed-cookie session management. There is no server-side session store - the
+ * cookie's signature is what verifies the session, which keeps auth stateless.
+ */
 
 const SESSION_COOKIE_NAME = 'session';
 const SESSION_DURATION_SECONDS = 60 * 60 * 24 * 7; // 7 days
@@ -14,7 +13,7 @@ export interface SessionPayload {
   userId: number;
 }
 
-/** SESSION_SECRET is required so a session token can't be forged; fail fast rather than sign with `undefined`. */
+/** Fails fast rather than signing with `undefined`, which would let a token be forged. */
 function getSecret(): string {
   const secret = process.env.SESSION_SECRET;
   if (!secret) {
@@ -23,12 +22,11 @@ function getSecret(): string {
   return secret;
 }
 
-/** Signs a session token carrying `payload`, expiring after SESSION_DURATION_SECONDS. */
 export function signSessionToken(payload: SessionPayload): string {
   return jwt.sign(payload, getSecret(), { expiresIn: SESSION_DURATION_SECONDS });
 }
 
-/** Verifies a session token, returning its payload, or null if it is missing, expired, or tampered with. */
+/** Returns the payload, or null if the token is expired or tampered with. */
 export function verifySessionToken(token: string): SessionPayload | null {
   try {
     return jwt.verify(token, getSecret()) as SessionPayload;
@@ -37,7 +35,7 @@ export function verifySessionToken(token: string): SessionPayload | null {
   }
 }
 
-/** Signs a session token for `userId` and sets it as an httpOnly cookie on `res`. */
+/** Signs a session token for `userId` and sets it as an httpOnly cookie. */
 export function startSession(res: Response, userId: number): void {
   const token = signSessionToken({ userId });
   res.cookie(SESSION_COOKIE_NAME, token, {
@@ -48,7 +46,6 @@ export function startSession(res: Response, userId: number): void {
   });
 }
 
-/** Clears the session cookie, ending the session. */
 export function endSession(res: Response): void {
   res.clearCookie(SESSION_COOKIE_NAME);
 }

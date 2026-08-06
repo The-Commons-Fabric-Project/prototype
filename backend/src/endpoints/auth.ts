@@ -10,7 +10,7 @@ import { startSession, endSession } from '../utils/userSessions.js';
 
 export const authRouter = Router();
 
-/** The columns that make up the public `User` schema  */
+/** The columns that make up the public `User` schema. */
 const userSelect = {
   id: true,
   fullname: true,
@@ -20,11 +20,8 @@ const userSelect = {
 } as const;
 
 /**
- * Maps a row to the `User` schema.
- *
- * Rows carrying extra columns (login reads passwordHash alongside these) are
- * accepted and the extras are dropped, which is what keeps the hash out of
- * every response.
+ * Maps a row to the `User` schema. Extra columns are dropped, which is what keeps
+ * passwordHash - read alongside these by login - out of every response.
  */
 const toUser = (row: {
   id: number;
@@ -43,8 +40,7 @@ const toUser = (row: {
 /**
  * POST /v1/auth/create-user
  *
- * Creates a new user with a name, email, password and organization id
- * Currently nothing stopping anybody from creating an account.
+ * Creates a user and signs them in. Registration is currently open to anybody.
  */
 authRouter.post('/auth/create-user', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -73,11 +69,7 @@ authRouter.post('/auth/create-user', async (req: Request, res: Response, next: N
   }
 });
 
-/**
- * POST /v1/auth/login
- *
- * Verifies email/password against the stored argon2id hash and logs user in
- */
+/** POST /v1/auth/login - verifies the password against the stored argon2id hash. */
 authRouter.post('/auth/login', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body as { email: string; password: string };
@@ -102,20 +94,14 @@ authRouter.post('/auth/login', async (req: Request, res: Response, next: NextFun
 /**
  * POST /v1/auth/logout
  *
- * Auth is stateless on the backend so only the client side cookie needs to be cleared
- * always returns true even if a session is not found
+ * Auth is stateless, so only the cookie is cleared. Succeeds with no session.
  */
 authRouter.post('/auth/logout', (_req: Request, res: Response) => {
   endSession(res);
   res.status(200).json({ ok: true });
 });
 
-/**
- * GET /v1/auth/profile
- *
- * Returns the signed-in user. The id comes from the verified session payload
- * that comes from the requireAuth middleware
- */
+/** GET /v1/auth/profile - the signed-in user, resolved from the session payload. */
 authRouter.get('/auth/profile', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.userId;

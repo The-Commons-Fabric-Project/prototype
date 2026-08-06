@@ -9,12 +9,13 @@ import { useAuth } from '../../hooks/useAuth';
 import { useModal } from '../../hooks/useOverlayContext';
 import CreateAccountModal from '../modals/CreateAccountModal';
 
-// ref for user auth in a Header component: https://github.com/david4473/Reciped/blob/main/src/components/Header.tsx
+// ref: https://github.com/david4473/Reciped/blob/main/src/components/Header.tsx
 
 /**
  * Header bar appearing on top of all pages.
- * 
- * SOMEDAY: replace CF logo with RCH logo, move CF logo to a new footer element -- blocked: need RCH logo asset
+ *
+ * TODO: replace the CF logo with the RCH logo and move CF's to a footer - blocked
+ * on the RCH logo asset.
  */
 export default function Header() {
   const [hidden, setHidden] = useState(false);
@@ -36,13 +37,13 @@ export default function Header() {
     }`
 
   const handleLogin = () => { setModal("login"); }
-  // logout clears local state before it awaits the server, so nothing here needs the promise
+  // logout clears local state before awaiting the server, so the promise is unused.
   const handleLogout = () => { void session.logout(); }
   const handleCreateAccount = () => { setModal("create_account"); }
   const closeModal = () => { setModal(undefined) }
 
   const renderModal =  () => { 
-    // header only controls the login and create account modals, don't need cases for the other modal options
+    // The header only opens the login and create-account modals.
     switch (modal) {
       case "create_account": 
         return <CreateAccountModal onClose={closeModal} />;

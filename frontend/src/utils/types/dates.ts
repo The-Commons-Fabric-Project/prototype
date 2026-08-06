@@ -1,5 +1,3 @@
-// TODO: convert these to types?
-
 export type Month = {
   num: number,
   abbv: string,

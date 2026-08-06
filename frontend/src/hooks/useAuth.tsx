@@ -1,13 +1,10 @@
 /**
  * Session state, backed by the real API.
  *
- * Source and reference project: https://tanstack.com/router/v1/docs/how-to/setup-authentication#create-authentication-context
+ * Reference: https://tanstack.com/router/v1/docs/how-to/setup-authentication#create-authentication-context
  *
- * There is no token here and nothing in localStorage. The session is an httpOnly
- * cookie, which JavaScript cannot read by design - that is what stops an XSS bug
- * from walking off with a session. The consequence is that the only way to learn
- * whether we are signed in is to ask the server, which is what the mount effect
- * below does.
+ * No token and nothing in localStorage - the session is an httpOnly cookie that
+ * JavaScript cannot read, so the mount effect asks the server instead.
  */
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
@@ -22,14 +19,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [status, setStatus] = useState<AuthAttemptStatus>('unsent')
   const [error, setError] = useState('')
-  // Starts true: on first paint we genuinely do not know yet, and claiming
-  // "signed out" before asking is what causes the refresh flicker.
   const [isLoading, setIsLoading] = useState(true)
 
-  // Restore the session on load. A 401 is the expected answer for a visitor who
-  // is not signed in, so it clears state rather than surfacing an error; anything
-  // else is a real failure and worth a console entry, but still leaves the app
-  // usable signed-out.
   useEffect(() => {
     let cancelled = false
 
@@ -49,8 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (!cancelled) setIsLoading(false)
       })
 
-    // StrictMode mounts effects twice in development; the flag keeps the first,
-    // discarded run from writing state after unmount.
+    // StrictMode mounts effects twice; keeps the discarded run from writing state.
     return () => {
       cancelled = true
     }
@@ -66,17 +56,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (err: unknown) {
       setUser(null)
       setStatus('fail')
-      // ApiError.detail is written by the API to be read by a person, so a bad
-      // password says so instead of showing a generic failure.
       setError(err instanceof ApiError ? err.detail : 'Could not reach the server.')
       throw err
     }
   }, [])
 
   const logout = useCallback(async () => {
-    // Clear locally first, and regardless of what the server says: the button
-    // must sign you out of this tab even if the request fails. The cookie is
-    // cleared server-side, and /auth/logout succeeds even without a session.
+    // Cleared locally first and regardless of the server, so the button signs you
+    // out of this tab even if the request fails.
     setUser(null)
     setStatus('unsent')
     setError('')

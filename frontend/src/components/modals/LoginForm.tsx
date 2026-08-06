@@ -11,18 +11,16 @@ function inputStyle (err: boolean): InputVariant {
   return `${err ? "error" : "default"}`;
 }
 
-/** 
- * 
- * ???: I (S) decided to separate the form from the modal so that the user could directly navigate to the URL /login but IDK if that's even useful...
- * 
- * SOMEDAY: this should probably be three separate forms? changing credentials could also be located in user profile (out of scope)
+/**
+ * Separate from the modal so /login can be navigated to directly.
+ *
+ * TODO: probably three separate forms; changing credentials may belong in a user
+ * profile instead.
  */
 export type LoginFormHeader = Pick<ModalHeaderProps, "title" | "subtitle">;
 
 export type LoginFormProps = {
-  /** called once the user is authenticated (or dismisses the form) */
   onClose: () => void,
-  /** lets the parent update its heading as the form switches modes */
   onChangeMode: (header: LoginFormHeader) => void,
 }
 

@@ -34,9 +34,6 @@ export default function FilterBar({
   rangeStart, setRangeStart,
   rangeEnd, setRangeEnd,
 }: FilterBarProps) {
-  // const [rangeStart, setRangeStart] = useState("");
-  // const [rangeEnd, setRangeEnd] = useState("");
-
   return (
     <div className="w-full flex flex-wrap gap-2 border border-line rounded-sm p-3 items-center justify-stretch">
       <h2 className="text-sm text-ink font-bold">FILTER BY DATE</h2>

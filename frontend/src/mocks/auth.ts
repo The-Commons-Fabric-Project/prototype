@@ -1,20 +1,13 @@
 /**
- * What is left of the mock auth client.
+ * What is left of the mock auth client. Login is real; account creation cannot be
+ * yet, because create-user needs an existing `organizationId` and the form asks for
+ * an organization *name* the API has no operation to create.
  *
- * Logging in is real now - see api/auth.ts and hooks/useAuth.tsx. Account
- * creation is not, and cannot be yet: `POST /v1/auth/create-user` requires an
- * `organizationId` for an organization that already exists, and the API has no
- * operation for creating one. The form in components/modals/CreateAccountModal.tsx
- * asks for an organization *name*, so there is nothing to map it to.
- *
- * So this keeps that one flow working exactly as it did before, in memory and
- * only in memory. Be aware of the gap it leaves: an account created here cannot
- * be logged into, because login now asks the server, which has never heard of it.
- * Deleting this file is part of finishing the create-account flow, not a
- * prerequisite for it.
+ * In memory only, so an account created here cannot then be logged into. Deleting
+ * this file is part of finishing the create-account flow.
  */
 
-/** Only the fields the create-account form collects - deliberately not the API's User. */
+/** Only the fields the create-account form collects - not the API's User. */
 export interface MockAccount {
   id: string;
   username: string;

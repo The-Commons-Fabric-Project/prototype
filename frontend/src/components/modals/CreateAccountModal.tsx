@@ -1,19 +1,10 @@
 /**
- * Auth modals - create account
- * SOMEDAY: form doesn't check if the organization you're registering already exists, should first show you a dropdown of existing orgs then offer option to add a new org
+ * Auth modals - create account. The one auth flow still backed by mocks/auth.ts, so
+ * an account created here exists only in memory and cannot be logged into.
  *
- * BLOCKED: this is the one auth flow still backed by mocks/auth.ts. Logging in
- * talks to the API; creating an account cannot yet, for two reasons:
- *
- *   1. POST /v1/auth/create-user requires an `organizationId`, and offering a
- *      choice means listing organizations - deferred with the rest of the data
- *      fetching.
- *   2. This form asks the user to *register their organization*, and the API has
- *      no operation for creating one. That is a missing endpoint, not a wiring
- *      gap, so the SOMEDAY above is now the blocking question.
- *
- * Until then an account created here exists only in memory and cannot be logged
- * into. See the header of mocks/auth.ts.
+ * TODO: blocked on a missing endpoint. This form asks the user to register their
+ * organization, and the API can only attach them to an existing `organizationId`.
+ * Offer a dropdown of existing orgs plus an option to add a new one.
  */
 
 import { useState } from "react";

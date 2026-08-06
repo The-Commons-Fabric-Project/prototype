@@ -1,23 +1,12 @@
 /**
- * Development-only seed for the SQLite dev database.
- * Note that this file was entirely AI generated. It's only a one use script for seeding data
- * so it's probably fine. I have not read through the code in detail.
+ * Development-only seed for the SQLite dev database. AI generated and unreviewed.
  *
- * Loads dev-organizations-seed.json (the human-editable fixture), validates it,
- * then wipes and repopulates organizations, organizations_tags, users and events.
+ * Loads dev-organizations-seed.json, validates it, then wipes and repopulates
+ * organizations, organizations_tags, users and events. Validation re-implements the
+ * Postgres regex CHECKs SQLite cannot run, so a malformed fixture fails loudly.
  *
- * Validation matters here because most of the constraints in db/schema.dbml are
- * Postgres regex CHECKs that SQLite cannot run (see the header of schema.prisma) -
- * they are re-implemented below so a malformed fixture fails loudly instead of
- * quietly writing invalid rows.
- *
- * Ids from the fixture are inserted verbatim so seeded rows line up with the ids the
- * frontend mocks already use (SEED_ORGS is 1-6). SQLite raises its AUTOINCREMENT
- * high-water mark to match, so rows the app creates later still get fresh ids.
- *
- * `devPassword` in the fixture is plaintext; it is hashed here with the same
- * hashPassword helper the app uses, so users.password_hash only ever receives a
- * hash in the same format production writes.
+ * Fixture ids are inserted verbatim so seeded rows line up with the ids the
+ * frontend mocks use; SQLite raises its AUTOINCREMENT high-water mark to match.
  *
  * Usage (from backend/):
  *   npm run db:seed                 wipe and reseed
@@ -78,11 +67,9 @@ const isOptionalString = (v: unknown): v is string | null | undefined =>
   v === null || v === undefined || typeof v === 'string';
 
 /**
- * Checks every fixture row against the schema's constraints and returns a list of
- * human-readable problems. An empty list means the parsed JSON is a valid SeedFile.
- *
- * Collecting all problems rather than throwing on the first one means a single run
- * tells you everything that needs fixing in the fixture.
+ * Checks every fixture row against the schema's constraints. An empty list means the
+ * parsed JSON is a valid SeedFile; all problems are collected rather than thrown on
+ * the first, so one run reports everything.
  */
 function validate(raw: unknown): string[] {
   const problems: string[] = [];
@@ -133,8 +120,8 @@ function validate(raw: unknown): string[] {
         if (!isOrgTag(tag)) {
           problems.push(`${at}: unknown tag ${JSON.stringify(tag)} (allowed: ${ORG_TAGS.join(', ')})`);
         } else if (seenTags.has(tag)) {
-          // organizations_tags is keyed on (organization_id, tag), so a repeat would
-          // be a primary key collision rather than a duplicate row.
+          // organizations_tags is keyed on (organization_id, tag) - a repeat is a
+          // primary key collision.
           problems.push(`${at}: tag "${tag}" listed more than once`);
         }
         seenTags.add(tag);
@@ -159,8 +146,8 @@ function validate(raw: unknown): string[] {
     if (typeof user.email !== 'string' || !EMAIL_RE.test(user.email)) {
       problems.push(`${at}: email ${JSON.stringify(user.email)} is not a valid email address`);
     } else {
-      // users.email is UNIQUE. SQLite compares case-sensitively, but two addresses
-      // differing only in case would still be the same account to any auth layer.
+      // users.email is UNIQUE and SQLite compares case-sensitively, but two casings
+      // of one address are the same account to any auth layer.
       const key = user.email.toLowerCase();
       if (emails.has(key)) problems.push(`${at}: duplicate email "${user.email}"`);
       emails.add(key);
@@ -224,11 +211,8 @@ function validate(raw: unknown): string[] {
 /**
  * Hashes each user's plaintext devPassword via the shared hashPassword helper.
  *
- * Every user is hashed separately even when they share a plaintext: argon2 embeds a
- * fresh random salt per call, so reusing one digest across users would make the dev
- * data misrepresent production - identical hashes on identical passwords is exactly
- * the pattern salting exists to prevent. The hashes run concurrently to keep the
- * cost of N deliberately-slow hashes off the critical path.
+ * Hashed per user even on a shared plaintext, since argon2 salts per call and
+ * identical digests would misrepresent production. Run concurrently.
  */
 async function hashPasswords(users: SeedUser[], defaultPassword?: string): Promise<Map<number, string>> {
   const digests = await Promise.all(
@@ -245,8 +229,7 @@ async function hashPasswords(users: SeedUser[], defaultPassword?: string): Promi
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
 
-  // This script deletes every row in four tables, so it must never run against a
-  // real deployment by accident.
+  // This script deletes every row in four tables.
   if (process.env.NODE_ENV === 'production') {
     throw new Error('refusing to run: NODE_ENV is "production" and this seed wipes existing data');
   }
@@ -269,9 +252,8 @@ async function main() {
     return;
   }
 
-  // A dedicated client rather than src/db/client.ts: that one logs every query,
-  // which would bury this script's output. One-shot process, so the "instantiate
-  // PrismaClient exactly once" concern that applies to the server does not bite here.
+  // Not src/db/client.ts, which logs every query and would bury this output. A
+  // one-shot process, so the single-client rule does not apply.
   const prisma = new PrismaClient({
     adapter: new PrismaBetterSqlite3({ url: process.env.DATABASE_URL ?? 'file:./dev.db' }),
     log: ['warn', 'error'],

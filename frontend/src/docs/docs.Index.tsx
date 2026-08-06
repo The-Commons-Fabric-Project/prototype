@@ -9,10 +9,7 @@ const meta = {
     layout: 'fullscreen',
     tanstack: {
       router: {
-        route: Route, // 👈 Supply the Route here
-        // 👇 Rest of these properties are type-safe
-        // params: { id: '42' },
-        // query: { tab: 'details' },
+        route: Route,
       },
     },
   },

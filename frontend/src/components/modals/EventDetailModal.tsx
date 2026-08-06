@@ -49,13 +49,11 @@ export default function EventDetailModal({
             } />
           {needsVolunteers(event) && (
             <DetailRow icon={<Icon name="user" size={15}/>} text={<>Volunteers wanted — <a href={
-              // [x] FIXME: event properties doesn't have volunteerContact
               `mailto:${event.volunteerContact}`} className="text-slate-900 font-semibold underline">{event.volunteerContact}</a></>} />
           )}
           {requiresRegistration(event) && (
             <a href={event.registrationLink || "#"} target="_blank" rel="noreferrer"
-              onClick={(e) => { if (!event.registrationLink) e.preventDefault(); 
-                // [x] FIXME: fix toast pop-ups
+              onClick={(e) => { if (!event.registrationLink) e.preventDefault();
               toast("Opening registration…"); }}
               className="no-underline">
                 {/* TODO: add real functionality*/}

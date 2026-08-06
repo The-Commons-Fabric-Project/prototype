@@ -1,35 +1,27 @@
 /**
- * The /v1/events operations.
- *
- * No mapping: utils/types/events.ts mirrors the OpenAPI `Event` schema, so the
- * response body is already the type the UI uses. If these ever need a conversion
- * step, the types have drifted from the document and that is the thing to fix.
+ * The /v1/events operations. No mapping - utils/types/events.ts mirrors the OpenAPI
+ * `Event` schema, so a conversion step here would mean the two have drifted.
  */
 
 import { get, post } from './client';
 import type { Event } from '../utils/types/events';
 
-/** Time window and organization filter for listEvents. All optional. */
+/**
+ * Time window and organization filter for listEvents. Timestamps in "YYYY-MM-DD" or
+ * RFC 3339 format; startDate defaults server-side to now, endDate is unbounded.
+ */
 export interface EventQuery {
-  /** "YYYY-MM-DD" or RFC 3339. Defaults server-side to now, so past events are excluded unless asked for. */
   startDate?: string;
-  /** "YYYY-MM-DD" or RFC 3339. Unbounded when omitted. Must be later than startDate. */
   endDate?: string;
   organizationId?: number;
 }
 
 /**
- * Widens a plain calendar date to the instant the API actually wants.
+ * Widens a "YYYY-MM-DD" date to the full timestamp the document requires.
  *
- * The window comes from `<input type="date">` and from month arithmetic, so it
- * arrives as "YYYY-MM-DD". The document declares both parameters as
- * `format: date-time`, and the validator rejects a bare date with a 400 - so
- * passing the UI's value through untouched fails every request.
- *
- * A date range in a calendar is inclusive of both ends, which is why the two
- * ends resolve differently: the 1st means from its first instant, the 30th means
- * up to its last. Both are resolved in local time, so "June 30th" ends when it
- * ends for the person reading the page rather than in UTC.
+ * The two ends resolve differently because a calendar range includes both: the
+ * start from its first instant, the end up to its last. Local time, so a day ends
+ * when it ends for the reader rather than in UTC.
  */
 function toTimestamp(value: string, edge: 'start' | 'end') {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return value; // already a full timestamp
@@ -43,10 +35,8 @@ function toTimestamp(value: string, edge: 'start' | 'end') {
 }
 
 /**
- * Builds the query string, dropping empty values.
- *
- * The date inputs use "" to mean unset, and sending `startDate=` would fail
- * validation rather than be read as absent.
+ * Builds the query string, dropping empty values - the date inputs use "" to mean
+ * unset, and `startDate=` would fail validation rather than read as absent.
  */
 function queryString(query: EventQuery = {}) {
   const params = new URLSearchParams();
@@ -58,23 +48,15 @@ function queryString(query: EventQuery = {}) {
   return search ? `?${search}` : '';
 }
 
-/**
- * GET /v1/events - events whose startsAt falls within the window, ordered by
- * startsAt.
- */
+/** GET /v1/events - events whose startsAt falls in the window, in that order. */
 export const listEvents = (query?: EventQuery) => get<Event[]>(`/events${queryString(query)}`);
 
 /** GET /v1/events/{eventId} */
 export const getEvent = (eventId: number) => get<Event>(`/events/${eventId}`);
 
 /**
- * The body `POST /v1/events` accepts - the `EventCreate` schema.
- *
- * Note what is *not* here. `ownerId` comes from the session cookie and
- * `organizationId` is derived from that owner, so neither can be sent; the
- * document rejects a body carrying them rather than ignoring them, which is what
- * stops a caller publishing as somebody else. `id` and `createdAt` are likewise
- * the server's to assign.
+ * The body `POST /v1/events` accepts. `ownerId`, `organizationId`, `id` and
+ * `createdAt` are the server's to assign, and sending them is rejected.
  */
 export interface EventCreate {
   title: string;
@@ -88,9 +70,7 @@ export interface EventCreate {
 }
 
 /**
- * POST /v1/events - publishes an event owned by the signed-in user.
- *
- * Requires a session: throws ApiError 401 when there is none, or when the cookie
- * does not verify.
+ * POST /v1/events - publishes an event owned by the signed-in user. Throws ApiError
+ * 401 without a session, or when the cookie does not verify.
  */
 export const createEvent = (input: EventCreate) => post<Event>('/events', input);

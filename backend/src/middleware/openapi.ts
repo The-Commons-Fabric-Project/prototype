@@ -5,25 +5,18 @@ import { fileURLToPath } from 'node:url';
 import * as OpenApiValidator from 'express-openapi-validator';
 
 /**
- * Wires src/docs/api/openapi.yaml into the request pipeline.
+ * Wires src/docs/api/openapi.yaml into the request pipeline: parameters are
+ * type-checked and coerced, bodies are checked against their schema, and
+ * undocumented paths or methods are refused before any handler runs.
  *
- * The document is the contract, so validation is driven from it rather than
- * restated in the handlers: query and path parameters are type-checked and
- * coerced, request bodies are checked against EventCreate (whose
- * `unevaluatedProperties: false` is what rejects a smuggled ownerId), and paths
- * or methods the document does not describe are refused before any handler runs.
- *
- * The validator writes no error body of its own - failures are thrown and land in
- * middleware/problemDetails.ts.
+ * Failures are thrown rather than written, and land in problemDetails.ts.
  */
 
 const moduleDir = path.dirname(fileURLToPath(import.meta.url));
 
 /**
- * `tsc` compiles TypeScript and copies nothing else, so the YAML never lands in
- * dist/. Prefer a copy sitting next to the compiled output if a build ever starts
- * producing one, and otherwise read the source document, which is where it lives
- * both under tsx in development and under node dist/ today.
+ * `tsc` copies nothing but TypeScript, so the YAML never lands in dist/. Prefers a
+ * copy next to the compiled output should a build ever start producing one.
  */
 function resolveSpecPath(): string {
   const candidates = [
@@ -43,10 +36,8 @@ export function openApiValidator(isDevelopment: boolean) {
     apiSpec: resolveSpecPath(),
     validateRequests: true,
 
-    // Loud in development so a handler that forgets to resolve organizationId fails
-    // immediately. In production the same violation is logged rather than thrown:
-    // responses are validated per row, so one organization with a malformed contact
-    // would otherwise turn the whole event list into a 500 for every visitor.
+    // Thrown in development so a bad response fails immediately; logged in
+    // production, where one malformed row would otherwise 500 the whole list.
     validateResponses: isDevelopment
       ? true
       : {

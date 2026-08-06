@@ -5,17 +5,8 @@ import { Prisma } from '../generated/prisma/client.js';
 import { requireAuth } from '../middleware/auth.js';
 import { badRequest, notFound, unauthorized } from '../utils/problems.js';
 
-/**
- * Routes for the `events` table. Mounted under /v1 in app.ts.
- *
- * Request shapes are not re-checked here - express-openapi-validator has already
- * rejected anything the document does not allow, and has coerced query and path
- * parameters to their declared types. What is left is the rules JSON Schema cannot
- * express (an inverted query window) and resolving the owner's organization.
- */
 export const eventsRouter = Router();
 
-/** Prisma row plus the joined column that `organizationId` is derived from. */
 type EventRow = Awaited<ReturnType<typeof prisma.event.findMany>>[number] & {
   owner: { organizationId: number };
 };
@@ -25,11 +16,7 @@ type EventRow = Awaited<ReturnType<typeof prisma.event.findMany>>[number] & {
  *
  * Timestamps are converted explicitly: response validation inspects the object
  * handed to res.json rather than the serialised JSON, so a Date would fail
- * `type: string` even though it would have serialised to a valid date-time.
- *
- * `organizationId` is the DBML relationship events.owner_id -> users.organization_id
- * resolved server-side. The events table has no organization column, so this
- * follows the owner's current organization.
+ * `type: string`.
  */
 const toEvent = (row: EventRow) => ({
   id: row.id,
@@ -45,7 +32,6 @@ const toEvent = (row: EventRow) => ({
   createdAt: row.createdAt.toISOString(),
 });
 
-/** One query, one join - never a lookup per event. */
 const withOwnerOrganization = { owner: { select: { organizationId: true } } } as const;
 
 /**
@@ -63,17 +49,12 @@ eventsRouter.get('/events', async (req: Request, res: Response, next: NextFuncti
     const start = startDate ? new Date(startDate) : new Date();
     const end = endDate ? new Date(endDate) : undefined;
 
-    // The schema cannot compare two parameters, so the document promises the
-    // server enforces this and answers 400. This is about the query window, not
-    // about any property of an event - events have only a start.
+    // JSON Schema cannot compare two parameters, so the document promises the
+    // server enforces this and answers 400.
     if (end && end <= start) {
       throw badRequest('endDate must be later than startDate.', '/query/endDate');
     }
 
-    // Events start in the window. This used to be an overlap test - endsAt >= start
-    // AND startsAt <= end - so a long event that began earlier and was still running
-    // was included. Events no longer have an end, so there is no interval to overlap
-    // and the only question left is where the event starts.
     const rows = await prisma.event.findMany({
       where: {
         startsAt: { gte: start, ...(end ? { lte: end } : {}) },
@@ -89,7 +70,6 @@ eventsRouter.get('/events', async (req: Request, res: Response, next: NextFuncti
   }
 });
 
-/** The body EventCreate admits. Optional fields are absent or null, never undefined-as-a-value. */
 type EventCreateBody = {
   title: string;
   startsAt: string;
@@ -103,12 +83,8 @@ type EventCreateBody = {
 /**
  * POST /v1/events
  *
- * The owner is the signed-in user and nothing else: requireAuth resolves it from
- * the signed session cookie, and EventCreate's `unevaluatedProperties: false`
- * rejects a body that tries to name a different one. Fields are copied across by
- * name rather than spreading req.body - the schema is what makes the spread safe
- * today, and picking fields explicitly is what keeps it safe if the schema ever
- * loosens.
+ * Publishes an event owned by the signed-in user - the owner comes from the
+ * session cookie, never from the body.
  */
 eventsRouter.post('/events', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -136,9 +112,8 @@ eventsRouter.post('/events', requireAuth, async (req: Request, res: Response, ne
 
     res.status(201).location(`/v1/events/${row.id}`).json(toEvent(row));
   } catch (err) {
-    // The session is signed and unexpired, but names a user who has since been
-    // deleted - so events.owner_id has nothing to point at. That is a dead
-    // session rather than a bad request, hence 401 and not 500.
+    // A valid session naming a user who has since been deleted, so owner_id has
+    // nothing to point at. A dead session rather than a bad request.
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2003') {
       next(unauthorized('The user for this session no longer exists.'));
       return;
@@ -147,9 +122,7 @@ eventsRouter.post('/events', requireAuth, async (req: Request, res: Response, ne
   }
 });
 
-/**
- * GET /v1/events/{eventId}
- */
+/** GET /v1/events/{eventId} */
 eventsRouter.get('/events/:eventId', async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Already validated and coerced to an integer >= 1 by the document.

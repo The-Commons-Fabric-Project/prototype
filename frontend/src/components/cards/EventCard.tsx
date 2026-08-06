@@ -6,42 +6,20 @@ import InlineDate from '../chips/InlineDate';
 import Tag from '../chips/Tag';
 import Icon from '../../assets/Icons';
 
-/** Event props now live in the event type */
 type EventCardProps = {
   event: Event;
   /**
-   * The publishing organization's name.
-   *
-   * Events carry only `organizationId`, and this component stays presentational
-   * rather than looking the name up itself - that keeps it usable from Storybook
-   * without a QueryClientProvider. The parent resolves it with useOrgLookup.
+   * Resolved by the parent with useOrgLookup, so this stays presentational and
+   * usable from Storybook without a QueryClientProvider.
    */
   orgName?: string;
   onClick: () => void;
   idx: number;
-  // /** Month of the event as a string */
-  // month: string;
-  // /** Date of the event */
-  // day: number;
-  // /** Event title */
-  // title: string;
-  // /** Host organization (optional) */
-  // organization?: string;
-  // description?: string;
-  // time: string;
-  // location?: string;
-  // /** array of tags for the event */
-  // tags?: EventTagKey[];
-  // thumbnailUrl?: string;
-  // onClick?: () => void;
 };
-// ===========================================================================
-// Event card
-// ===========================================================================
+
 export default function EventCard({ event, orgName, onClick, idx }: EventCardProps) {
   return (
     <div onClick={onClick} className={`cf-card-hover bg-white border border-slate-200 rounded-[8px] cursor-pointer flex flex-col p-[18px] gap-[10px] animate-[cf-stagger_0.35s_ease_both]`} style={{ animationDelay: `${idx * 0.04}s` }}>
-      {/* Tags now live inside the card (no image) */}
       {(requiresRegistration(event) || needsVolunteers(event)) && (
         <div className="flex flex-wrap gap-1.5">
           {requiresRegistration(event) && <Tag variant="solid">Registration</Tag>}

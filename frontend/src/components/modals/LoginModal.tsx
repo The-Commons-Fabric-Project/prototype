@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Modal, { ModalHeader } from './Modal';
 import LoginForm, { type LoginFormHeader } from './LoginForm';
-// import { useAuth } from '../../hooks/useAuth';
 
 export type LoginModalProps = {
   onClose: () => void,
@@ -12,9 +11,7 @@ export type LoginModalProps = {
 export default function LoginModal({
   onClose,
 }: LoginModalProps) {
-  // const auth = useAuth();
-  const [header, setHeader] = useState<LoginFormHeader>({title: "Log in", subtitle: undefined}); // login | password | email
-  // const [error, setError] = useState("");
+  const [header, setHeader] = useState<LoginFormHeader>({title: "Log in", subtitle: undefined});
 
   const updateHeader = (e: LoginFormHeader) => {
     setHeader({...e})
