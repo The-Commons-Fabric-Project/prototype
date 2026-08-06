@@ -24,7 +24,6 @@
 
    which outputs a 64-character string to the terminal. Copy the string to your clipboard and paste it into the local env file `./.env` at the `SESSION_SECRET` field.
 
-
 4. Initialize the Prisma database:
 
    ```bash
