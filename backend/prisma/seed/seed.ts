@@ -48,6 +48,7 @@ interface SeedEvent {
   title: string;
   ownerId: number;
   startsAt: string;
+  endsAt: string;
   location: string | null;
   description: string | null;
   thumbnail: string | null;
@@ -184,8 +185,15 @@ function validate(raw: unknown): string[] {
     }
 
     const startsAt = typeof event.startsAt === 'string' ? new Date(event.startsAt) : null;
+    const endsAt = typeof event.endsAt === 'string' ? new Date(event.endsAt) : null;
     if (!startsAt || Number.isNaN(startsAt.getTime())) {
       problems.push(`${at}: startsAt ${JSON.stringify(event.startsAt)} is not an ISO 8601 datetime`);
+    }
+    if (!endsAt || Number.isNaN(endsAt.getTime())) {
+      problems.push(`${at}: endsAt ${JSON.stringify(event.endsAt)} is not an ISO 8601 datetime`);
+    }
+    if (startsAt && endsAt && !Number.isNaN(startsAt.getTime()) && !Number.isNaN(endsAt.getTime())) {
+      if (endsAt <= startsAt) problems.push(`${at}: endsAt must be after startsAt`);
     }
 
     for (const field of ['location', 'description', 'thumbnail'] as const) {
@@ -299,6 +307,7 @@ async function main() {
           title: event.title,
           ownerId: event.ownerId,
           startsAt: new Date(event.startsAt),
+          endsAt: new Date(event.endsAt),
           location: event.location,
           description: event.description,
           thumbnail: event.thumbnail,

@@ -38,6 +38,7 @@ model Event {
   title            String
   ownerId          Int      @map("owner_id")
   startsAt         DateTime @map("starts_at")
+  endsAt           DateTime @map("ends_at")
   location         String?
   description      String?
   thumbnail        String? // file path of image e.g. ./public/event_images/example.jpg
