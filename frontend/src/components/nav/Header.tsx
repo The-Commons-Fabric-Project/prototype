@@ -80,7 +80,7 @@ export default function Header() {
               buttons is correct. Rendering the signed-out pair would flash "Log in"
               at an already signed-in user on every refresh, so hold the space instead. */}
           {session.isLoading ? (
-            <div className="h-[34px] w-40" aria-hidden />
+            <div className="h-8.5 w-40" aria-hidden />
           ) : session.isAuthenticated ? (
             <>
               <span className="text-[13px] text-ink font-semibold max-w-40 truncate">{session.user?.fullname}</span>
