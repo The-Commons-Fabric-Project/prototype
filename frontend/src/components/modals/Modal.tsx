@@ -21,13 +21,11 @@ export default function Modal({
   return (
     <div
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-5 bg-black/45 backdrop-blur-xs animate-fade"
-      // style={{ animation: "cf-fade .16s ease" }}
+      className="fixed inset-0 z-100 flex items-center justify-center p-5 bg-black/45 backdrop-blur-xs animate-fade"
     >
       <div
         role="dialog" aria-modal="true"
-        className="w-full max-h-[88vh] overflow-y-auto bg-white rounded-[10px] border border-gray-200 shadow-[0_16px_40px_rgba(0,0,0,0.2)]"
-        style={{ maxWidth: width, animation: "cf-pop .18s ease" }}
+        className={`w-full max-w-[${width}px] max-h-[88vh] overflow-y-auto bg-white rounded-md border border-gray-200 shadow-[0_16px_40px_rgba(0,0,0,0.2)] animate-pop`}
       >
         {children}
       </div>

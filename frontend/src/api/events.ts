@@ -5,6 +5,7 @@
 
 import { get, post } from './client';
 import type { Event } from '../utils/types/events';
+import type { components } from './openapi';
 
 /**
  * Time window and organization filter for listEvents. Timestamps in "YYYY-MM-DD" or
@@ -58,16 +59,17 @@ export const getEvent = (eventId: number) => get<Event>(`/events/${eventId}`);
  * The body `POST /v1/events` accepts. `ownerId`, `organizationId`, `id` and
  * `createdAt` are the server's to assign, and sending them is rejected.
  */
-export interface EventCreate {
-  title: string;
-  /** RFC 3339. */
-  startsAt: string;
-  location?: string | null;
-  description?: string | null;
-  thumbnail?: string | null;
-  registrationLink?: string | null;
-  volunteerContact?: string | null;
-}
+export type EventCreate = components["schemas"]["EventCreate"];
+// {
+//   title: string;
+//   /** RFC 3339. */
+//   startsAt: string;
+//   location?: string | null;
+//   description?: string | null;
+//   thumbnail?: string | null;
+//   registrationLink?: string | null;
+//   volunteerContact?: string | null;
+// }
 
 /**
  * POST /v1/events - publishes an event owned by the signed-in user. Throws ApiError

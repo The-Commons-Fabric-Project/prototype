@@ -1,1 +1,3 @@
-This is for mock data and interacting with a mock backend
+# Mock data and interacting with a mock backend
+
+TODO: delete this folder now that API is implemented?

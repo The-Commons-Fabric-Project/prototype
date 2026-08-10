@@ -15,24 +15,35 @@ import { useCreateEvent } from "../../hooks/useEvents";
 import { ApiError } from "../../api/client";
 import type { Event } from "../../utils/types/events";
 import type { User } from "../../utils/types/users";
+import { EventCreate } from "../../api/events";
 
 /**
  * What this form collects - deliberately not derived from `Event`. The form takes
- * separate date and time inputs and registration toggles; the API takes one
+ * separate startDate and startTime inputs and registration toggles; the API takes one
  * `startsAt` and infers registration from the link. The submit handler converts.
  */
-export type CreateEventFormData = {
-  title: string;
+type EventStringFields = {
+  /**
+   * title: string;
+   * startsAt: string;
+   * endsAt: string;
+   * location: string;
+   * description: string;
+   * registrationLink: string;
+   * volunteerContact: string;
+   */
+  [K in keyof EventCreate]-?: NonNullable<EventCreate[K]>
+}
+
+type CreateEventFormData = Omit<EventStringFields, "startsAt" | "endsAt" | "thumbnail"> & {
   /** "YYYY-MM-DD", straight from <input type="date">. */
-  date: string;
+  startDate: string;
   /** "HH:MM", straight from <input type="time">. */
-  time: string;
-  location: string;
-  description: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
   registrationRequired: boolean;
-  registrationLink: string;
   volunteersNeeded: boolean;
-  volunteerContact: string;
 };
 
 type EventFormErrors = Partial<CreateEventFormData>;
@@ -51,7 +62,10 @@ export default function CreateEventModal({
 }: CreateEventModalProps) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<CreateEventFormData>({
-    title: "", date: "", time: "", location: "", description: "",
+    title: "", 
+    startDate: "", startTime: "", 
+    endDate: "", endTime: "", 
+    location: "", description: "",
     registrationRequired: false, registrationLink: "",
     volunteersNeeded: false, volunteerContact: "",
   });
@@ -70,7 +84,8 @@ export default function CreateEventModal({
     createEvent.mutate(
       {
         title: form.title.trim(),
-        startsAt: fromDateAndTime(form.date, form.time),
+        startsAt: fromDateAndTime(form.startDate, form.startTime),
+        endsAt: fromDateAndTime(form.endDate, form.endTime),
         location: blank(form.location),
         description: blank(form.description),
         registrationLink: form.registrationRequired ? blank(form.registrationLink) : null,
@@ -93,13 +108,13 @@ export default function CreateEventModal({
   const setF = (patch: Partial<CreateEventFormData>) => setForm((f) => ({ ...f, ...patch }));
 
   const validate = () => {
-    const e: Partial<CreateEventFormData> = {};
+    const e: EventFormErrors = {};
     if (!form.title?.trim()) e.title = "Title is required.";
-    if (!form.date) e.date = "Event date is required.";
-    if (!form.time) e.time = "Event time is required.";
+    if (!form.startDate) e.startDate = "Event startDate is required.";
+    if (!form.startTime) e.startTime = "Event startTime is required.";
     if (!form.location?.trim()) e.location = "Location is required.";
     if (form.registrationRequired && !form.registrationLink?.trim()) e.registrationLink = "Add the link people register through.";
-    if (form.volunteersNeeded && !EMAIL_RE.test(form.volunteerContact as string)) e.volunteerContact = "Add a valid contact email for volunteers.";
+    if (form.volunteersNeeded && !EMAIL_RE.test(form.volunteerContact)) e.volunteerContact = "Add a valid contact email for volunteers.";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -111,7 +126,7 @@ export default function CreateEventModal({
       {/* TODO: name the organization, not the person - resolve it with useOrgLookup. */}
       <ModalHeader title="Create event" onClose={onClose}
         subtitle={`Hosting as ${session.fullname}`} />
-      <div className="px-[18px] py-[24px]">
+      <div className="px-4.5 py-[24px]">
         {step === 1 ? (
           <>
             <Field label="Title" error={errors.title}>
@@ -120,15 +135,15 @@ export default function CreateEventModal({
             </Field>
             <div className="flex gap-3">
               <div className="flex-1">
-                <Field label="Event date" error={errors.date}>
-                  <input type="date" className={inputStyle(errors.date)} value={form.date}
-                    onChange={(e) => setF({ date: e.target.value })} />
+                <Field label="Event startDate" error={errors.startDate}>
+                  <input type="startDate" className={inputStyle(errors.startDate)} value={form.startDate}
+                    onChange={(e) => setF({ startDate: e.target.value })} />
                 </Field>
               </div>
               <div className="flex-1">
-                <Field label="Event time" error={errors.time}>
-                  <input type="time" className={inputStyle(errors.time)} value={form.time}
-                    onChange={(e) => setF({ time: e.target.value })} />
+                <Field label="Event startTime" error={errors.startTime}>
+                  <input type="startTime" className={inputStyle(errors.startTime)} value={form.startTime}
+                    onChange={(e) => setF({ startTime: e.target.value })} />
                 </Field>
               </div>
             </div>
@@ -169,15 +184,15 @@ export default function CreateEventModal({
             <div className="bg-paper border border-line rounded-sm p-[16px] mb-[16px]"
             >
               <Summary label="Title" value={form.title} />
-              <Summary label="When" value={`${fmtPlainDate(form.date)} · ${fmtTime(form.time)}`} />
-              <Summary label="Where" value={form.location as string} />
+              <Summary label="When" value={`${fmtPlainDate(form.startDate)} · ${fmtTime(form.startTime)}`} />
+              <Summary label="Where" value={form.location} />
               <Summary label="Host" value={session.fullname} />
-              <Summary label="Registration" value={form.registrationRequired ? form.registrationLink as string : "Not required"} />
-              <Summary label="Volunteers" value={form.volunteersNeeded ? form.volunteerContact as string : "Not recruiting"} last />
+              <Summary label="Registration" value={form.registrationRequired ? form.registrationLink : "Not required"} />
+              <Summary label="Volunteers" value={form.volunteersNeeded ? form.volunteerContact : "Not recruiting"} last />
             </div>
-            <p className="text-[14px] font-[600] text-ink m-[0 0 14px]"
+            <p className="text-[14px] font-semibold text-ink m-[0 0 14px]"
             >Is this information correct?</p>
-            <div className="flex gap-[10px]"
+            <div className="flex gap-2.5"
             >
               <Button variant="ghost" className="flex-1" onClick={() => setStep(1)}
                 disabled={createEvent.isPending}>No, edit</Button>

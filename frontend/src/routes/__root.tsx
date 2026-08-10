@@ -6,15 +6,17 @@ import { useToast } from '../hooks/useOverlayContext'
 
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: () => {
-    const {toastMsg} = useToast();
-    return (
-      <div className="flex flex-col min-h-dvh w-dvw items-center">
-        <Header /> 
-        <Outlet />
-        <Toast message={toastMsg}/>
-      </div>
-    )
-  },
+  component: RootComponent,
   loader: ({context}) => context.auth
 })
+
+function RootComponent() {
+  const {toastMsg} = useToast();
+  return (
+    <div className="flex flex-col min-h-dvh w-dvw items-center">
+      <Header /> 
+      <Outlet />
+      <Toast message={toastMsg}/>
+    </div>
+  )
+}

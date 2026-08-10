@@ -57,7 +57,6 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
   };
 
   const goToPrev = () => { goToMonth(new Date(year, month - 1, 1)) };
-
   const goToNext = () => { goToMonth(new Date(year, month + 1, 1)) };
 
   const cells: (number | null)[] = [
@@ -65,21 +64,23 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ];
 
+  const arrowButtonStyles = "cf-press font-semibold text-sm px-3 py-1.5 rounded-md cursor-pointer border border-line leading-tight tracking-tight bg-transparent text-primary";
+
   return (
     <div className="bg-white border border-line rounded-2xl p-4.5">
       <div className="flex justify-between items-center mb-3.5">
-        <h3 className="font-display text-[20px] font-semibold text-ink m-0">
+        <h3 className="font-display text-xl font-semibold text-ink m-0">
           {MONTH_NAMES[month]} {year}
         </h3>
         <div className="flex gap-2">
           <button
-            className="cf-press font-semibold text-[14px] px-3 py-1.5 rounded-md cursor-pointer border border-line leading-[1.1] tracking-[0.1px] bg-transparent text-primary"
+            className={arrowButtonStyles}
             onClick={goToPrev}
           >
             ‹
           </button>
           <button
-            className="cf-press font-semibold text-[14px] px-3 py-1.5 rounded-md cursor-pointer border border-line leading-[1.1] tracking-[0.1px] bg-transparent text-primary"
+            className={arrowButtonStyles}
             onClick={goToNext}
           >
             ›
@@ -89,7 +90,7 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
 
       <div className="grid grid-cols-7 gap-1.5">
         {DAY_HEADERS.map(d => (
-          <div key={d} className="text-center text-[11px] font-bold text-muted tracking-[0.5px] pb-1">
+          <div key={d} className="text-center text-[11px] font-bold text-muted tracking-[0.5px] pb-1 tracking">
             {d}
           </div>
         ))}

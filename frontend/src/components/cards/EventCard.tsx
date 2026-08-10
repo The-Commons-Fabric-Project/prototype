@@ -19,7 +19,7 @@ type EventCardProps = {
 
 export default function EventCard({ event, orgName, onClick, idx }: EventCardProps) {
   return (
-    <div onClick={onClick} className={`cf-card-hover bg-white border border-slate-200 rounded-[8px] cursor-pointer flex flex-col p-[18px] gap-[10px] animate-[cf-stagger_0.35s_ease_both]`} style={{ animationDelay: `${idx * 0.04}s` }}>
+    <div onClick={onClick} className={`cf-card-hover bg-white border border-slate-200 rounded-lg cursor-pointer flex flex-col p-4.5 gap-2.5 animate-[cf-stagger_0.35s_ease_both]`} style={{ animationDelay: `${idx * 0.04}s` }}>
       {(requiresRegistration(event) || needsVolunteers(event)) && (
         <div className="flex flex-wrap gap-1.5">
           {requiresRegistration(event) && <Tag variant="solid">Registration</Tag>}
@@ -29,14 +29,14 @@ export default function EventCard({ event, orgName, onClick, idx }: EventCardPro
 
       <div className="min-w-0">
         <InlineDate date={toDateKey(event.startsAt)} className="block text-[12.5px] font-bold text-slate-500 mb-[4px] tracking-[0.3px]" />
-        <h3 className="font-sans text-[17px] font-bold text-slate-900 m-0 leading-[1.25]">{event.title}</h3>
+        <h3 className="font-sans text-[17px] font-bold text-slate-900 m-0 leading-tight">{event.title}</h3>
         <p className="text-[12.5px] text-slate-500 font-semibold mt-[4px] mb-0">{orgName}</p>
       </div>
 
-      {event.description && <p className="text-[13.5px] text-slate-500 leading-[1.5] m-0 line-clamp-2">{event.description}</p>}
+      {event.description && <p className="text-[13.5px] text-slate-500 leading-normal m-0 line-clamp-2">{event.description}</p>}
 
       {/* Time left, location right-aligned in the same row */}
-      <div className="flex items-center justify-between gap-[12px] text-[12.5px] text-slate-500 border-t border-slate-200 pt-[10px] mt-auto">
+      <div className="flex items-center justify-between gap-[12px] text-[12.5px] text-slate-500 border-t border-slate-200 pt-2.5 mt-auto">
         <span className="inline-flex items-center gap-1.5"><Icon name="clock" size={14} /> {fmtTime(toTimeKey(event.startsAt))}</span>
         <span className="inline-flex items-center gap-1.5 text-right min-w-0">
           <Icon name="pin" size={14} /> <span className="overflow-hidden text-ellipsis whitespace-nowrap">{event.location}</span>

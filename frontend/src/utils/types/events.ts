@@ -1,3 +1,7 @@
+import type { paths, components } from '../../api/openapi';
+
+export type Event = components["schemas"]["Event"];
+
 export const EVENT_TAGS = {
   "Registration": {
     label: "Registration",
@@ -22,22 +26,22 @@ export type EventTagInfo = (typeof EVENT_TAGS)[EventTag]
  * toDateKey/toTimeKey in utils/datetime.ts for the "YYYY-MM-DD" and "HH:MM" strings
  * the formatters and DateChip expect.
  */
-export type Event = {
-  id: number;
-  ownerId: number;
-  /** Resolved server-side by following ownerId. */
-  organizationId: number;
-  title: string;
-  /** RFC 3339 timestamp. */
-  startsAt: string;
-  location: string | null;
-  description: string | null;
-  /** Server-relative path, e.g. ./public/event_images/example.jpg */
-  thumbnail: string | null;
-  registrationLink: string | null;
-  volunteerContact: string | null;
-  createdAt: string;
-};
+// export type Event = {
+//   id: number;
+//   ownerId: number;
+//   /** Resolved server-side by following ownerId. */
+//   organizationId: number;
+//   title: string;
+//   /** RFC 3339 timestamp. */
+//   startsAt: string;
+//   location: string | null;
+//   description: string | null;
+//   /** Server-relative path, e.g. ./public/event_images/example.jpg */
+//   thumbnail: string | null;
+//   registrationLink: string | null;
+//   volunteerContact: string | null;
+//   createdAt: string;
+// };
 
 /**
  * Derived rather than stored: an event needs registration exactly when it has a link
