@@ -1,4 +1,4 @@
-import type { Org } from '../utils/types/orgs'
+import type { Org } from '../api/orgs'
 
 export const SEED_ORGS: Org[] = [
   {

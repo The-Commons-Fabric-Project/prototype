@@ -8,14 +8,13 @@ import Button from "../controls/Button";
 import Toggle from "../controls/Toggle";
 import Summary from "../chips/Summary";
 
-import { EMAIL_RE } from "../../utils/types/orgs";
+import { EMAIL_RE } from "../../utils/types/stringcheck";
 import { fmtTime, fmtPlainDate, fromDateAndTime } from "../../utils/datetime";
 import { useToast } from "../../hooks/useOverlayContext";
 import { useCreateEvent } from "../../hooks/useEvents";
 import { ApiError } from "../../api/client";
-import type { Event } from "../../utils/types/events";
-import type { User } from "../../utils/types/users";
-import { EventCreate } from "../../api/events";
+import type { Event, EventCreate } from "../../api/events";
+import type { User } from "../../api/auth";
 
 /**
  * What this form collects - deliberately not derived from `Event`. The form takes

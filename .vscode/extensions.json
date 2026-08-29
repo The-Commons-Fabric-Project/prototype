@@ -5,6 +5,7 @@
         "dbaeumer.vscode-eslint",
         "ms-vscode-remote.vscode-remote-extensionpack",
         "prisma.prisma",
-        "dbdiagram.dbdiagram-vscode"
+        "dbdiagram.dbdiagram-vscode",
+        "fanaticpythoner.better-todo-tree"
     ]
 }

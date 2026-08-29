@@ -114,7 +114,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/events/{eventId}": {
+    [path: `/events/${string}`]: {
         parameters: {
             query?: never;
             header?: never;
@@ -153,7 +153,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/organizations/{organizationId}": {
+    [path: `/organizations/${string}`]: {
         parameters: {
             query?: never;
             header?: never;

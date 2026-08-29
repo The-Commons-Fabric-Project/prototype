@@ -1,12 +1,17 @@
-This is for interacting with the backend
+# API for interacting with the backend
 
 The peer of `mocks/`, which interacts with a mock backend instead. Flows move
 from there to here as they are wired up; when `mocks/` is empty it can go.
 
-- `client.ts` — the only place that calls `fetch`. Everything else in this
+## File Structure
+
+- `client.ts` — the **only** place that calls `fetch`. Everything else in this
   folder goes through it. It prefixes `/v1`, sends the session cookie, and turns
   an `application/problem+json` error into a typed `ApiError`.
-- `auth.ts` — the `/v1/auth/*` operations, one function per endpoint.
+- Each file listed corresponds to a group of `v1/[pathname]/` paths as well as a component of the data model.
+  - `auth.ts` - `/v1/auth/*` operations, one function per endpoint. Model component: `User`
+  - `events.ts` - `v1/events` operations, component: `Event`
+  - `organizations.ts` - `v1/organizations` operations, component: `Organization`
 
 Two conventions worth keeping:
 
@@ -20,6 +25,12 @@ and return what it gave back, throwing `ApiError` otherwise. Deciding what a
 failure *means* — that a 401 from `/auth/profile` is a signed-out visitor rather
 than a fault — belongs to the caller, e.g. `hooks/useAuth.tsx`.
 
-The API these mirror is defined in `backend/src/docs/api/openapi.yaml`. That
+API defined in `backend/src/docs/api/openapi.yaml` and mirrored in `./openapi.d.ts`. That
 document is the contract; types here should match it, and it in turn follows
 `backend/src/docs/db/schema.dbml`.
+
+To update the API typescript mirror, run:
+
+```bash
+npx openapi-typescript
+```

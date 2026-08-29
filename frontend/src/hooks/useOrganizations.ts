@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
 
 import { listOrganizations } from '../api/organizations';
-import type { Org } from '../utils/types/orgs';
+import type { Org } from '../api/orgs';
 
 export const organizationsQueryKey = ['organizations'] as const;
 

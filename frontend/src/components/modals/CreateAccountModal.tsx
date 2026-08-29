@@ -8,7 +8,7 @@
  */
 
 import { useState } from "react";
-import { EMAIL_RE } from "../../utils/types/orgs";
+import { EMAIL_RE } from "../../utils/types/stringcheck";
 import Modal, { ModalHeader } from "./Modal";
 import Field from "../controls/Field";
 import Button from "../controls/Button";
@@ -77,15 +77,15 @@ export default function CreateAccountModal({ onClose }: CreateAccountModalProps)
         {step === 1 ? (
           <>
             <Field label="Organization name" error={errors.name}>
-              <input className={`w-full px-[11px] py-[9px] rounded-md text-sm font-sans outline-none ${errors.name ? 'border border-red-500' : 'border border-slate-300'} bg-white text-slate-900`} value={formData.name}
+              <input className={`w-full px-2.75 py-2.25 rounded-md text-sm font-sans outline-none ${errors.name ? 'border border-red-500' : 'border border-slate-300'} bg-white text-slate-900`} value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Ottawa Civic Tech" />
             </Field>
             <Field label="Email" error={errors.email}>
-              <input className={`w-full px-[11px] py-[9px] rounded-md text-sm font-sans outline-none ${errors.email ? 'border border-red-500' : 'border border-slate-300'} bg-white text-slate-900`} value={formData.email}
+              <input className={`w-full px-2.75 py-2.25 rounded-md text-sm font-sans outline-none ${errors.email ? 'border border-red-500' : 'border border-slate-300'} bg-white text-slate-900`} value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="you@org.example" />
             </Field>
             <Field label="Password" error={errors.password}>
-              <input type="password" className={`w-full px-[11px] py-[9px] rounded-md text-sm font-sans outline-none ${errors.password ? 'border border-red-500' : 'border border-slate-300'} bg-white text-slate-900`} value={formData.password}
+              <input type="password" className={`w-full px-2.75 py-2.25 rounded-md text-sm font-sans outline-none ${errors.password ? 'border border-red-500' : 'border border-slate-300'} bg-white text-slate-900`} value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })} placeholder="At least 6 characters" />
             </Field>
             <Button className="w-full mt-1" onClick={() => { if (validate()) setStep(2); }}>Continue</Button>
@@ -96,7 +96,7 @@ export default function CreateAccountModal({ onClose }: CreateAccountModalProps)
               <Summary label="Organization" value={formData.name} />
               <Summary label="Email" value={formData.email} last />
             </div>
-            <p className="text-sm font-semibold text-slate-900 mb-[14px]">Is this information correct?</p>
+            <p className="text-sm font-semibold text-slate-900 mb-3.5">Is this information correct?</p>
             <div className="flex gap-2.5">
               <Button variant="ghost" className="flex-1" onClick={() => setStep(1)}>No, edit</Button>
               <Button className="flex-1" onClick={handleCreate}>Yes, create</Button>

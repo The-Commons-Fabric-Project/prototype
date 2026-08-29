@@ -9,7 +9,7 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
-import type { AuthAttemptStatus, AuthState, User } from '../utils/types/users'
+import type { AuthAttemptStatus, AuthState, User } from '../api/auth'
 import * as authApi from '../api/auth'
 import { ApiError } from '../api/client'
 

@@ -3,19 +3,50 @@
  * `Event` schema, so a conversion step here would mean the two have drifted.
  */
 
-import { get, post } from './client';
-import type { Event } from '../utils/types/events';
-import type { components } from './openapi';
+import { get, post, type QueryString } from './client';
+import type { components as c, operations as op } from './openapi.gen';
+
+/**
+ * Mirrors the `Event` schema in `backend/src/docs/api/openapi.yaml`. A `GET /v1/events` response is this type with no conversion.
+ * 
+ * - `organizationId`: resolved server-side thru `ownerId`
+ * - `thumbnail`: server-relative path, e.g. `./public/event_images/example.jpg`
+ *
+ * Use `toDateKey`/`toTimeKey` in utils/datetime.ts for the `YYYY-MM-DD` and `HH:MM` strings the formatters and DateChip expect.
+ */
+export type Event = c["schemas"]["Event"];
+export type EventId = c["schemas"]["EventId"];
+export type Timestamp = c["schemas"]["Timestamp"];
+
+export const EVENT_TAGS = {
+  "Registration": {
+    label: "Registration",
+    color: "rgb(80, 122, 189)",
+    background: "rgb(231, 238, 247)",
+  },
+  "Volunteers wanted": {
+    label: "Volunteers wanted",
+    color: "rgb(242, 165, 65)",
+    background: "rgba(242, 165, 65, 0.14)",
+  },
+} as const
+
+export type EventTag = keyof typeof EVENT_TAGS
+export type EventTagInfo = (typeof EVENT_TAGS)[EventTag]
+
+/**
+ * Derived rather than stored: an event needs registration exactly when it has a link
+ * to register through, so the two cannot fall out of sync.
+ */
+export const requiresRegistration = (event: Event) => Boolean(event.registrationLink);
+export const needsVolunteers = (event: Event) => Boolean(event.volunteerContact);
+
 
 /**
  * Time window and organization filter for listEvents. Timestamps in "YYYY-MM-DD" or
- * RFC 3339 format; startDate defaults server-side to now, endDate is unbounded.
+ * RFC 3339 format; startDate defaults server-side to now (current date), endDate is unbounded.
  */
-export interface EventQuery {
-  startDate?: string;
-  endDate?: string;
-  organizationId?: number;
-}
+export type EventQuery = op["listEvents"]["parameters"]["query"];
 
 /**
  * Widens a "YYYY-MM-DD" date to the full timestamp the document requires.
@@ -39,7 +70,7 @@ function toTimestamp(value: string, edge: 'start' | 'end') {
  * Builds the query string, dropping empty values - the date inputs use "" to mean
  * unset, and `startDate=` would fail validation rather than read as absent.
  */
-function queryString(query: EventQuery = {}) {
+function queryString(query: EventQuery = {}): QueryString | '' {
   const params = new URLSearchParams();
   if (query.startDate) params.set('startDate', toTimestamp(query.startDate, 'start'));
   if (query.endDate) params.set('endDate', toTimestamp(query.endDate, 'end'));
@@ -56,20 +87,12 @@ export const listEvents = (query?: EventQuery) => get<Event[]>(`/events${querySt
 export const getEvent = (eventId: number) => get<Event>(`/events/${eventId}`);
 
 /**
- * The body `POST /v1/events` accepts. `ownerId`, `organizationId`, `id` and
+ * The body `POST /v1/events` accepts. 
+ * - `ownerId`, `organizationId`, `id` and
  * `createdAt` are the server's to assign, and sending them is rejected.
+ * - `startsAt` RFC 3339 timestamp
  */
-export type EventCreate = components["schemas"]["EventCreate"];
-// {
-//   title: string;
-//   /** RFC 3339. */
-//   startsAt: string;
-//   location?: string | null;
-//   description?: string | null;
-//   thumbnail?: string | null;
-//   registrationLink?: string | null;
-//   volunteerContact?: string | null;
-// }
+export type EventCreate = c["schemas"]["EventCreate"];
 
 /**
  * POST /v1/events - publishes an event owned by the signed-in user. Throws ApiError

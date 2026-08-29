@@ -6,6 +6,18 @@
  * the httpOnly session cookie travels on its own and there is no CORS to configure.
  */
 
+import type { paths } from "./openapi.gen";
+import type { Concat } from "../utils/types/stringcheck";
+
+type ApiPath = keyof paths & string;
+type Subpath = Concat<"/", `${string}`>; //`/${string}`;
+export type QueryString = Concat<"?", `${string}`>;
+type IsParameterizedPath<P> = P extends `${ApiPath}${Subpath}` ? P : never;
+
+export type ParameterizedApiPath = IsParameterizedPath<ApiPath>;
+
+export type ApiRequestPath = ApiPath | Concat<ApiPath, QueryString>;
+
 /** Path prefix. Also the document's server URL - see backend/src/docs/api/openapi.yaml. */
 const BASE = '/v1';
 
@@ -39,7 +51,7 @@ export class ApiError extends Error {
   }
 }
 
-interface ProblemBody {
+type ProblemBody = {
   title?: string;
   status?: number;
   detail?: string;
@@ -73,7 +85,7 @@ async function toApiError(response: Response): Promise<ApiError> {
  * `credentials: 'include'` is redundant while same-origin, and keeps auth working
  * if VITE_API_TARGET ever points elsewhere.
  */
-export async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+export async function request<T>(path: ApiRequestPath, init: RequestInit = {}): Promise<T> {
   let response: Response;
   try {
     response = await fetch(`${BASE}${path}`, {
@@ -102,7 +114,7 @@ export async function request<T>(path: string, init: RequestInit = {}): Promise<
   return (await response.json()) as T;
 }
 
-export const post = <T>(path: string, body?: unknown) =>
+export const post = <T>(path: ApiRequestPath, body?: unknown) =>
   request<T>(path, { method: 'POST', body: body === undefined ? undefined : JSON.stringify(body) });
 
-export const get = <T>(path: string) => request<T>(path, { method: 'GET' });
+export const get = <T>(path: ApiRequestPath) => request<T>(path, { method: 'GET' });

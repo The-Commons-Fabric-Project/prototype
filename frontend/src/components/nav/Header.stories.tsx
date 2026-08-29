@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react';
 
 import Header from './Header';
-import type { AuthState, User } from '../../utils/types/users';
+import type { AuthState, User } from '../../api/users';
 
 const meta = {
   component: Header,

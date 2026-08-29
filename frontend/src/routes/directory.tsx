@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import type { Org } from '../utils/types/orgs'
+import type { Org } from '../api/orgs'
 import type { Event } from '../utils/types/events'
 import { useEvents } from '../hooks/useEvents'
 import { useOrganizations } from '../hooks/useOrganizations'

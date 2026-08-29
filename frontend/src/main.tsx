@@ -9,7 +9,7 @@ import { routeTree } from './routeTree.gen'
 import './index.css'
 import { OverlayProvider, type OverlayState } from './hooks/useOverlayContext'
 
-import type { AuthState } from './utils/types/users'
+import type { AuthState } from './api/users'
 
 // const router = createRouter({ routeTree })
 

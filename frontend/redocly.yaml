@@ -1,0 +1,12 @@
+# Config file for openapi-typescript, NOT Redocly.
+# Refer to https://openapi-ts.dev/cli#flags but flags don't seem to work?
+
+apis:
+  core@v1:
+    root: ../backend/src/docs/api/openapi.yaml
+    x-openapi-ts:
+      output: ./src/api/openapi.gen.ts
+
+      # CLI flags don't seem to work
+      path-params-as-types: true
+      export-type: true
