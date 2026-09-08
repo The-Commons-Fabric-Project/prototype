@@ -1,3 +1,7 @@
+/**
+ * TODO: implement org search
+ */
+
 import { useState } from "react";
 import { PALETTE, SEED_ORGS } from "../data";
 import { S, T } from "../tokens";
@@ -67,6 +71,7 @@ export function DirectoryView({ onOpenProfile }: Props) {
   );
 }
 
+// equiv to OrgCard
 function OrgRow({ org, onOpenProfile }: { org: Organization; onOpenProfile: (id: number) => void }) {
   const hover = useHoverStyle({ borderColor: "#9A9A9A" });
   const pal = PALETTE[orgColorKey(SEED_ORGS.findIndex((o) => o.id === org.id))];

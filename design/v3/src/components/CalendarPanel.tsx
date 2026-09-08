@@ -1,3 +1,4 @@
+// has become a parent component to the calendar itself (prev version only had equiv of MonthGrid)
 import { useMemo, useState } from "react";
 import { PALETTE, SEED_ORGS } from "../data";
 import { S, T } from "../tokens";

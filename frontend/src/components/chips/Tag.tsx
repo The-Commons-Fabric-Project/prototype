@@ -1,9 +1,20 @@
 import type { TagVariant } from "../../utils/types/variants";
+import { PALETTE } from "../../utils/palette";
+import type { CSSProperties } from "react";
 
-const VARIANT_MAPS: Record<TagVariant, string> = {
-  solid: "bg-accent-soft text-ink border border-line",
-  outline: "bg-white text-ink border border-muted",
-}
+const tagStyles = (color: TagVariant): CSSProperties => {
+  const c = PALETTE[color];
+  return {
+    backgroundColor: c.tint,
+    color: c.text,
+    border: `1pt solid ${c.c1}`
+  } // `bg-["${c.tint}"] text-[${c.text}] border-[${c.c1}]`;
+};
+
+// {
+//   // solid: "bg-accent-soft text-ink border border-line",
+//   // outline: "bg-white text-ink border border-muted",
+// }
 
 type TagProps = {
   variant: TagVariant;
@@ -11,12 +22,13 @@ type TagProps = {
 } 
 
 export default function Tag({ 
-  variant = "solid",
+  variant = "purple",
   children,
 }: TagProps) {
   return (
     <span 
-      className={"inline-block px-2 py-1 rounded-[4px] text-[10.5px] font-semibold uppercase tracking-[0.06em] font-sans " + VARIANT_MAPS[variant]}
+      className={"inline-block px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider font-sans"}
+      style = {tagStyles(variant)}
     >{children}</span>
   );
 }

@@ -6,18 +6,21 @@ export const MONTHS_FULL = ["January", "February", "March", "April", "May", "Jun
 export const DOW = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 export const DOW_FULL = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 export const EMAIL_RE = /\S+@\S+\.\S+/;
-export const FREQ_LABEL: Record<RepeatFrequency, string> = { weekly: "week", biweekly: "two weeks", monthly: "month" };
+export const FREQ_LABEL: Record<RepeatFrequency, string> = { weekly: "week", biweekly: "two weeks", monthly: "month" }; // added
 
 /** Parse YYYY-MM-DD as a LOCAL date (new Date(iso) would parse as UTC and shift the day). */
+// no change
 export function parseDate(d: string): Date {
   const [y, m, day] = d.split("-").map(Number);
   return new Date(y, m - 1, day);
 }
 
+// added
 export function toIso(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+// no change
 export function ordinal(n: number): string {
   const s = ["th", "st", "nd", "rd"];
   const v = n % 100;
@@ -25,6 +28,7 @@ export function ordinal(n: number): string {
 }
 
 /** "Saturday, June 20th, 2026" */
+// no change
 export function fmtPlainDate(d: string): string {
   const dt = parseDate(d);
   return `${DOW_FULL[dt.getDay()]}, ${MONTHS_FULL[dt.getMonth()]} ${ordinal(dt.getDate())}, ${dt.getFullYear()}`;
@@ -101,6 +105,7 @@ export function linearGradient(dir: string, from: string, to: string): string {
  * emit the selected weekdays; monthly repeats the same date. The start date is
  * always included. Capped at 60 occurrences.
  */
+// added
 export function occurrenceDates(f: {
   date: string;
   recurring: boolean;

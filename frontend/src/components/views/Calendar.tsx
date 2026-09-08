@@ -4,10 +4,11 @@
  */
 
 import { useState, useMemo } from 'react'
-import type { Event } from '../../utils/types/events'
+import type { Event } from '../../api/events';
 
 import { parseDate, fmtTime, toTimeKey, monthBounds } from '../../utils/datetime';
 import { MONTHS_FULL as MONTH_NAMES, DOW as DAY_HEADERS } from '../../utils/types/dates';
+import { paletteForID } from '../../utils/palette';
 
 type CalendarViewProps = {
   events: Event[];
@@ -20,14 +21,6 @@ type CalendarViewProps = {
   /** Asks the route to fetch a new month. Called on every month navigation. */
   onWindowChange: (start: string, end: string) => void;
 };
-
-/** Takes the 12-hour string produced by fmtTime and drops a `:00`. */
-function formatTimeShort(time: string): string {
-  const match = time.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
-  if (!match) return time;
-  const [, h, m, period] = match;
-  return m === '00' ? `${h} ${period.toUpperCase()}` : `${h}:${m} ${period.toUpperCase()}`;
-}
 
 export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: CalendarViewProps) {
   // Seeded from the current window, falling back to today. The month decides which
@@ -107,19 +100,27 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
             {day !== null && (
               <>
                 <div className="text-xs font-semibold text-muted mb-1">{day}</div>
-                {(byDay[day] || []).map(event => (
-                  <div
-                    key={event.id}
-                    className="cf-press bg-primary text-white text-[10.5px] font-semibold rounded-sm px-1.5 py-0.75 mb-0.75 cursor-pointer truncate max-w-full"
-                    title={`${fmtTime(toTimeKey(event.startsAt))} ${event.title}`}
-                    onClick={() => onSelect(event)} // setSelectedEvent(event)}
-                  >
-                    {/* formatTimeShort matches a 12-hour string, so it needs fmtTime's
-                        output. It used to be handed the raw 24-hour value, where the
-                        regex never matched and "18:30" was rendered unformatted. */}
-                    {formatTimeShort(fmtTime(toTimeKey(event.startsAt)))} {event.title}
-                  </div>
-                ))}
+                {(byDay[day] || []).map(e => {
+                  const pal = paletteForID(e.organizationId);
+                  const t = toTimeKey(e.startsAt);
+                return (
+                  <div key={e.id}>
+                      <div
+                        onClick={() => onSelect(e)}
+                        title={`${fmtTime(t)} ${e.title}`}
+                        style={{
+                          background: `linear-gradient(90deg,${pal.c1},${pal.c2})`,
+                          height: 5,
+                          borderRadius: 2,
+                          marginBottom: 2,
+                          cursor: "pointer",
+                        }}
+                      />
+                      <div style={{ fontSize: 8, color: "var(--color-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: 2 }}>
+                        {`${fmtTime(t).replace(":00", "")} ${e.title}`}
+                      </div>
+                    </div>
+                )})}
               </>
             )}
           </div>

@@ -17,3 +17,7 @@ export const MONTHS_FULL = MONTHS_DATA.full;
 export const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"] as const;
 
 export const DOW_FULL = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"] as const;
+
+export type RepeatFrequency = "weekly" | "biweekly" | "monthly";
+
+export const FREQ_LABEL: Record<RepeatFrequency, string> = { weekly: "week", biweekly: "two weeks", monthly: "month" };

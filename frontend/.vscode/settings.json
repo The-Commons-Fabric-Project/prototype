@@ -7,5 +7,12 @@
   },
   "search.exclude": {
     "**/routeTree.gen.ts": true
-  }
+  },
+  "colorize.languages": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "CSS",
+    "markdown", "python"
+  ]
 } 

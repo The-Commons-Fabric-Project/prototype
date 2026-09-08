@@ -32,6 +32,7 @@ export function MonthGrid({ year, month, events, maxPerDay, onSelect }: Props) {
   ];
   while (cells.length % 7 !== 0) cells.push(null);
 
+  /** TODO: extract event chip to its own component */
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 1, background: T.color.line, border: `1px solid ${T.color.line}` }}>
       {DOW.map((d) => (

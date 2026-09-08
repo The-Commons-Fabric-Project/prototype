@@ -23,6 +23,7 @@ export interface Organization {
 
 export type RepeatFrequency = "weekly" | "biweekly" | "monthly";
 
+// TODO: check against API spec
 export interface CalendarEvent {
   id: number;
   title: string;
@@ -83,6 +84,7 @@ export interface CreateEventForm {
   volunteerContact: string;
 }
 
+// TODO: new type for calendar view settings
 export interface CommonsFabricCalendarProps {
   /** Primary accent. Design-system default #6F49E0. */
   accentColor?: string;

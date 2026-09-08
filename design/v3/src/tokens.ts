@@ -101,19 +101,19 @@ export const S = {
   error: { display: "block", marginTop: 5, fontSize: 10.5, color: T.color.danger, fontWeight: 700 } as CSSProperties,
 
   btnPrimary: (accent: string) =>
-    ({
-      background: accentGradient(accent),
-      color: "#fff",
-      border: "none",
-      padding: "9px 18px",
-      borderRadius: T.radius.md,
-      fontSize: 12,
-      fontWeight: 700,
-      textTransform: "uppercase",
-      letterSpacing: "0.02em",
-      cursor: "pointer",
-      fontFamily: T.font,
-    } as CSSProperties),
+  ({
+    background: accentGradient(accent),
+    color: "#fff",
+    border: "none",
+    padding: "9px 18px",
+    borderRadius: T.radius.md,
+    fontSize: 12,
+    fontWeight: 700,
+    textTransform: "uppercase",
+    letterSpacing: "0.02em",
+    cursor: "pointer",
+    fontFamily: T.font,
+  } as CSSProperties),
 
   btnSecondary: {
     background: T.color.surface,
@@ -142,16 +142,16 @@ export const S = {
   } as CSSProperties,
 
   modal: (maxWidth: number) =>
-    ({
-      width: "100%",
-      maxWidth,
-      maxHeight: "88vh",
-      overflowY: "auto",
-      background: T.color.surface,
-      borderRadius: T.radius.lg,
-      border: `1px solid ${T.color.ink}`,
-      animation: "cf-pop .18s ease",
-    } as CSSProperties),
+  ({
+    width: "100%",
+    maxWidth,
+    maxHeight: "88vh",
+    overflowY: "auto",
+    background: T.color.surface,
+    borderRadius: T.radius.lg,
+    border: `1px solid ${T.color.ink}`,
+    animation: "cf-pop .18s ease",
+  } as CSSProperties),
 
   toast: {
     position: "fixed",

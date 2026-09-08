@@ -12,11 +12,6 @@ export default meta;
 type Story = StoryObj<typeof Tag>;
 
 export const Basic: Story = {args: {
-  variant: "solid",
+  variant: "purple",
   children: "#tag"
 }};
-
-export const Outline: Story = {args: {
-  variant: "outline",
-  children: "come as you are"
-}}

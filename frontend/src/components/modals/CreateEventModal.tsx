@@ -8,7 +8,7 @@ import Button from "../controls/Button";
 import Toggle from "../controls/Toggle";
 import Summary from "../chips/Summary";
 
-import { EMAIL_RE } from "../../utils/types/stringcheck";
+import { EMAIL_RE } from "../../utils/stringcheck";
 import { fmtTime, fmtPlainDate, fromDateAndTime } from "../../utils/datetime";
 import { useToast } from "../../hooks/useOverlayContext";
 import { useCreateEvent } from "../../hooks/useEvents";

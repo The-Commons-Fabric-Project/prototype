@@ -3,6 +3,7 @@ import type { CalendarEvent, HostColorKey, HostPalette, Organization } from "./t
 /**
  * Commons Fabric design-system host colors. Organizations are assigned a color
  * by their index in SEED_ORGS, cycling through HOST_ORDER.
+ * TODO: add to variants.ts
  */
 export const PALETTE: Record<HostColorKey, HostPalette> = {
   green:  { c1:"#10C662", c2:"#90DF97", tint:"#EAF6EC", text:"#0D9E52", stops:["#10C662","#3ACE73","#64D685","#90DF97"] },

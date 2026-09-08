@@ -1,5 +1,4 @@
-import type { Event } from '../../utils/types/events'
-import { needsVolunteers, requiresRegistration } from '../../utils/types/events';
+import { type Event, needsVolunteers, requiresRegistration } from '../../api/events'
 import { fmtPlainDate, fmtTime, toDateKey, toTimeKey } from '../../utils/datetime';
 import DetailRow from '../chips/DetailRow';
 import Icon from '../../assets/Icons';
