@@ -9,6 +9,9 @@ import { useAuth } from '../../hooks/useAuth';
 import { useModal } from '../../hooks/useOverlayContext';
 import CreateAccountModal from '../modals/CreateAccountModal';
 
+import { COLOR_ORDER, PALETTE } from '../../utils/palette'
+const HEADER_STRIPE = COLOR_ORDER.map(x => PALETTE[x]["c1"]);
+
 // ref: https://github.com/david4473/Reciped/blob/main/src/components/Header.tsx
 
 /**
@@ -57,6 +60,12 @@ export default function Header() {
   return (
     <>
     <header className={`sticky top-0 z-50 w-full border-b border-line bg-paper/80 backdrop-blur-[10px] transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+      <div className="w-full flex gap-0.5">
+        {COLOR_ORDER.map((c) => (
+          <span key={c} className={`flex-1 h-0.75 bg-cf-${c}`}/>
+        ))}
+      </div>
+
       <div className="max-w-260 mx-auto px-6 py-3 flex items-center justify-between gap-4">
 
         {/* Logo */}

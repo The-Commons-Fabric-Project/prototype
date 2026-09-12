@@ -16,4 +16,14 @@ export function isEmailAddress(str: string): asserts str is EmailAddress {
   if (!EMAIL_RE.test(str)) throw new Error(`${str} is not a valid email address.`)
 }
 
+/** "The Council on Aging of Ottawa" -> "TCAO" (max 4 letters) */
+export function orgInitials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter((w) => /^[A-Za-z0-9]/.test(w))
+    .map((w) => w[0].toUpperCase())
+    .join("")
+    .slice(0, 4);
+}
+
 

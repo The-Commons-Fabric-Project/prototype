@@ -15,12 +15,12 @@ export const Default: Story = {
   args: {
     "org": {
       "id": 0,
-      "name": "name",
+      "name": "name of cool org",
       "logo": null,
-      "blurb": "blurb",
+      "blurb": "This organization does cool stuff, too cool to describe here",
       "tags": [],
-      "contact": "contact",
-      "website": "website"
+      "contact": "contact@website.org",
+      "website": "website.org"
     },
     "onClick": fn(),
     "idx": 0

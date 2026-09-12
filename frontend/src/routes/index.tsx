@@ -11,10 +11,10 @@ import { useModal } from '../hooks/useOverlayContext';
 import CreateEventModal from '../components/modals/CreateEventModal';
 import EventDetailModal from '../components/modals/EventDetailModal';
 import { monthBounds, toDateKey } from '../utils/datetime';
-import type { Event } from '../utils/types/events';
+import type { Event } from '../api/events';
 
 function Index() {
-  const [view, setView] = useState<'cards' | 'calendar'>('cards')
+  const [view, setView] = useState<'cards' | 'calendar'>('calendar')
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   // A window per view, deliberately not shared.
@@ -56,17 +56,18 @@ function Index() {
       <div className="w-full flex centered justify-between items-center mt-6">
       <div className="inline-flex bg-white border border-line p-1.25 rounded-md">
         <button
-          onClick={() => setView('cards')}
-          className={`text-[13px] rounded-lg font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
-        >
-          Card grid
-        </button>
-        <button
           onClick={() => setView('calendar')}
           className={`text-[13px] rounded-lg font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
         >
           Calendar
         </button>
+        <button
+          onClick={() => setView('cards')}
+          className={`text-[13px] rounded-lg font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
+        >
+          Card grid
+        </button>
+        
         </div>
 
         {/* If signed in, display create event button */}

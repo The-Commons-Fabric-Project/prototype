@@ -7,7 +7,7 @@
  */
 
 import type { paths } from "./openapi.gen";
-import type { Concat } from "../utils/types/stringcheck";
+import type { Concat } from "../utils/stringcheck";
 
 type ApiPath = keyof paths & string;
 type Subpath = Concat<"/", `${string}`>; //`/${string}`;

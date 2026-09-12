@@ -8,7 +8,7 @@
  */
 
 import { useState } from "react";
-import { EMAIL_RE } from "../../utils/types/stringcheck";
+import { EMAIL_RE } from "../../utils/stringcheck";
 import Modal, { ModalHeader } from "./Modal";
 import Field from "../controls/Field";
 import Button from "../controls/Button";

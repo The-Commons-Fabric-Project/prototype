@@ -1,0 +1,39 @@
+# V3 Integration Checklist
+
+- (`components`)
+  - `AboutView`- new component
+  - `CalendarPanel`- update existing
+    - `StepButton`- new
+    - `SpanToggle`- new
+  - `CreateAccountModal` - update existing
+  - `CreateEventModal` - update existing
+  - `DirectoryView`- update existing (`/routes` not `/components`)
+    - `OrgRow`- update existing
+  - `EventCardGrid`- update existing
+  - `EventDetailModal` - update existing
+    - `Row` - update existing
+  - `Footer` - new component
+  - `Header` - update existing
+  - `Icons` - update existing
+  - `LoginModal` - update existing
+  - `ModalShell` - update existing
+    - `CloseButton` - new, needed?  
+    - `Field`,`Toggle` - update existing
+    - `ToggleRow`, `SummaryRow` - check if exist
+  - `MonthGrid`- new component?
+  - `OrgFilterDropdown` - new component
+  - `OrgProfileView` - new component (and route?)
+  - `TimelineGrid` - new component
+    - `Block` - new component
+- `CommonsFabricCalendar.tsx` - main TSX file
+- (helpers)
+  - `data.ts`
+  - `timeline.ts`
+  - `tokens.ts`
+    - `T` = { ~~`color`~~, `radius`, `font`, `calendarBodyHeight`}
+    - `S: {key in S: CSSProperties}` = {}
+    - `accentGradient`
+    - `GLOBAL_CSS`
+  - `types.ts`
+  - `useHoverStyle.ts`
+  - `utils.ts`

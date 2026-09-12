@@ -1,28 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
-/* body {
-    background-color: rgb(247, 248, 250);
-    font-family: "Inter", Arial, sans-serif;
-    color: rgb(65, 65, 66);
-} */
-
 /* themes from updated wireframe */
 @theme {
-    --font-display: "Roboto", "Helvetica", Arial, sans-serif;
-    --font-body: "Roboto", "Helvetica", Arial, sans-serif;
+    --font-display: "Helvetica", Arial, sans-serif;
+    --font-body: "Helvetica", Arial, sans-serif;
     --font-sans: var(--font-body);
 
-    /* Grayscale palette */
-    --color-primary: #2b2b2b;
-    --color-accent: var(--color-primary);
-    --color-accent-soft: #ececec;
-    --color-ink: #1a1a1a;
-    --color-muted: #6e6e6e;
-    --color-line: #cfcfcf;
-    --color-paper: #f4f4f4;
-    --color-danger: #555555; 
-    
+    --color-primary: #2b2b2b; /* not in v3 design sys */
+    --color-ink: #262626;
+    --color-body: #6b6b6b;
+    --color-muted: #8a8a8a;
+    --color-faint: #B8B8B8;
+    --color-line: #D1D1D1;
+    --color-surface: #FAFAFA;
+    --color-surface-alt: #F5F5F5;
+    --color-field: #FFFFFF;
+    --color-track-off: #E8E8E8;
+    --color-paper: #f4f4f4; /* not in v3 design sys */
+    --color-danger: #f50a1e; 
+    --color-accent: #6f49e0;
+    --color-accent-soft: #b297d6;
+    --color-footer: #1E1E1E;
+    --color-footer-line: #333333;
+    --color-footer-text: #B8B8B8;
+    /* --color-overlay: rgba(38,38,38,0.55); */
+
+    --color-cf-green: #10c662;
+    --color-cf-blue: #4c6dc5;
+    --color-cf-purple: var(--color-accent);
+    --color-cf-red: #e2526c;
+    --color-cf-orange: #e67539;
+    --color-cf-yellow: #f8e056;
+
     /* layout from Figma */
     --spacing-2xs: 4px;
     --spacing-xs: 8px;
