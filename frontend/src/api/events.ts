@@ -3,6 +3,7 @@
  * `Event` schema, so a conversion step here would mean the two have drifted.
  */
 
+import { toDateTime } from '../utils/datetime';
 import { get, post, type QueryString } from './client';
 import type { components as c, operations as op } from './openapi.gen';
 
@@ -56,13 +57,15 @@ export type EventQuery = op["listEvents"]["parameters"]["query"];
  * when it ends for the reader rather than in UTC.
  */
 function toTimestamp(value: string, edge: 'start' | 'end') {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return value; // already a full timestamp
+  // if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return value; // already a full timestamp
 
   const [y, m, d] = value.split('-').map(Number);
   const date =
     edge === 'start'
       ? new Date(y, m - 1, d, 0, 0, 0, 0)
       : new Date(y, m - 1, d, 23, 59, 59, 999);
+
+  // console.log(date.toISOString());
   return date.toISOString();
 }
 
@@ -71,6 +74,7 @@ function toTimestamp(value: string, edge: 'start' | 'end') {
  * unset, and `startDate=` would fail validation rather than read as absent.
  */
 function queryString(query: EventQuery = {}): QueryString | '' {
+  // console.log(query);
   const params = new URLSearchParams();
   if (query.startDate) params.set('startDate', toTimestamp(query.startDate, 'start'));
   if (query.endDate) params.set('endDate', toTimestamp(query.endDate, 'end'));

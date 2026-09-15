@@ -1,31 +1,64 @@
 /**
  * Helper functions for parsing and formatting dates and times
+ * 
+ * OPEN API SPEC: "YYYY-MM-DD HH:MM:SS-ZZ:zz"
+ * in the works - adding timezone as UTC offset https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
  */
 
-import { MONTHS, MONTHS_FULL, DOW, DOW_FULL, type RepeatFrequency } from "./types/dates";
+import { MONTHS, MONTHS_FULL, DOW, DOW_FULL } from "./types/dates";
+import type { RepeatFrequency, ParsedTimestamp, DBTimestamp, Timespan } from "./types/dates";
+import { padNumString } from "./stringcheck";
+import type { Event } from "../api/events";
 
-// DATES
-///////////////////////////////////////////
+/** YYYY-MM-DD */
+const DATE_RE = /([12]\d{3})-(0\d|1[012])-([0-3]\d)/;
+/** 24 hour time HH:MM */
+const TIME_RE = /([01]\d|2[0-3]):([0-5]\d)/;
+const AMPMTIME_RE = /^(\d+):(\d+)\s*(AM|PM)$/i;
+const TIMESTAMP_RE = new RegExp(`${DATE_RE.source}T${TIME_RE.source}`)
+// /([12]\d{3})-(0\d|1[012])-([0-3]\d)T([01]\d|2[0-3]):([0-5]\d)/;
 
-/** Parse YYYY-MM-DD as a LOCAL date (new Date(iso) would parse as UTC and shift the day). */
-export function parseDate(d: string) {
-  const [y, m, day] = d.split("-").map(Number);
-  return new Date(y, m - 1, day);
+/** 
+ * Parse a timestamp from the database into a Date object (in UTC but not adjusted with offset) 
+ */
+export function parseDate(d: DBTimestamp): ParsedTimestamp {
+  if (TIMESTAMP_RE.test(d)) {
+    const matches = TIMESTAMP_RE.exec(d) as RegExpExecArray;
+    // always skip the first match for the whole regex
+    const [,y, m, day, hr, min] = matches.map(Number);
+    return new Date(y, m - 1, day, hr, min);
+  } else if (DATE_RE.test(d)) {
+    const matches = DATE_RE.exec(d) as RegExpExecArray;
+    const [,y, m, day] = matches.map(Number);
+    return new Date(y, m-1, day);
+  } else {
+    throw new Error(`timestamp regex failed on ${d}`);
+  }
 }
 
 /**
- * Splits an RFC 3339 timestamp into the "YYYY-MM-DD" and "HH:MM" strings the rest of
- * this file speaks, read in the viewer's timezone - `toISOString().slice(0, 10)`
- * would file an Ottawa evening event under tomorrow.
+ * inverse of parseDate, Date -> DB string to store WITH timezone offset
  */
-export function toIso(d: Date): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+export function toIso(d: ParsedTimestamp): DBTimestamp {
+  const tz = d.getTimezoneOffset();
+  const offset = tz > 0 ? 
+    `-${padNumString(Math.floor(tz/60))}:${padNumString(tz % 60)}` : 
+    `+${padNumString(Math.floor(-tz/60))}:${padNumString((-tz) % 60)}`;
+  return `${toDateKey(d)}T${toTimeKey(d)}${offset}`;
 }
-export function toDateKey(iso: string): string {  return toIso(new Date(iso)); }
 
-export function toTimeKey(iso: string): string {
-  const dt = new Date(iso);
-  return `${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}`;
+/** "YYYY-MM-DD" */
+export function toDateKey(d: Date): string {  
+  return `${d.getFullYear()}-${padNumString(d.getMonth() + 1)}-${padNumString(d.getDate())}`; 
+}
+
+/** "HH:SS" */
+export function toTimeKey(d: Date): string {
+  return `${padNumString(d.getHours())}:${padNumString(d.getMinutes())}`;
+}
+
+export function toDateTime(d: Date): string {
+  return `${toDateKey(d)} ${toTimeKey(d)}`
 }
 
 /**
@@ -39,20 +72,19 @@ export function fromDateAndTime(date: string, time: string): string {
 }
 
 /** Start and end of the month containing `date`, as "YYYY-MM-DD" - the calendar's fetch window. */
-export function monthBounds(date: Date) {
+export function monthBounds(date: Date): Timespan {
   const first = new Date(date.getFullYear(), date.getMonth(), 1);
   const last = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-  const key = (d: Date) =>
-    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  return { start: key(first), end: key(last) };
+  return { start: toDateKey(first), end: toDateKey(last) };
 }
 
-export function fmtDateChip(d: string) { 
-  const dt = parseDate(d); 
+/** "JUN 16" */
+export function fmtDateChip(dt: string) { 
+  const d = parseDate(dt); 
   
   return { 
-    month: MONTHS[dt.getMonth()].toUpperCase(), 
-    day: dt.getDate() 
+    month: MONTHS[d.getMonth()].toUpperCase(), 
+    day: d.getDate() 
   }; 
 }
 
@@ -61,24 +93,21 @@ export function ordinal(n: number): string {
   const v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); 
 }
 
-export function fmtMonthDate(d: string): string { 
-  const dt = parseDate(d); 
-  return `${MONTHS_FULL[dt.getMonth()]} ${dt.getDate()}`; 
+export function fmtMonthDate(dt: string): string { 
+  const d = parseDate(dt); 
+  return `${MONTHS_FULL[d.getMonth()]} ${d.getDate()}`; 
 }
 
 /** "Saturday, June 20th, 2026" */
-export function fmtPlainDate(d: string): string { 
-  const dt = parseDate(d); 
-  return `${DOW_FULL[dt.getDay()]}, ${MONTHS_FULL[dt.getMonth()]} ${ordinal(dt.getDate())}, ${dt.getFullYear()}`; 
+export function fmtPlainDate(dt: string): string { 
+  const d = parseDate(dt); 
+  return `${DOW_FULL[d.getDay()]}, ${MONTHS_FULL[d.getMonth()]} ${ordinal(d.getDate())}, ${d.getFullYear()}`; 
 }
 
-export function fmtLongDate(d: string) { 
-  const dt = parseDate(d); 
-  return `${DOW[dt.getDay()]}, ${MONTHS_FULL[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`; 
+export function fmtLongDate(dt: string) { 
+  const d = parseDate(dt); 
+  return `${DOW[d.getDay()]}, ${MONTHS_FULL[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`; 
 }
-
-// TIMES
-///////////////////////////////////////////
 
 /** "10:00" -> "10:00 AM" */
 export function fmtTime(t: string): string { return fmtMinutes(minutesOf(t)); }
@@ -91,6 +120,7 @@ export function fmtShortTime(time: string): string {
   return m === '00' ? `${h} ${period.toUpperCase()}` : `${h}:${m} ${period.toUpperCase()}`;
 }
 
+/** Converts a time to a length in minutes "11:30 AM -> 690" */
 export function minutesOf(t: string): number {
   const [h, m] = t.split(":").map(Number);
   return h * 60 + m;
@@ -120,8 +150,8 @@ export function fmtShortMinutes(mins: number): string {
  * 
  * FIXME: new duration types and calendar event
  */
-export function durationOf(e: CalendarEvent): number {
-  if (e.endTime) {
+export function durationOf(e: Event): number {
+  if (e.endsAt) {
     const spanDays =
       e.endDate && e.endDate !== e.date
         ? Math.round((parseDate(e.endDate).getTime() - parseDate(e.date).getTime()) / 86400000)
