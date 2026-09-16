@@ -1,14 +1,5 @@
 // This is the Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-//
-// Source of truth for the DB structure. The human-readable diagram lives in
-// db/schema.dbml. Note the SQLite-specific translation choices vs. that DBML:
-//   - SQLite has no enum type   -> org_tags is stored as a plain String (see OrganizationTag.tag)
-//   - SQLite autoincrement is Int only -> all `bigint` PKs/FKs become Int
-//   - varchar(n) native types are not enforced by SQLite -> lengths dropped
-//   - Postgres `~*` regex CHECKs cannot run on SQLite -> those validations move
-//     to the application layer. The simple non-regex CHECKs (e.g. length(trim(x)) > 0)
-//     are added by hand in the initial migration SQL.
 
 generator client {
   provider = "prisma-client"
@@ -65,11 +56,6 @@ model Organization {
   @@map("organizations")
 }
 
-// org_tags in the DBML is a Postgres enum. SQLite has no enums, so `tag` is a
-// String. The allowed values are the org_tags enum in src/docs/db/schema.dbml,
-// enforced by a CHECK in the initial migration and by ORG_TAGS in
-// src/utils/orgTags.ts. They are deliberately not restated here - that would be
-// another copy to keep in sync, and src/utils/orgTags.ts explains the rest.
 model OrganizationTag {
   organizationId Int          @map("organization_id")
   tag            String
