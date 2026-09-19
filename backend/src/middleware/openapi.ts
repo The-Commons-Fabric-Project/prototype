@@ -36,8 +36,7 @@ export function openApiValidator(isDevelopment: boolean) {
     apiSpec: resolveSpecPath(),
     validateRequests: true,
 
-    // Thrown in development so a bad response fails immediately; logged in
-    // production, where one malformed row would otherwise 500 the whole list.
+    // Throws an error if development but logs the response in production to prevent the 
     validateResponses: isDevelopment
       ? true
       : {
