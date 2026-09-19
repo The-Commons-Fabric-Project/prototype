@@ -1,0 +1,19 @@
+# Use Prisma for database access
+
+## Status
+Accepted — 2026-03-14
+
+## Context and Problem Statement
+Node/PostgreSQL backend with a schema already defined. Migration
+tooling, type inference, and AGPL license compatibility all matter.
+
+## Considered Options
+- Prisma (Apache-2.0)
+- node-postgres with hand-written SQL
+
+## Decision Outcome
+Chosen: <option>, because <driving reason>.
+
+### Consequences
+- Good, because <...>
+- Bad, because <...>

@@ -1,0 +1,1 @@
+backend/src/docs/api/openapi.yaml
