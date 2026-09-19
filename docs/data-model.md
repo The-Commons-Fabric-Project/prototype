@@ -1,3 +1,3 @@
 # Data Model
 
-- [schema.dbml](../../backend/src/docs/db/schema.dbml)
+- [schema.dbml](../backend/src/docs/db/schema.dbml)
