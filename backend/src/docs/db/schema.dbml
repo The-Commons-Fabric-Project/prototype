@@ -29,7 +29,7 @@ Table users {
     email           varchar(255)    [not null, unique, check: `email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'`]
     password        varchar         [not null, check: `length(password) > 0`, note: 'Stores the password hash, not plaintext']
     organization_id bigint          [not null, ref: > organizations.id]
-    created_at      timestamp       [not null, default: `now()`]
+    created_at      timestampz       [not null, default: `now()`]
 }
 
 Table events {
@@ -43,7 +43,7 @@ Table events {
     thumbnail           text            [note: "file path of image e.g. ./public/event_images/example.jpg"]
     registration_link   text            [default: null, check: `registration_link IS NULL OR registration_link ~* '^https?://[^\s/$.?#].[^\s]*$'`]
     volunteer_contact   varchar(255)    [check: `volunteer_contact IS NULL OR volunteer_contact ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'`]
-    created_at          timestamp       [not null, default: `now()`]
+    created_at          timestampz       [not null, default: `now()`]
 }
 
 Table organizations {
