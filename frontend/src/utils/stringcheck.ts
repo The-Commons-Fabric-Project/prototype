@@ -26,4 +26,13 @@ export function orgInitials(name: string): string {
     .slice(0, 4);
 }
 
+/** Turns number `n` into a string with length `places`. 
+ * 1 -> "01". Default num places = 2. 
+ * If `n` has more digits than `places`, digits to the left get dropped.
+ */
+export function padNumString(n: number, places = 2): string {
+  const num = n % Math.pow(10, places);
+  return String(num).padStart(places, "0");
+}
+
 

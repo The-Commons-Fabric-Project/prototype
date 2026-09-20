@@ -1,6 +1,6 @@
 import { type Event } from "../../api/events";
 import { DOW as DAY_HEADERS } from "../../utils/types/dates";
-import { fmtTime, toIso } from "../../utils/datetime";
+import { fmtTime, toIso, toTimeKey } from "../../utils/datetime";
 import { paletteForID } from "../../utils/palette";
 
 export interface MonthGridProps {
@@ -14,6 +14,14 @@ export interface MonthGridProps {
 export function MonthGrid({ year, month, events, maxPerDay, onSelect }: MonthGridProps) {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const byIso = new Map<string, Event[]>();
+  events.forEach((e) => {
+    const list = byIso.get(e.startsAt) ?? [];
+    list.push(e);
+    byIso.set(e.startsAt, list);
+  });
+  byIso.forEach((l) => l.sort((a, b) => a.time.localeCompare(b.time)));
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
@@ -21,7 +29,7 @@ export function MonthGrid({ year, month, events, maxPerDay, onSelect }: MonthGri
   return (
     <div className="grid grid-cols-7 gap-1.5">
       {DAY_HEADERS.map(d => (
-        <div key={d} className="text-center text-[11px] font-bold text-muted tracking-[0.5px] pb-1 tracking">
+        <div key={d} className="text-center text-xs font-bold text-muted tracking-[0.5px] pb-1 tracking">
           {d}
         </div>
       ))}

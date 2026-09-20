@@ -24,6 +24,7 @@ export interface Organization {
 export type RepeatFrequency = "weekly" | "biweekly" | "monthly";
 
 // TODO: check against API spec
+// start date and start time are separate fields, but in API they're combined in startsAt.
 export interface CalendarEvent {
   id: number;
   title: string;

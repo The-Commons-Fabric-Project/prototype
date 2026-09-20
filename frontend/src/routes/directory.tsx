@@ -1,36 +1,39 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import type { Org } from '../api/orgs'
-import type { Event } from '../utils/types/events'
+import type { Org } from '../api/organizations'
+import type { Event } from '../api/events'
 import { useEvents } from '../hooks/useEvents'
 import { useOrganizations } from '../hooks/useOrganizations'
-import { toDateKey, toTimeKey } from '../utils/datetime'
+import { parseDate, toDateKey, toTimeKey } from '../utils/datetime'
 import { fmtTime } from '../utils/datetime'
 
 import EventDetailModal from '../components/modals/EventDetailModal'
 import OrgCard, { OrgTag } from '../components/cards/OrgCard'
 import DateChip from '../components/chips/DateChip'
-import LogoPlaceholder from '../assets/LogoPlaceholder';
 import Icon from '../assets/Icons'
+import { paletteForID } from '../utils/palette'
+import { orgInitials } from '../utils/stringcheck';
 
 export const Route = createFileRoute('/directory')({
   component: Directory,
 })
 
 function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
+  const start = parseDate(event.startsAt);
+  const end = parseDate(event.endsAt);
   return (
     <div
       onClick={onClick}
       className="flex gap-3.5 items-center bg-white border border-line rounded-xl p-3.5 cursor-pointer hover:shadow-[0_4px_12px_rgba(65,65,66,0.08)] active:scale-[0.99]"
       style={{ transition: 'box-shadow .18s ease, transform .08s ease' }}
     >
-      <DateChip date={toDateKey(event.startsAt)} large={false}/>
+      <DateChip date={toDateKey(start)} large={false}/>
       <div className="flex-1 min-w-0">
         <h4 className="font-display text-[16px] font-semibold text-ink m-0 leading-[1.2]">
           {event.title}
         </h4>
         <p className="text-[12.5px] text-muted m-0 mt-1 font-body">
-          {fmtTime(toTimeKey(event.startsAt))} · {event.location}
+          {fmtTime(toTimeKey(start))} · {event.location}
         </p>
       </div>
     </div>
@@ -49,7 +52,8 @@ function ProfileView({
   // Filtered by the server rather than by matching display names. The events
   // table has no organization name to match on - it has an id - and two
   // organizations are free to share a name.
-  const { data: orgEvents = [], isLoading } = useEvents({ organizationId: org.id })
+  const { data: orgEvents = [], isLoading } = useEvents({ organizationId: org.id });
+  const pal = paletteForID(org.id);
 
   return (
     <div style={{ animation: 'cf-fade .3s ease' }}>
@@ -63,7 +67,24 @@ function ProfileView({
 
       {/* Org header card */}
       <div className="bg-white border border-line rounded-2xl p-7 mb-6 flex gap-6 items-start flex-wrap">
-        <LogoPlaceholder size={104} />
+        <div
+                className = "rounded-md"
+                style={{
+                  width: 60,
+                  height: 60,
+                  flexShrink: 0,
+                  background: `linear-gradient(180deg,${pal.tint},var(--color-surface-alt))`,
+                  borderTop: `3px solid ${pal.c1}`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: pal.c1,
+                  fontSize: 16,
+                  fontWeight: 700
+                }}
+              >
+                {orgInitials(org.name)}
+              </div>
         <div className="flex-1 min-w-65">
           <div className="flex gap-2 flex-wrap mb-3">
             {(org.tags ?? []).map((t) => <OrgTag key={t}>{t}</OrgTag>)}
