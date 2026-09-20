@@ -4,7 +4,7 @@ import type { Org } from '../api/organizations'
 import type { Event } from '../api/events'
 import { useEvents } from '../hooks/useEvents'
 import { useOrganizations } from '../hooks/useOrganizations'
-import { parseDate, toDateKey, toTimeKey } from '../utils/datetime'
+import { parseDate, toDateKey } from '../utils/datetime'
 import { fmtTime } from '../utils/datetime'
 
 import EventDetailModal from '../components/modals/EventDetailModal'
@@ -32,7 +32,7 @@ function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
           {event.title}
         </h4>
         <p className="text-[12.5px] text-muted m-0 mt-1 font-body">
-          {fmtTime(toTimeKey(start))} · {event.location}
+          {fmtTime(start)} · {event.location}
         </p>
       </div>
     </div>

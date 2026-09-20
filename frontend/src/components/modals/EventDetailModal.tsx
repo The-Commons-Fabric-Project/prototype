@@ -1,5 +1,5 @@
 import { type Event, needsVolunteers, requiresRegistration } from '../../api/events'
-import { fmtPlainDate, fmtTime, toDateKey, toTimeKey } from '../../utils/datetime';
+import { fmtPlainDate, fmtTime } from '../../utils/datetime';
 import DetailRow from '../chips/DetailRow';
 import Icon from '../../assets/Icons';
 import Modal, { ModalHeader } from './Modal';
@@ -32,10 +32,10 @@ export default function EventDetailModal({
         <div className="flex flex-col gap-2.5 mb-4.5 border-t border-slate-200 pt-4">
           <DetailRow 
             icon={<Icon name="calendar" size={15} />}  
-            text={fmtPlainDate(toDateKey(event.startsAt))} /> 
+            text={fmtPlainDate(event.startsAt)} /> 
           <DetailRow 
             icon={<Icon name="clock" size={15} />} 
-            text={fmtTime(toTimeKey(event.startsAt))} />
+            text={fmtTime(event.startsAt)} />
           <DetailRow 
             icon={<Icon name="pin" size={15} />} 
             text={event.location ?? "Location to come"} />

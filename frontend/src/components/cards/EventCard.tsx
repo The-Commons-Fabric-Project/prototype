@@ -1,5 +1,5 @@
 import { type Event, needsVolunteers, requiresRegistration } from '../../api/events'
-import { parseDate, fmtTime, toDateKey, toTimeKey } from '../../utils/datetime';
+import { parseDate, fmtTime, toDateKey } from '../../utils/datetime';
 
 import InlineDate from '../chips/InlineDate';
 import Tag from '../chips/Tag';
@@ -43,7 +43,7 @@ export default function EventCard({ event, orgName, onClick, idx }: EventCardPro
 
       {/* Time left, location right-aligned in the same row */}
       <div className="flex items-center justify-between gap-[12px] text-[12.5px] text-slate-500 border-t border-slate-200 pt-2.5 mt-auto">
-        <span className="inline-flex items-center gap-1.5"><Icon name="clock" size={14} /> {fmtTime(toTimeKey(start))}</span>
+        <span className="inline-flex items-center gap-1.5"><Icon name="clock" size={14} /> {fmtTime(start)}</span>
         <span className="inline-flex items-center gap-1.5 text-right min-w-0">
           <Icon name="pin" size={14} /> <span className="overflow-hidden text-ellipsis whitespace-nowrap">{event.location}</span>
         </span>

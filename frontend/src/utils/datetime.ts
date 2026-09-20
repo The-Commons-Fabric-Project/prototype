@@ -1,62 +1,56 @@
 /**
- * Helper functions for parsing and formatting dates and times
- * 
+ * Date/time parsing and formatting, built on date-fns.
+ *
  * OPEN API SPEC: "YYYY-MM-DD HH:MM:SS-ZZ:zz"
- * in the works - adding timezone as UTC offset https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+ *
+ * The functions that take a timestamp accept either the raw API string or an
+ * already-parsed Date, because callers hold one or the other depending on
+ * whether they have gone through parseDate yet.
  */
 
-import { MONTHS, MONTHS_FULL, DOW_FULL } from "./types/dates";
-import type { ParsedTimestamp, DBTimestamp, Timespan } from "./types/dates";
-import { padNumString } from "./stringcheck";
+import { endOfMonth, format, isValid, parse, startOfMonth } from "date-fns";
 
-/** YYYY-MM-DD */
-const DATE_RE = /([12]\d{3})-(0\d|1[012])-([0-3]\d)/;
-/** 24 hour time HH:MM */
-const TIME_RE = /([01]\d|2[0-3]):([0-5]\d)/;
-const TIMESTAMP_RE = new RegExp(`${DATE_RE.source}T${TIME_RE.source}`)
-// /([12]\d{3})-(0\d|1[012])-([0-3]\d)T([01]\d|2[0-3]):([0-5]\d)/;
+import type { DBTimestamp, Timespan } from "./types/dates";
 
-/** 
- * Parse a timestamp from the database into a Date object (in UTC but not adjusted with offset) 
- */
-export function parseDate(d: DBTimestamp): ParsedTimestamp {
-  if (TIMESTAMP_RE.test(d)) {
-    const matches = TIMESTAMP_RE.exec(d) as RegExpExecArray;
-    // always skip the first match for the whole regex
-    const [,y, m, day, hr, min] = matches.map(Number);
-    return new Date(y, m - 1, day, hr, min);
-  } else if (DATE_RE.test(d)) {
-    const matches = DATE_RE.exec(d) as RegExpExecArray;
-    const [,y, m, day] = matches.map(Number);
-    return new Date(y, m-1, day);
-  } else {
-    throw new Error(`timestamp regex failed on ${d}`);
-  }
-}
+/** The literal layout the API writes, read up to the minute. */
+const WALL_CLOCK = "yyyy-MM-dd'T'HH:mm";
+const DATE_ONLY = "yyyy-MM-dd";
+const TIME_ONLY = "HH:mm";
 
 /**
- * inverse of parseDate, Date -> DB string to store WITH timezone offset
+ * Only seconds and milliseconds are ever taken from the reference date - every
+ * other field comes from the string being parsed - so a fixed epoch keeps the
+ * result from depending on when it ran.
  */
-export function toIso(d: ParsedTimestamp): DBTimestamp {
-  const tz = d.getTimezoneOffset();
-  const offset = tz > 0 ? 
-    `-${padNumString(Math.floor(tz/60))}:${padNumString(tz % 60)}` : 
-    `+${padNumString(Math.floor(-tz/60))}:${padNumString((-tz) % 60)}`;
-  return `${toDateKey(d)}T${toTimeKey(d)}${offset}`;
+const REFERENCE = new Date(0);
+
+export function parseDate(d: DBTimestamp): Date {
+  const parsed = d.includes("T")
+    ? parse(d.slice(0, 16), WALL_CLOCK, REFERENCE)
+    : parse(d.slice(0, 10), DATE_ONLY, REFERENCE);
+
+  if (!isValid(parsed)) throw new Error(`timestamp parse failed on ${d}`);
+  return parsed;
+}
+
+/** Accepts either end of the parse, so callers pass whichever they are holding. */
+function asDate(d: Date | DBTimestamp): Date {
+  return typeof d === "string" ? parseDate(d) : d;
+}
+
+/** inverse of parseDate, Date -> DB string to store WITH timezone offset */
+export function toIso(d: Date): DBTimestamp {
+  return format(d, `${WALL_CLOCK}XXX`);
 }
 
 /** "YYYY-MM-DD" */
-export function toDateKey(d: Date): string {  
-  return `${d.getFullYear()}-${padNumString(d.getMonth() + 1)}-${padNumString(d.getDate())}`; 
+export function toDateKey(d: Date | DBTimestamp): string {
+  return format(asDate(d), DATE_ONLY);
 }
 
-/** "HH:SS" */
-export function toTimeKey(d: Date): string {
-  return `${padNumString(d.getHours())}:${padNumString(d.getMinutes())}`;
-}
-
-export function toDateTime(d: Date): string {
-  return `${toDateKey(d)} ${toTimeKey(d)}`
+/** "HH:MM" */
+export function toTimeKey(d: Date | DBTimestamp): string {
+  return format(asDate(d), TIME_ONLY);
 }
 
 /**
@@ -64,58 +58,37 @@ export function toDateTime(d: Date): string {
  * that is what they typed; returned as the UTC string the API stores.
  */
 export function fromDateAndTime(date: string, time: string): string {
-  const [y, m, d] = date.split("-").map(Number);
-  const [hh, mm] = time.split(":").map(Number);
-  return new Date(y, m - 1, d, hh, mm, 0, 0).toISOString();
+  return parse(`${date}T${time}`, WALL_CLOCK, REFERENCE).toISOString();
 }
 
 /** Start and end of the month containing `date`, as "YYYY-MM-DD" - the calendar's fetch window. */
 export function monthBounds(date: Date): Timespan {
-  const first = new Date(date.getFullYear(), date.getMonth(), 1);
-  const last = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-  return { start: toDateKey(first), end: toDateKey(last) };
+  return { start: toDateKey(startOfMonth(date)), end: toDateKey(endOfMonth(date)) };
 }
 
 /** "JUN 16" */
-export function fmtDateChip(dt: string) { 
-  const d = parseDate(dt); 
-  
-  return { 
-    month: MONTHS[d.getMonth()].toUpperCase(), 
-    day: d.getDate() 
-  }; 
+export function fmtDateChip(dt: Date | DBTimestamp) {
+  const d = asDate(dt);
+  return { month: format(d, "MMM").toUpperCase(), day: format(d, "d") };
 }
 
-function ordinal(n: number): string { 
-  const s = ["th","st","nd","rd"]; 
-  const v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); 
-}
-
-export function fmtMonthDate(dt: string): string { 
-  const d = parseDate(dt); 
-  return `${MONTHS_FULL[d.getMonth()]} ${d.getDate()}`; 
+/** "June 16" */
+export function fmtMonthDate(dt: Date | DBTimestamp): string {
+  return format(asDate(dt), "MMMM d");
 }
 
 /** "Saturday, June 20th, 2026" */
-export function fmtPlainDate(dt: string): string { 
-  const d = parseDate(dt); 
-  return `${DOW_FULL[d.getDay()]}, ${MONTHS_FULL[d.getMonth()]} ${ordinal(d.getDate())}, ${d.getFullYear()}`; 
+export function fmtPlainDate(dt: Date | DBTimestamp): string {
+  return format(asDate(dt), "EEEE, MMMM do, yyyy");
 }
 
-/** "10:00" -> "10:00 AM" */
-export function fmtTime(t: string): string { return fmtMinutes(minutesOf(t)); }
+/**
+ * "10:00 AM", from a full timestamp or the bare "HH:MM" a time input produces.
+ * The bare form is tried first; a full timestamp fails it and falls through.
+ */
+export function fmtTime(t: Date | DBTimestamp): string {
+  if (typeof t !== "string") return format(t, "h:mm a");
 
-/** Converts a time to a length in minutes "11:30 AM -> 690" */
-function minutesOf(t: string): number {
-  const [h, m] = t.split(":").map(Number);
-  return h * 60 + m;
-}
-
-/** 690 -> "11:30 AM" */
-function fmtMinutes(mins: number): string {
-  const h = Math.floor(mins / 60) % 24;
-  const m = mins % 60;
-  const ampm = h >= 12 ? "PM" : "AM";
-  const hr = h % 12 === 0 ? 12 : h % 12;
-  return `${hr}:${String(m).padStart(2, "0")} ${ampm}`;
+  const timeOnly = parse(t, TIME_ONLY, REFERENCE);
+  return format(isValid(timeOnly) ? timeOnly : parseDate(t), "h:mm a");
 }

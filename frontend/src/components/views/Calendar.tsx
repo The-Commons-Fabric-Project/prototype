@@ -6,8 +6,10 @@
 import { useState, useMemo } from 'react'
 import type { Event } from '../../api/events';
 
-import { parseDate, fmtTime, toTimeKey, monthBounds } from '../../utils/datetime';
-import { MONTHS_FULL as MONTH_NAMES, DOW as DAY_HEADERS } from '../../utils/types/dates';
+import { addMonths, format, getDate, getDay, getDaysInMonth, isSameMonth, startOfMonth, subMonths } from 'date-fns';
+
+import { parseDate, fmtTime, monthBounds } from '../../utils/datetime';
+import { DOW as DAY_HEADERS } from '../../utils/types/dates';
 import { classesForID } from '../../utils/palette';
 
 type CalendarViewProps = {
@@ -27,23 +29,21 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
   // data is fetched, so it cannot be derived from the events.
   
   const [cursor, setCursor] = useState(() => (rangeStart ? parseDate(rangeStart) : new Date()));
-  const year = cursor.getFullYear(), month = cursor.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  
+  const firstDay = getDay(startOfMonth(cursor));
+  const daysInMonth = getDaysInMonth(cursor);
 
   const byDay = useMemo(() => {
     const map: Event[][] = [];
-    console.log(events[0]);
     events.forEach((e) => {
       const d = parseDate(e.startsAt);
-      if (d.getFullYear() === year && d.getMonth() === month) {
-        (map[d.getDate()] = map[d.getDate()] || []).push(e);
+      if (isSameMonth(d, cursor)) {
+        const day = getDate(d);
+        (map[day] = map[day] || []).push(e);
       }
     });
     Object.values(map).forEach((list) => list.sort((a, b) => a.startsAt.localeCompare(b.startsAt)));
     return map;
-  }, [events, year, month]);
+  }, [events, cursor]);
 
   // Moving the cursor also moves the fetch window.
   const goToMonth = (next: Date) => {
@@ -52,8 +52,8 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
     onWindowChange(start, end);
   };
 
-  const goToPrev = () => { goToMonth(new Date(year, month - 1, 1)) };
-  const goToNext = () => { goToMonth(new Date(year, month + 1, 1)) };
+  const goToPrev = () => { goToMonth(startOfMonth(subMonths(cursor, 1))) };
+  const goToNext = () => { goToMonth(startOfMonth(addMonths(cursor, 1))) };
 
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
@@ -66,7 +66,7 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
     <div className="bg-white border border-line rounded-2xl p-4.5">
       <div className="flex justify-between items-center mb-3.5">
         <h3 className="font-display text-xl font-semibold text-ink m-0">
-          {MONTH_NAMES[month]} {year}
+          {format(cursor, 'MMMM yyyy')}
         </h3>
         <div className="flex gap-2">
           <button
@@ -105,16 +105,16 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
                 <div className="text-xs font-semibold text-muted mb-1">{day}</div>
                 {(byDay[day] || []).map(e => {
                   const color = classesForID(e.organizationId);
-                  const t = toTimeKey(parseDate(e.startsAt));
+                  const t = fmtTime(e.startsAt);
                 return (
                   <div key={e.id}>
                       <div
                         onClick={() => onSelect(e)}
-                        title={`${fmtTime(t)} ${e.title}`}
+                        title={`${t} ${e.title}`}
                         className={`h-[5px] rounded-[2px] mb-[2px] cursor-pointer ${color.railX}`}
                       />
                       <div className="text-[8px] text-muted overflow-hidden text-ellipsis whitespace-nowrap mb-[2px]">
-                        {`${fmtTime(t).replace(":00", "")} ${e.title}`}
+                        {`${t.replace(":00", "")} ${e.title}`}
                       </div>
                     </div>
                 )})}
