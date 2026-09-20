@@ -1,5 +1,5 @@
 import { useMemo, type Dispatch, type SetStateAction } from 'react'
-import type { Event } from '../../utils/types/events'
+import type { Event } from '../../api/events'
 import EventCard from '../cards/EventCard'
 import FilterBar from '../nav/FilterBar';
 

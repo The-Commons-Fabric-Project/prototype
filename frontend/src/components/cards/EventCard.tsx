@@ -20,7 +20,6 @@ type EventCardProps = {
 export default function EventCard({ event, orgName, onClick, idx }: EventCardProps) {
   const color = classesForID(event.organizationId);
   const start = parseDate(event.startsAt);
-  const end = parseDate(event.endsAt);
   return (
     <div onClick={onClick} className={`cf-card-hover bg-white border border-slate-200 rounded-lg cursor-pointer flex flex-row p-4.5 gap-2.5 animate-[cf-stagger_0.35s_ease_both]`} style={{ animationDelay: `${idx * 0.04}s` }}>
 

@@ -20,7 +20,6 @@ export const Route = createFileRoute('/directory')({
 
 function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
   const start = parseDate(event.startsAt);
-  const end = parseDate(event.endsAt);
   return (
     <div
       onClick={onClick}

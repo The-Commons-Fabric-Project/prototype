@@ -1,5 +1,4 @@
 import type {Org as Organization} from '../../api/organizations';
-// import LogoPlaceholder from '../../assets/LogoPlaceholder';
 import { type ColorVariantClasses, classesForID } from '../../utils/palette';
 import { orgInitials } from '../../utils/stringcheck';
 

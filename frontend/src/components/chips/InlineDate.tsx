@@ -1,6 +1,6 @@
 import { fmtMonthDate, fmtPlainDate } from "../../utils/datetime";
 
-export interface InlineDateProps {
+interface InlineDateProps {
   date: string;
   /** classes to pass to child element */
   className: string;

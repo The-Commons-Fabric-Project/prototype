@@ -2,15 +2,15 @@
 export type ColorVariantKey = "green" | "blue" | "purple" | "red" | "orange" | "yellow";
 
 export const COLOR_ORDER: ColorVariantKey[] = ["green", "blue", "purple", "red", "orange", "yellow"];
-export const NUMCOLORS: number = COLOR_ORDER.length;
+const NUMCOLORS: number = COLOR_ORDER.length;
 
 /** Tailwind classes for the parts of a component that carry a variant's color. */
 export interface ColorVariantClasses {
-  /** Vertical rail, top to bottom. Card left edges. */
+  /** Card left edges. */
   railY: string;
-  /** Horizontal rail, left to right. Calendar day pills. */
+  /** Horizontal rail, left to right. Used in the calendarCalendar. */
   railX: string;
-  /** Logo plate: pale tint fading into the page, colored top edge and initials. */
+  /** Logo platecolored top edge and initials. */
   plate: string;
   /** Tag chip: pale fill, AA-safe text, solid border. */
   chip: string;
@@ -69,11 +69,10 @@ export const COLOR_CLASSES: Record<ColorVariantKey, ColorVariantClasses> = {
   },
 };
 
-export function colorKey(idx: number): ColorVariantKey {
+function colorKey(idx: number): ColorVariantKey {
   return COLOR_ORDER[idx % COLOR_ORDER.length];
 }
 
-/** Assigns a stable variant to an organization, so its color never shifts between views. */
 export function classesForID(id: number): ColorVariantClasses {
   const idx = id % NUMCOLORS;
   return COLOR_CLASSES[colorKey(idx < 0 ? 0 : idx)];

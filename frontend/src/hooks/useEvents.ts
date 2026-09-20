@@ -14,7 +14,7 @@ import { createEvent, listEvents, type EventCreate, type EventQuery } from '../a
  * The key for a window. Empty strings from the date inputs are normalised away, so
  * "" and undefined do not produce two cache entries for one window.
  */
-export function eventsQueryKey(query: EventQuery = {}) {
+function eventsQueryKey(query: EventQuery = {}) {
   return [
     'events',
     {

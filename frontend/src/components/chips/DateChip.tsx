@@ -20,7 +20,6 @@ export default function DateChip({
       <span className="justify-start text-ink text-xs font-semibold font-sans uppercase tracking-wide"
       >{month}</span>
       <span className="text-primary font-sans text-xl font-semibold leading-md"
-      // style={{ fontSize: large ? 28 : 22}}
       >{day}</span>
     </div>
   );

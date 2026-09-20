@@ -1,9 +1,9 @@
 import { type Event } from "../../api/events";
 import { DOW as DAY_HEADERS } from "../../utils/types/dates";
-import { fmtTime, toIso, toTimeKey } from "../../utils/datetime";
+import { fmtTime, toTimeKey } from "../../utils/datetime";
 import { classesForID } from "../../utils/palette";
 
-export interface MonthGridProps {
+interface MonthGridProps {
   year: number;
   month: number;
   events: Event[];
@@ -11,7 +11,7 @@ export interface MonthGridProps {
   onSelect: (id: number) => void;
 }
 
-export function MonthGrid({ year, month, events, maxPerDay, onSelect }: MonthGridProps) {
+export function MonthGrid({ year, month, events, onSelect }: MonthGridProps) {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 

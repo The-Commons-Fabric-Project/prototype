@@ -31,7 +31,6 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   
-  // console.log(rangeStart, parseDate(rangeStart));
 
   const byDay = useMemo(() => {
     const map: Event[][] = [];

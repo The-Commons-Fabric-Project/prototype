@@ -6,7 +6,7 @@ import type { ModalHeaderProps } from "./Modal";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useToast } from "../../hooks/useOverlayContext";
-import type { AuthAttemptStatus } from "../../api/users";
+import type { AuthAttemptStatus } from "../../api/auth";
 
 function inputStyle (err: boolean): InputVariant {
   return `${err ? "error" : "default"}`;
@@ -20,7 +20,7 @@ function inputStyle (err: boolean): InputVariant {
  */
 export type LoginFormHeader = Pick<ModalHeaderProps, "title" | "subtitle">;
 
-export type LoginFormProps = {
+type LoginFormProps = {
   onClose: () => void,
   onChangeMode: (header: LoginFormHeader) => void,
 }
@@ -72,11 +72,6 @@ export default function LoginForm({
     setPrevStatus(s);
   }
 
-  // handle when auth service successfully verifies the user
-  // useEffect(() => {
-  //   // console.log("Login form effect!");
-    
-  // }, [status])
   if (status !== prevStatus) handleStatus(status);
 
   const baseInputStyles = "px-3 py-2 border border-line rounded-md w-full";
@@ -98,10 +93,7 @@ export default function LoginForm({
         <input type="password" className={`${baseInputStyles} ${inputStyle(!!err)}`} value={creds.password}
           onChange={(e) => { setCreds({ ...creds, password: e.target.value }); setErr(""); }} placeholder="Your password" />
       </Field>
-      <Button type="submit" onClick={() => {
-        // auth.login(creds.email, creds.password);
-        // onSubmit({ username: creds.email, password: creds.password});
-      }} label="Log in"/>
+      <Button type="submit" onClick={() => {}} label="Log in"/>
       
     </form>
   );
