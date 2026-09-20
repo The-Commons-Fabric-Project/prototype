@@ -4,8 +4,14 @@
 
 import { MONTHS, MONTHS_FULL, DOW, DOW_FULL, type RepeatFrequency } from "./types/dates";
 
-// DATES
-///////////////////////////////////////////
+/** YYYY-MM-DD */
+const DATE_RE = /([12]\d{3})-(0\d|1[012])-([0-3]\d)/;
+/** 24 hour time HH:MM */
+const TIME_RE = /([01]\d|2[0-3]):([0-5]\d)/;
+/** HH:MM with AM/PM, case-insensitive 1:30 PM = 1:30 pm */
+const AMPMTIME_RE = /^(\d+):(\d+)\s*(AM|PM)$/i;
+const TIMESTAMP_RE = new RegExp(`${DATE_RE.source}T${TIME_RE.source}`);
+// /([12]\d{3})-(0\d|1[012])-([0-3]\d)T([01]\d|2[0-3]):([0-5]\d)/;
 
 /** Parse YYYY-MM-DD as a LOCAL date (new Date(iso) would parse as UTC and shift the day). */
 export function parseDate(d: string) {
