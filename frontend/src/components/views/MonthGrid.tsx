@@ -1,7 +1,7 @@
 import { type Event } from "../../api/events";
 import { DOW as DAY_HEADERS } from "../../utils/types/dates";
 import { fmtTime, toIso, toTimeKey } from "../../utils/datetime";
-import { paletteForID } from "../../utils/palette";
+import { classesForID } from "../../utils/palette";
 
 export interface MonthGridProps {
   year: number;
@@ -47,22 +47,16 @@ export function MonthGrid({ year, month, events, maxPerDay, onSelect }: MonthGri
             <>
               <div className="text-xs font-semibold text-muted mb-1">{day}</div>
               {(byDay[day] || []).map(e => {
-                const pal = paletteForID(e.organizationId);
+                const color = classesForID(e.organizationId);
                 const t = toTimeKey(e.startsAt);
               return (
                 <div key={e.id}>
                     <div
                       onClick={() => onSelect(e)}
                       title={`${fmtTime(t)} ${e.title}`}
-                      style={{
-                        background: `linear-gradient(90deg,${pal.c1},${pal.c2})`,
-                        height: 5,
-                        borderRadius: 2,
-                        marginBottom: 2,
-                        cursor: "pointer",
-                      }}
+                      className={`h-[5px] rounded-[2px] mb-[2px] cursor-pointer ${color.railX}`}
                     />
-                    <div style={{ fontSize: 8, color: "var(--color-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: 2 }}>
+                    <div className="text-[8px] text-muted overflow-hidden text-ellipsis whitespace-nowrap mb-[2px]">
                       {`${fmtTime(t).replace(":00", "")} ${e.title}`}
                     </div>
                   </div>

@@ -79,14 +79,14 @@ export default function LoginForm({
   // }, [status])
   if (status !== prevStatus) handleStatus(status);
 
-  const baseInputStyles = "px-3 py-2 border border-bg-subtle rounded-md w-full";
+  const baseInputStyles = "px-3 py-2 border border-line rounded-md w-full";
 
   return (
     <form onSubmit={handleSubmit} className="py-2 px-6">
       {/* A seeded account from backend/prisma/seed/dev-organizations-seed.json - these
           are real credentials against a seeded dev database, not a mock. Run
           `npm run db:seed -w backend` if they do not work. */}
-      <div className="bg-accent-primary-soft text-shadow-text-primary rounded-md text-xs font-normal tracking-[0.8px] px-3 py-2 mb-4">
+      <div className="bg-accent-soft text-ink rounded-md text-xs font-normal tracking-[0.8px] px-3 py-2 mb-4">
         Demo hint: use <strong>jordan.lefebvre@ottawacivictech.example</strong> / <strong>devpassword123</strong>
       </div>
       <Field label="Email" error={err ? " " : ""}>

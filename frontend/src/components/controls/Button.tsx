@@ -5,9 +5,9 @@ import type { ButtonVariant } from "../../utils/types/variants";
 const VARIANT_MAPS: Record<ButtonVariant, string> = {
   primary: "bg-accent text-white border-accent",
   ghost: "bg-white text-ink border-line",
-  subtle: "bg-accentSoft text-ink border-line",
+  subtle: "bg-accent-soft text-ink border-line",
   danger: "bg-white text-danger border-line",
-  link: "bg-transparent text-bg-subtle underline"
+  link: "bg-transparent text-muted underline"
 }
 
 type ButtonProps = Partial<ButtonHTMLAttributes<HTMLButtonElement>> & {

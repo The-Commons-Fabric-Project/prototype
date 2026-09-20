@@ -11,7 +11,7 @@ import EventDetailModal from '../components/modals/EventDetailModal'
 import OrgCard, { OrgTag } from '../components/cards/OrgCard'
 import DateChip from '../components/chips/DateChip'
 import Icon from '../assets/Icons'
-import { paletteForID } from '../utils/palette'
+import { classesForID } from '../utils/palette'
 import { orgInitials } from '../utils/stringcheck';
 
 export const Route = createFileRoute('/directory')({
@@ -53,7 +53,7 @@ function ProfileView({
   // table has no organization name to match on - it has an id - and two
   // organizations are free to share a name.
   const { data: orgEvents = [], isLoading } = useEvents({ organizationId: org.id });
-  const pal = paletteForID(org.id);
+  const color = classesForID(org.id);
 
   return (
     <div style={{ animation: 'cf-fade .3s ease' }}>
@@ -68,20 +68,7 @@ function ProfileView({
       {/* Org header card */}
       <div className="bg-white border border-line rounded-2xl p-7 mb-6 flex gap-6 items-start flex-wrap">
         <div
-                className = "rounded-md"
-                style={{
-                  width: 60,
-                  height: 60,
-                  flexShrink: 0,
-                  background: `linear-gradient(180deg,${pal.tint},var(--color-surface-alt))`,
-                  borderTop: `3px solid ${pal.c1}`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: pal.c1,
-                  fontSize: 16,
-                  fontWeight: 700
-                }}
+                className={`rounded-md size-15 shrink-0 flex items-center justify-center text-base font-bold ${color.plate}`}
               >
                 {orgInitials(org.name)}
               </div>

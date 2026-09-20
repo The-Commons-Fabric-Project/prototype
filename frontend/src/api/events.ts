@@ -19,22 +19,6 @@ export type Event = c["schemas"]["Event"];
 export type EventId = c["schemas"]["EventId"];
 export type Timestamp = c["schemas"]["Timestamp"];
 
-export const EVENT_TAGS = {
-  "Registration": {
-    label: "Registration",
-    color: "rgb(80, 122, 189)",
-    background: "rgb(231, 238, 247)",
-  },
-  "Volunteers wanted": {
-    label: "Volunteers wanted",
-    color: "rgb(242, 165, 65)",
-    background: "rgba(242, 165, 65, 0.14)",
-  },
-} as const
-
-export type EventTag = keyof typeof EVENT_TAGS
-export type EventTagInfo = (typeof EVENT_TAGS)[EventTag]
-
 /**
  * Derived rather than stored: an event needs registration exactly when it has a link
  * to register through, so the two cannot fall out of sync.

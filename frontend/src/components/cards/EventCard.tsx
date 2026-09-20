@@ -4,7 +4,7 @@ import { parseDate, fmtTime, toDateKey, toTimeKey } from '../../utils/datetime';
 import InlineDate from '../chips/InlineDate';
 import Tag from '../chips/Tag';
 import Icon from '../../assets/Icons';
-import { paletteForID } from '../../utils/palette';
+import { classesForID } from '../../utils/palette';
 
 type EventCardProps = {
   event: Event;
@@ -18,13 +18,13 @@ type EventCardProps = {
 };
 
 export default function EventCard({ event, orgName, onClick, idx }: EventCardProps) {
-  const pal = paletteForID(event.organizationId);
+  const color = classesForID(event.organizationId);
   const start = parseDate(event.startsAt);
   const end = parseDate(event.endsAt);
   return (
     <div onClick={onClick} className={`cf-card-hover bg-white border border-slate-200 rounded-lg cursor-pointer flex flex-row p-4.5 gap-2.5 animate-[cf-stagger_0.35s_ease_both]`} style={{ animationDelay: `${idx * 0.04}s` }}>
 
-      <span style={{ width: 3, alignSelf: "stretch", flexShrink: 0, background: `linear-gradient(180deg,${pal.c1},${pal.c2})` }} />
+      <span className={`w-[3px] self-stretch shrink-0 ${color.railY}`} />
 
 
       <div className="min-w-0 flex flex-1 flex-col gap-2">

@@ -61,6 +61,8 @@ frontend/                       — React SPA (Vite, TanStack Router/Query, Tail
 │   ├── assets/                     — Logo/icon React components.
 │   └── utils/
 │       ├── datetime.ts              — Date/time formatting helpers.
+│       ├── palette.ts               — Per-org color variants as literal Tailwind class strings.
+│       ├── stringcheck.ts           — String helpers (org initials).
 │       └── types/                   — Shared TS types: dates, events, orgs, users, variants.
 ├── design/                        — Design reference material (remixed-abfa2797.tsx, README).
 └── .storybook/                    — Storybook config (main.ts, preview.tsx).
@@ -94,6 +96,14 @@ not what); one-liners or obvious functionality do not need one.
 - **`frontend/src/mocks/` mirrors `frontend/src/api/`** as a mock-backend peer. Flows
   move from `mocks/` to `api/` as they're wired to the real backend; once `mocks/` is
   empty it can be deleted.
+- **Color belongs in Tailwind class names, never in an inline style or a JS color
+  string.** `src/index.css` is the only place a color value is written down; use the
+  utilities those `@theme` tokens generate (`bg-green-tint`, `text-muted`,
+  `border-line`, …) rather than `var(--color-*)` in a `style` prop or a hex/`rgb()`
+  literal in a `.ts` file. Class names must be **literal strings** — Tailwind only
+  emits a utility it can find in the source, so `` `bg-${key}` `` silently renders
+  nothing. For a value that varies at runtime, look the whole class name up in a
+  static map; `utils/palette.ts` does this for the six per-organization variants.
 - **`backend/src/docs/api/openapi.yaml` is the API contract.** Every request/response
   under `/v1` is validated against it (`middleware/openapi.ts`), so endpoint handlers
   don't need to re-check shapes the schema already guarantees — only rules a JSON
