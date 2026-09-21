@@ -1,19 +1,4 @@
-/**
- * Date/time formatting, built on date-fns.
- *
- * Every formatter here takes a `Date` - an absolute instant - and renders it in
- * the viewer's own timezone, which is what date-fns `format` does by default.
- * Timestamps arrive from the API as RFC 3339 strings with an offset and are
- * resolved into `Date`s once, at the api/ boundary, so no timestamp string is
- * parsed in this file.
- *
- * The date-key and form helpers at the bottom are the exception: the values an
- * `<input type="date">` or `<input type="time">` produces carry no offset, so
- * they are read in the viewer's timezone - the clock they typed against.
- */
-
 import { endOfDay, endOfMonth, format, isValid, parse, startOfDay, startOfMonth } from "date-fns";
-
 import type { DateKey, DBTimestamp, Timespan } from "./types/dates";
 
 const DATE_ONLY = "yyyy-MM-dd";

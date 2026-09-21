@@ -19,12 +19,6 @@ export function useOrganizations() {
   });
 }
 
-/**
- * Resolves an organizationId to its name, for parents to pass down as a prop -
- * which keeps the presentational components working in Storybook.
- *
- * Returns undefined while the directory loads, or for an unknown id.
- */
 export function useOrgLookup() {
   const { data } = useOrganizations();
 

@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react';
-
 import { type Event, needsVolunteers, requiresRegistration } from '../../api/events'
 import { fmtPlainDate, fmtTime } from '../../utils/datetime';
 import Icon from '../../assets/Icons';
