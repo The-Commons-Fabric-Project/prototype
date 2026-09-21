@@ -25,15 +25,19 @@ type CalendarViewProps = {
 export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: CalendarViewProps) {
   // Seeded from the current window, falling back to today. The month decides which
   // data is fetched, so it cannot be derived from the events.
+  
   const [cursor, setCursor] = useState(() => (rangeStart ? parseDate(rangeStart) : new Date()));
   const year = cursor.getFullYear(), month = cursor.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
+  
+  // console.log(rangeStart, parseDate(rangeStart));
 
   const byDay = useMemo(() => {
     const map: Event[][] = [];
+    console.log(events[0]);
     events.forEach((e) => {
-      const d = new Date(e.startsAt);
+      const d = parseDate(e.startsAt);
       if (d.getFullYear() === year && d.getMonth() === month) {
         (map[d.getDate()] = map[d.getDate()] || []).push(e);
       }
@@ -102,7 +106,7 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
                 <div className="text-xs font-semibold text-muted mb-1">{day}</div>
                 {(byDay[day] || []).map(e => {
                   const pal = paletteForID(e.organizationId);
-                  const t = toTimeKey(e.startsAt);
+                  const t = toTimeKey(parseDate(e.startsAt));
                 return (
                   <div key={e.id}>
                       <div

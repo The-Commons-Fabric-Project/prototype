@@ -90,6 +90,18 @@ export function paletteForID(id: number): ColorVariantPalette {
   return PALETTE[colorKey(idx < 0 ? 0 : idx)];
 }
 
+/**
+ * 
+ * @param dir Direction of gradient in degrees "##deg"
+ * @param from Starting color hex
+ * @param to Ending color hex
+ * @returns CSS property string
+ */
 export function linearGradient(dir: string, from: string, to: string): string {
   return `linear-gradient(${dir},${from},${to})`;
+}
+export function accentGradient(accent: ColorVariantKey): string {
+  const pal = PALETTE[accent];
+  return linearGradient("135deg", pal.c1, pal.stops[2]);
+  //  return `linear-gradient(135deg,${pal.c1},${pal.stops[2]})`;
 }
