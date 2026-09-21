@@ -85,9 +85,9 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-1.5">
+      <div className="grid grid-cols-7 gap-px bg-line border border-line">
         {DAY_HEADERS.map(d => (
-          <div key={d} className="text-center text-[11px] font-bold text-muted tracking-[0.5px] pb-1 tracking">
+          <div key={d} className="text-center text-[11px] font-bold text-muted bg-surface-alt tracking-[0.06em] px-1.25 tracking">
             {d}
           </div>
         ))}
@@ -95,15 +95,13 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
         {cells.map((day, i) => (
           <div
             key={i}
-            className={`min-h-19 min-w-0 rounded-md p-1.5 border ${
-              day === null
-                ? 'border-transparent bg-transparent'
-                : 'border-line bg-paper'
+            className={`min-h-19 min-w-0 p-1.5 ${
+              day === null ? 'bg-transparent' : 'bg-surface'
             }`}
           >
             {day !== null && (
               <>
-                <div className="text-xs font-semibold text-muted mb-1">{day}</div>
+                <div className="text-xs font-semibold text-muted">{day}</div>
                 {(byDay[day] || []).map(e => {
                   const color = classesForID(e.organizationId);
                   const t = fmtTime(e.startsAt);

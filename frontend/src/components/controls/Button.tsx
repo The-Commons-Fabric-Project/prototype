@@ -1,13 +1,14 @@
 import type { ButtonHTMLAttributes } from "react";
 import type { ButtonVariant } from "../../utils/types/variants";
+import { accentGradient } from "../../utils/palette";
 
 // reference: https://blog.logrocket.com/building-reusable-react-components-using-tailwind-css/#testing-badge-component
 const VARIANT_MAPS: Record<ButtonVariant, string> = {
-  primary: "bg-accent text-white border-accent",
-  ghost: "bg-white text-ink border-line",
-  subtle: "bg-accent-soft text-ink border-line",
-  danger: "bg-white text-danger border-line",
-  link: "bg-transparent text-muted underline"
+  primary: `${accentGradient()} text-white text-xs border-none`,
+  secondary: "bg-surface text-ink border border-ink text-[11px]",
+  tertiary: "bg-surface text-body border border-line text-[11px]",
+  disabled: "bg-surface-alt text-faint border border-line text-[11px]",
+  // link: "bg-transparent text-muted underline"
 }
 
 type ButtonProps = Partial<ButtonHTMLAttributes<HTMLButtonElement>> & {
@@ -32,8 +33,9 @@ export default function Button({
   className,
   ...props
  }: ButtonProps) {
-  const baseClasses = "font-sans font-semibold text-sm py-2.5 px-4 rounded-md cursor-pointer border border-transparent leading-tight";
+  const baseClasses = "font-sans font-semibold text-sm py-2.25 px-4.5 rounded-md cursor-pointer leading-tight";
   const classes = `${baseClasses} ${VARIANT_MAPS[variant]} ${className || ''}`
+  const text = `${label ? label: ''}${children ? children : ''}`.toString().toUpperCase();
   return (
     <button 
       aria-label={label ? label : children?.toString() }
@@ -41,7 +43,7 @@ export default function Button({
       className={`${classes} cf-press`}
       {...props}
     >
-      {label} {children}
+      {text}
     </button>
   );
 }

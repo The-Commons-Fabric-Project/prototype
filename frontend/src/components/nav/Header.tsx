@@ -92,17 +92,14 @@ export default function Header() {
           ) : session.isAuthenticated ? (
             <>
               <span className="text-[13px] text-ink font-semibold max-w-40 truncate">{session.user?.fullname}</span>
-              <button 
-                className="font-sans font-semibold text-[14px] px-3.5 py-2 rounded-md cursor-pointer border border-line bg-transparent text-primary leading-[1.1] tracking-[0.1px]"
-                onClick={handleLogout}
-              >
+              <Button variant="tertiary" onClick={handleLogout}>
                 Log out
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <Button variant="ghost" onClick={handleLogin} className="font-sans font-semibold text-[14px] px-3.5 py-2 rounded-md cursor-pointer border border-line bg-transparent text-primary leading-[1.1] tracking-[0.1px]">Log in</Button>
-              <Button className="font-sans font-semibold text-[14px] px-3.5 py-2 rounded-md cursor-pointer border border-primary bg-primary text-white leading-[1.1] tracking-[0.1px]" onClick={handleCreateAccount}>
+              <Button variant="tertiary" onClick={handleLogin}>Log in</Button>
+              <Button variant="primary" onClick={handleCreateAccount}>
                 Create account
               </Button>
             </>

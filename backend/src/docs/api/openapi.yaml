@@ -356,6 +356,8 @@ components:
     Timestamp:
       type: string
       format: date-time
+      description: >-
+        Format includes timezone offset from UTC: `2026-06-16T10:00:00-04:00`
 
     OrganizationId:
       type: integer

@@ -100,6 +100,7 @@ export const S = {
 
   error: { display: "block", marginTop: 5, fontSize: 10.5, color: T.color.danger, fontWeight: 700 } as CSSProperties,
 
+  // TODO: update button variants
   btnPrimary: (accent: string) =>
   ({
     background: accentGradient(accent),

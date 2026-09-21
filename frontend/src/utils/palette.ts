@@ -77,3 +77,7 @@ export function classesForID(id: number): ColorVariantClasses {
   const idx = id % NUMCOLORS;
   return COLOR_CLASSES[colorKey(idx < 0 ? 0 : idx)];
 }
+
+export function accentGradient(color: ColorVariantKey = "purple"): string {
+  return `bg-linear-135 from-${color}-c1 to-${color}-stop3`
+}
