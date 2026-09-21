@@ -1,21 +1,24 @@
 /**
- * Date/time parsing and formatting, built on date-fns.
+ * Date/time formatting, built on date-fns.
  *
- * OPEN API SPEC: "YYYY-MM-DD HH:MM:SS-ZZ:zz"
+ * Every formatter here takes a `Date` - an absolute instant - and renders it in
+ * the viewer's own timezone, which is what date-fns `format` does by default.
+ * Timestamps arrive from the API as RFC 3339 strings with an offset and are
+ * resolved into `Date`s once, at the api/ boundary, so no timestamp string is
+ * parsed in this file.
  *
- * The functions that take a timestamp accept either the raw API string or an
- * already-parsed Date, because callers hold one or the other depending on
- * whether they have gone through parseDate yet.
+ * The date-key and form helpers at the bottom are the exception: the values an
+ * `<input type="date">` or `<input type="time">` produces carry no offset, so
+ * they are read in the viewer's timezone - the clock they typed against.
  */
 
-import { endOfMonth, format, isValid, parse, startOfMonth } from "date-fns";
+import { endOfDay, endOfMonth, format, isValid, parse, startOfDay, startOfMonth } from "date-fns";
 
-import type { DBTimestamp, Timespan } from "./types/dates";
+import type { DateKey, DBTimestamp, Timespan } from "./types/dates";
 
-/** The literal layout the API writes, read up to the minute. */
-const WALL_CLOCK = "yyyy-MM-dd'T'HH:mm";
 const DATE_ONLY = "yyyy-MM-dd";
 const TIME_ONLY = "HH:mm";
+const WALL_CLOCK = `${DATE_ONLY}'T'${TIME_ONLY}`;
 
 /**
  * Only seconds and milliseconds are ever taken from the reference date - every
@@ -24,71 +27,61 @@ const TIME_ONLY = "HH:mm";
  */
 const REFERENCE = new Date(0);
 
-export function parseDate(d: DBTimestamp): Date {
-  const parsed = d.includes("T")
-    ? parse(d.slice(0, 16), WALL_CLOCK, REFERENCE)
-    : parse(d.slice(0, 10), DATE_ONLY, REFERENCE);
-
-  if (!isValid(parsed)) throw new Error(`timestamp parse failed on ${d}`);
-  return parsed;
-}
-
-/** Accepts either end of the parse, so callers pass whichever they are holding. */
-function asDate(d: Date | DBTimestamp): Date {
-  return typeof d === "string" ? parseDate(d) : d;
-}
-
-/** inverse of parseDate, Date -> DB string to store WITH timezone offset */
-export function toIso(d: Date): DBTimestamp {
-  return format(d, `${WALL_CLOCK}XXX`);
-}
-
-/** "YYYY-MM-DD" */
-export function toDateKey(d: Date | DBTimestamp): string {
-  return format(asDate(d), DATE_ONLY);
-}
-
-/** "HH:MM" */
-export function toTimeKey(d: Date | DBTimestamp): string {
-  return format(asDate(d), TIME_ONLY);
-}
-
-/**
- * The inverse of toDateKey/toTimeKey. Interpreted in the viewer's timezone, because
- * that is what they typed; returned as the UTC string the API stores.
- */
-export function fromDateAndTime(date: string, time: string): string {
-  return parse(`${date}T${time}`, WALL_CLOCK, REFERENCE).toISOString();
-}
-
-/** Start and end of the month containing `date`, as "YYYY-MM-DD" - the calendar's fetch window. */
-export function monthBounds(date: Date): Timespan {
-  return { start: toDateKey(startOfMonth(date)), end: toDateKey(endOfMonth(date)) };
-}
-
 /** "JUN 16" */
-export function fmtDateChip(dt: Date | DBTimestamp) {
-  const d = asDate(dt);
+export function fmtDateChip(d: Date) {
   return { month: format(d, "MMM").toUpperCase(), day: format(d, "d") };
 }
 
 /** "June 16" */
-export function fmtMonthDate(dt: Date | DBTimestamp): string {
-  return format(asDate(dt), "MMMM d");
+export function fmtMonthDate(d: Date): string {
+  return format(d, "MMMM d");
 }
 
 /** "Saturday, June 20th, 2026" */
-export function fmtPlainDate(dt: Date | DBTimestamp): string {
-  return format(asDate(dt), "EEEE, MMMM do, yyyy");
+export function fmtPlainDate(d: Date): string {
+  return format(d, "EEEE, MMMM do, yyyy");
+}
+
+/** "10:00 AM" */
+export function fmtTime(d: Date): string {
+  return format(d, "h:mm a");
+}
+
+/** "YYYY-MM-DD", the day this instant falls on for the viewer. */
+export function toDateKey(d: Date): DateKey {
+  return format(d, DATE_ONLY);
+}
+
+/** Inverse of toDateKey: midnight on that day in the viewer's timezone. */
+export function fromDateKey(key: DateKey): Date {
+  const day = parse(key, DATE_ONLY, REFERENCE);
+  if (!isValid(day)) throw new Error(`expected a YYYY-MM-DD date key, got ${key}`);
+  return day;
 }
 
 /**
- * "10:00 AM", from a full timestamp or the bare "HH:MM" a time input produces.
- * The bare form is tried first; a full timestamp fails it and falls through.
+ * Widens one edge of a day-granular window into the instant the API filters on.
+ * The day is bounded in the viewer's timezone, so the window covers exactly the
+ * days they picked rather than a UTC day that straddles two of them.
  */
-export function fmtTime(t: Date | DBTimestamp): string {
-  if (typeof t !== "string") return format(t, "h:mm a");
+export function dayEdge(key: DateKey, edge: "start" | "end"): DBTimestamp {
+  const day = fromDateKey(key);
+  return (edge === "start" ? startOfDay(day) : endOfDay(day)).toISOString();
+}
 
-  const timeOnly = parse(t, TIME_ONLY, REFERENCE);
-  return format(isValid(timeOnly) ? timeOnly : parseDate(t), "h:mm a");
+/** Start and end of the month containing `date` - the calendar's fetch window. */
+export function monthBounds(date: Date): Timespan {
+  return { start: toDateKey(startOfMonth(date)), end: toDateKey(endOfMonth(date)) };
+}
+
+/** The create-event form's two inputs read as one instant in the viewer's timezone. */
+export function localDateTime(date: DateKey, time: string): Date {
+  const d = parse(`${date}T${time}`, WALL_CLOCK, REFERENCE);
+  if (!isValid(d)) throw new Error(`could not read ${date} ${time} as a date and time`);
+  return d;
+}
+
+/** That instant as the RFC 3339 string the API stores. */
+export function fromDateAndTime(date: DateKey, time: string): DBTimestamp {
+  return localDateTime(date, time).toISOString();
 }

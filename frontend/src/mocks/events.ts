@@ -1,9 +1,13 @@
-import type { Event } from '../api/events'
+import { toEvent, type Event } from '../api/events'
 
 /**
  * Fixtures for the Storybook stories in the docs.*.tsx files; the live app reads
  * events from the API. Shaped like a `GET /v1/events` response, with an explicit
  * -04:00 offset so the wall-clock times read as intended in Ottawa.
+ *
+ * Fed through `toEvent`, the same mapper the real responses go through, so the
+ * stories hold resolved `Date`s like the app does - and render in whatever
+ * timezone the browser viewing Storybook is in, exactly as the app would.
  */
 export const EXAMPLE_EVENTS: Event[] = [
   { id: 1, ownerId: 1, organizationId: 1, title: "Newcomer Welcome Morning", startsAt: "2026-06-16T10:00:00-04:00", endsAt: "2026-06-16T12:00:00-04:00", location: "RCH Room 1", description: "A relaxed drop-in for newcomers to the neighbourhood. Meet settlement workers, learn what programs are running this summer, and connect with other families over coffee.", thumbnail: null, registrationLink: null, volunteerContact: "volunteer@rrcrc.example", createdAt: "2026-05-01T12:00:00-04:00" },
@@ -17,4 +21,4 @@ export const EXAMPLE_EVENTS: Event[] = [
   { id: 4, ownerId: 4, organizationId: 4, title: "Poverty & Policy Briefing", startsAt: "2026-06-23T12:00:00-04:00", endsAt: "2026-06-23T13:30:00-04:00", location: "RCH Room 2", description: "A lunchtime briefing on the latest local data around income, housing, and food security, with time for discussion on where research can drive change.", thumbnail: null, registrationLink: "https://example.com/briefing-rsvp", volunteerContact: null, createdAt: "2026-05-01T12:00:00-04:00" },
   { id: 5, ownerId: 5, organizationId: 5, title: "Family Maker Lab: Circuits", startsAt: "2026-06-26T15:30:00-04:00", endsAt: "2026-06-26T17:30:00-04:00", location: "RCH Workshop", description: "Hands-on electronics for curious makers aged 8 and up. Build a working circuit you can take home — no experience needed, just bring your curiosity.", thumbnail: null, registrationLink: "https://example.com/makerlab-rsvp", volunteerContact: "build@steamakers.example", createdAt: "2026-05-01T12:00:00-04:00" },
   { id: 6, ownerId: 6, organizationId: 6, title: "Commons Fabric Meetup", startsAt: "2026-06-18T18:00:00-04:00", endsAt: "2026-06-18T20:00:00-04:00", location: "RCH Room 2", description: "Monthly working session for the Commons Fabric project. Newcomers welcome — we'll walk through the calendar prototype and pick up open tasks together.", thumbnail: null, registrationLink: null, volunteerContact: "volunteer@ottawacivictech.example", createdAt: "2026-05-01T12:00:00-04:00" },
-]
+].map(toEvent)

@@ -1,6 +1,8 @@
+import { getDate, isSameMonth } from "date-fns";
+
 import { type Event } from "../../api/events";
 import { DOW as DAY_HEADERS } from "../../utils/types/dates";
-import { fmtTime, toTimeKey } from "../../utils/datetime";
+import { fmtTime } from "../../utils/datetime";
 import { classesForID } from "../../utils/palette";
 
 interface MonthGridProps {
@@ -15,13 +17,15 @@ export function MonthGrid({ year, month, events, onSelect }: MonthGridProps) {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const byIso = new Map<string, Event[]>();
+  // Binned by the day each instant falls on for the viewer, which is the clock
+  // fmtTime renders below.
+  const byDay = new Map<number, Event[]>();
   events.forEach((e) => {
-    const list = byIso.get(e.startsAt) ?? [];
-    list.push(e);
-    byIso.set(e.startsAt, list);
+    if (!isSameMonth(e.startsAt, new Date(year, month, 1))) return;
+    const day = getDate(e.startsAt);
+    byDay.set(day, [...(byDay.get(day) ?? []), e]);
   });
-  byIso.forEach((l) => l.sort((a, b) => a.time.localeCompare(b.time)));
+  byDay.forEach((l) => l.sort((a, b) => +a.startsAt - +b.startsAt));
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
@@ -46,18 +50,18 @@ export function MonthGrid({ year, month, events, onSelect }: MonthGridProps) {
           {day !== null && (
             <>
               <div className="text-xs font-semibold text-muted mb-1">{day}</div>
-              {(byDay[day] || []).map(e => {
+              {(byDay.get(day) ?? []).map(e => {
                 const color = classesForID(e.organizationId);
-                const t = toTimeKey(e.startsAt);
+                const t = fmtTime(e.startsAt);
               return (
                 <div key={e.id}>
                     <div
-                      onClick={() => onSelect(e)}
-                      title={`${fmtTime(t)} ${e.title}`}
+                      onClick={() => onSelect(e.id)}
+                      title={`${t} ${e.title}`}
                       className={`h-[5px] rounded-[2px] mb-[2px] cursor-pointer ${color.railX}`}
                     />
                     <div className="text-[8px] text-muted overflow-hidden text-ellipsis whitespace-nowrap mb-[2px]">
-                      {`${fmtTime(t).replace(":00", "")} ${e.title}`}
+                      {`${t.replace(":00", "")} ${e.title}`}
                     </div>
                   </div>
               )})}

@@ -52,7 +52,7 @@ frontend/                       — React SPA (Vite, TanStack Router/Query, Tail
 │   ├── hooks/                     — useAuth (session context), useEvents, useOrganizations, useOverlayContext.
 │   ├── components/                — Grouped by Design System page (see components/README.md).
 │   │   ├── cards/                  — EventCard, OrgCard (+ Storybook docs.* variants).
-│   │   ├── chips/                  — DateChip, DetailRow, InlineDate, Summary, Tag.
+│   │   ├── chips/                  — DateChip, Summary, Tag.
 │   │   ├── controls/                — Button, Field, Toggle.
 │   │   ├── modals/                  — CreateAccountModal, CreateEventModal, EventDetailModal, LoginForm/Modal, Modal, Toast.
 │   │   ├── nav/                     — FilterBar, Header (+ .stories.tsx).
@@ -93,6 +93,14 @@ not what); one-liners or obvious functionality do not need one.
   `application/problem+json` into `ApiError`); other modules in that folder wrap one
   endpoint each and hold no state, interpreting no errors themselves. Interpreting a
   failure (e.g. "401 means signed out") belongs to the caller — see `hooks/`.
+- **Timestamps are resolved at the `api/` boundary, once.** The API sends RFC 3339
+  strings whose offset is authoritative; `api/events.ts` maps every response through
+  `toEvent`, which turns each one into a `Date` (an absolute instant). Everything
+  downstream holds `Date`s and renders them in the viewer's timezone via
+  `utils/datetime.ts` — no component parses a timestamp string, and no formatter
+  accepts one. Going the other way, a bare `<input type="date">`/`type="time"` value
+  (`DateKey`, "YYYY-MM-DD") carries no offset, so it is read in the viewer's timezone
+  and widened into an instant before it is sent (`dayEdge`, `fromDateAndTime`).
 - **`frontend/src/mocks/` mirrors `frontend/src/api/`** as a mock-backend peer. Flows
   move from `mocks/` to `api/` as they're wired to the real backend; once `mocks/` is
   empty it can be deleted.

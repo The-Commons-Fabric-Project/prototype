@@ -1,32 +1,56 @@
 /**
- * The /v1/events operations. No mapping - utils/types/events.ts mirrors the OpenAPI
- * `Event` schema, so a conversion step here would mean the two have drifted.
+ * The /v1/events operations, and the one place a timestamp crosses between the
+ * API's RFC 3339 strings and the `Date`s the rest of the app holds.
+ *
+ * The offset the database stores is authoritative: `toEvent` resolves each
+ * timestamp into an absolute instant, which utils/datetime then renders in the
+ * viewer's own timezone. Every Event in the app comes through here, so nothing
+ * downstream ever parses a timestamp string.
  */
 
-import { endOfDay, parse, startOfDay } from 'date-fns';
+import { dayEdge } from '../utils/datetime';
+import type { DateKey, DBTimestamp } from '../utils/types/dates';
 
 import { get, post, type QueryString } from './client';
-import type { components as c, operations as op } from './openapi.gen';
+import type { components as c } from './openapi.gen';
 
 
-export type Event = c["schemas"]["Event"];
-export type Timestamp = c["schemas"]["Timestamp"];
+type EventResponse = c["schemas"]["Event"];
+
+export type Event = Omit<EventResponse, "startsAt" | "endsAt" | "createdAt"> & {
+  startsAt: Date;
+  endsAt: Date;
+  createdAt: Date;
+};
+
 export const requiresRegistration = (event: Event) => Boolean(event.registrationLink);
 export const needsVolunteers = (event: Event) => Boolean(event.volunteerContact);
 
 
-export type EventQuery = op["listEvents"]["parameters"]["query"];
-
-
-function toTimestamp(value: string, edge: 'start' | 'end'): Timestamp {
-  const day = parse(value, 'yyyy-MM-dd', new Date(0));
-  return (edge === 'start' ? startOfDay(day) : endOfDay(day)).toISOString();
+function instant(value: DBTimestamp, field: string): Date {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) throw new Error(`${field} is not a valid timestamp: ${value}`);
+  return parsed;
 }
+
+/** Wire event -> app event. Exported for the Storybook fixtures in mocks/. */
+export const toEvent = (event: EventResponse): Event => ({
+  ...event,
+  startsAt: instant(event.startsAt, "startsAt"),
+  endsAt: instant(event.endsAt, "endsAt"),
+  createdAt: instant(event.createdAt, "createdAt"),
+});
+
+export type EventQuery = {
+  startDate?: DateKey;
+  endDate?: DateKey;
+  organizationId?: number;
+};
 
 function queryString(query: EventQuery = {}): QueryString | '' {
   const params = new URLSearchParams();
-  if (query.startDate) params.set('startDate', toTimestamp(query.startDate, 'start'));
-  if (query.endDate) params.set('endDate', toTimestamp(query.endDate, 'end'));
+  if (query.startDate) params.set('startDate', dayEdge(query.startDate, 'start'));
+  if (query.endDate) params.set('endDate', dayEdge(query.endDate, 'end'));
   if (query.organizationId !== undefined) params.set('organizationId', String(query.organizationId));
 
   const search = params.toString();
@@ -34,7 +58,8 @@ function queryString(query: EventQuery = {}): QueryString | '' {
 }
 
 /** GET /v1/events - events whose startsAt falls in the window, in that order. */
-export const listEvents = (query?: EventQuery) => get<Event[]>(`/events${queryString(query)}`);
+export const listEvents = async (query?: EventQuery): Promise<Event[]> =>
+  (await get<EventResponse[]>(`/events${queryString(query)}`)).map(toEvent);
 
 export type EventCreate = c["schemas"]["EventCreate"];
 
@@ -42,4 +67,5 @@ export type EventCreate = c["schemas"]["EventCreate"];
  * POST /v1/events - publishes an event owned by the signed-in user. Throws ApiError
  * 401 without a session, or when the cookie does not verify.
  */
-export const createEvent = (input: EventCreate) => post<Event>('/events', input);
+export const createEvent = async (input: EventCreate): Promise<Event> =>
+  toEvent(await post<EventResponse>('/events', input));

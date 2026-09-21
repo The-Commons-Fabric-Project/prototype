@@ -1,17 +1,12 @@
 import { type Event, needsVolunteers, requiresRegistration } from '../../api/events'
-import { parseDate, fmtTime, toDateKey } from '../../utils/datetime';
+import { fmtMonthDate, fmtPlainDate, fmtTime } from '../../utils/datetime';
 
-import InlineDate from '../chips/InlineDate';
 import Tag from '../chips/Tag';
 import Icon from '../../assets/Icons';
 import { classesForID } from '../../utils/palette';
 
 type EventCardProps = {
   event: Event;
-  /**
-   * Resolved by the parent with useOrgLookup, so this stays presentational and
-   * usable from Storybook without a QueryClientProvider.
-   */
   orgName?: string;
   onClick: () => void;
   idx: number;
@@ -19,13 +14,12 @@ type EventCardProps = {
 
 export default function EventCard({ event, orgName, onClick, idx }: EventCardProps) {
   const color = classesForID(event.organizationId);
-  const start = parseDate(event.startsAt);
+  const start = event.startsAt;
   return (
     <div onClick={onClick} className={`cf-card-hover bg-white border border-slate-200 rounded-lg cursor-pointer flex flex-row p-4.5 gap-2.5 animate-[cf-stagger_0.35s_ease_both]`} style={{ animationDelay: `${idx * 0.04}s` }}>
 
       <span className={`w-[3px] self-stretch shrink-0 ${color.railY}`} />
-
-
+      
       <div className="min-w-0 flex flex-1 flex-col gap-2">
         {(requiresRegistration(event) || needsVolunteers(event)) && (
           <div className="flex flex-wrap gap-1.5">
@@ -33,8 +27,12 @@ export default function EventCard({ event, orgName, onClick, idx }: EventCardPro
             {needsVolunteers(event) && <Tag variant="orange">Volunteers wanted</Tag>}
           </div>
         )}
-      
-        <InlineDate date={toDateKey(start)} className="block text-[12.5px] font-bold text-slate-500 mb-[4px] tracking-[0.3px]" />
+
+        {/**Inline Date */}
+        <span aria-label={fmtPlainDate(start)} className="block text-[12.5px] font-bold text-slate-500 mb-[4px] tracking-[0.3px]">
+          {fmtMonthDate(start)}
+        </span>
+
         <h3 className="font-sans text-[17px] font-bold text-slate-900 m-0 leading-tight">{event.title}</h3>
         <p className="text-[12.5px] text-slate-500 font-semibold mt-[4px] mb-0">{orgName}</p>
       

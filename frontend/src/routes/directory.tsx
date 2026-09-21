@@ -4,7 +4,6 @@ import type { Org } from '../api/organizations'
 import type { Event } from '../api/events'
 import { useEvents } from '../hooks/useEvents'
 import { useOrganizations } from '../hooks/useOrganizations'
-import { parseDate, toDateKey } from '../utils/datetime'
 import { fmtTime } from '../utils/datetime'
 
 import EventDetailModal from '../components/modals/EventDetailModal'
@@ -19,14 +18,14 @@ export const Route = createFileRoute('/directory')({
 })
 
 function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
-  const start = parseDate(event.startsAt);
+  const start = event.startsAt;
   return (
     <div
       onClick={onClick}
       className="flex gap-3.5 items-center bg-white border border-line rounded-xl p-3.5 cursor-pointer hover:shadow-[0_4px_12px_rgba(65,65,66,0.08)] active:scale-[0.99]"
       style={{ transition: 'box-shadow .18s ease, transform .08s ease' }}
     >
-      <DateChip date={toDateKey(start)} large={false}/>
+      <DateChip date={start} large={false}/>
       <div className="flex-1 min-w-0">
         <h4 className="font-display text-[16px] font-semibold text-ink m-0 leading-[1.2]">
           {event.title}

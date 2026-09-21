@@ -1,7 +1,8 @@
 import { fmtDateChip } from "../../utils/datetime";
 
 type DateChipProps = {
-  date: string;
+  /** The instant to label, already in the viewer's timezone. See api/events.ts. */
+  date: Date;
   large: boolean;
 }
 

@@ -8,8 +8,8 @@ import type { Event } from '../../api/events';
 
 import { addMonths, format, getDate, getDay, getDaysInMonth, isSameMonth, startOfMonth, subMonths } from 'date-fns';
 
-import { parseDate, fmtTime, monthBounds } from '../../utils/datetime';
-import { DOW as DAY_HEADERS } from '../../utils/types/dates';
+import { fromDateKey, fmtTime, monthBounds } from '../../utils/datetime';
+import { DOW as DAY_HEADERS, type DateKey } from '../../utils/types/dates';
 import { classesForID } from '../../utils/palette';
 
 type CalendarViewProps = {
@@ -19,29 +19,30 @@ type CalendarViewProps = {
    * Start of the calendar's own fetch window, "YYYY-MM-DD". Owned by
    * routes/index.tsx and separate from the card grid's range. Falls back to today.
    */
-  rangeStart: string;
+  rangeStart: DateKey;
   /** Asks the route to fetch a new month. Called on every month navigation. */
-  onWindowChange: (start: string, end: string) => void;
+  onWindowChange: (start: DateKey, end: DateKey) => void;
 };
 
 export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: CalendarViewProps) {
   // Seeded from the current window, falling back to today. The month decides which
   // data is fetched, so it cannot be derived from the events.
   
-  const [cursor, setCursor] = useState(() => (rangeStart ? parseDate(rangeStart) : new Date()));
+  const [cursor, setCursor] = useState(() => (rangeStart ? fromDateKey(rangeStart) : new Date()));
   const firstDay = getDay(startOfMonth(cursor));
   const daysInMonth = getDaysInMonth(cursor);
 
   const byDay = useMemo(() => {
     const map: Event[][] = [];
     events.forEach((e) => {
-      const d = parseDate(e.startsAt);
-      if (isSameMonth(d, cursor)) {
-        const day = getDate(d);
+      // In the viewer's timezone: getDate/isSameMonth read local fields, which is
+      // the same clock fmtTime renders below, so a cell and its labels agree.
+      if (isSameMonth(e.startsAt, cursor)) {
+        const day = getDate(e.startsAt);
         (map[day] = map[day] || []).push(e);
       }
     });
-    Object.values(map).forEach((list) => list.sort((a, b) => a.startsAt.localeCompare(b.startsAt)));
+    Object.values(map).forEach((list) => list.sort((a, b) => +a.startsAt - +b.startsAt));
     return map;
   }, [events, cursor]);
 
