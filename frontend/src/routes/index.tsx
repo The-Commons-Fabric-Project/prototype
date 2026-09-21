@@ -11,29 +11,17 @@ import { useModal } from '../hooks/useOverlayContext';
 import CreateEventModal from '../components/modals/CreateEventModal';
 import EventDetailModal from '../components/modals/EventDetailModal';
 import { monthBounds, toDateKey } from '../utils/datetime';
+import type { DateKey } from '../utils/types/dates';
 import type { Event } from '../api/events';
 
 function Index() {
   const [view, setView] = useState<'cards' | 'calendar'>('calendar')
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
-  // A window per view, deliberately not shared.
-  //
-  // The two views ask different questions - the grid filters an open-ended list
-  // between two dates, the calendar always shows exactly one month - so a single
-  // window would make each one's navigation overwrite the other's filter. They
-  // are held here rather than inside the views so that toggling between them,
-  // which unmounts one, does not throw its window away.
-  //
-  // The grid starts unbounded: "" is read by the API as "from now" and
-  // "no end". The calendar starts on the month it is about to display, so its
-  // first request is already scoped to what is on screen.
-  const [gridStart, setGridStart] = useState("");
-  const [gridEnd, setGridEnd] = useState("");
+  const [gridStart, setGridStart] = useState<DateKey>("");
+  const [gridEnd, setGridEnd] = useState<DateKey>("");
   const [calendarWindow, setCalendarWindow] = useState(() => monthBounds(new Date()));
 
-  // Only the visible view's window is fetched. Toggling swaps the query key, and
-  // the other view's events are usually still cached from last time.
   const activeWindow = view === 'cards'
     ? { startDate: gridStart, endDate: gridEnd }
     : { startDate: calendarWindow.start, endDate: calendarWindow.end };
@@ -112,10 +100,6 @@ function Index() {
         <CreateEventModal
           onClose={() => setModal(undefined)}
           session={user}
-          // The modal publishes and invalidates the event cache itself, so the
-          // list refreshes without anything here. Jump the grid to the new
-          // event's day so it is visible rather than possibly outside the
-          // current window.
           onCreate={(created) => {
             const day = toDateKey(created.startsAt);
             setView('cards');

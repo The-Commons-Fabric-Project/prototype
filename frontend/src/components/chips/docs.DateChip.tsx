@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    "date": "2023-08-15",
+    "date": new Date("2023-08-15T12:00:00-04:00"),
     "large": false
   },
 };

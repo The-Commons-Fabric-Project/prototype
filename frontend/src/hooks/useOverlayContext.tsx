@@ -22,7 +22,7 @@ export type OverlayState = {
   toast: { toastMsg: string, toastTimer: ToastTimer, toast: (msg: string) => void},
 }
 
-const OverlayContext = createContext<OverlayState | undefined>(undefined); //({ toastMsg, toastTimer, toast })
+const OverlayContext = createContext<OverlayState | undefined>(undefined);
 
 export function OverlayProvider({ children }: { children: React.ReactNode }) {
   const [toastMsg, setToastMsg] = useState("");
@@ -51,7 +51,6 @@ export function useToast() {
   if (context === undefined) {
     throw new Error('useToast must be used within an OverlayProvider')
   }
-  // else { console.log(`toast message is set to: ${context.toast.toastMsg}`)};
   return context.toast
 }
 

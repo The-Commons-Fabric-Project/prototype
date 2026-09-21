@@ -1,7 +1,8 @@
 import { fmtDateChip } from "../../utils/datetime";
 
 type DateChipProps = {
-  date: string;
+  /** The instant to label, already in the viewer's timezone. See api/events.ts. */
+  date: Date;
   large: boolean;
 }
 
@@ -20,7 +21,6 @@ export default function DateChip({
       <span className="justify-start text-ink text-xs font-semibold font-sans uppercase tracking-wide"
       >{month}</span>
       <span className="text-primary font-sans text-xl font-semibold leading-md"
-      // style={{ fontSize: large ? 28 : 22}}
       >{day}</span>
     </div>
   );

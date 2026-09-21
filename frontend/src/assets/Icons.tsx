@@ -1,6 +1,6 @@
 // Icons (grayscale, stroke = currentColor)
 
-import type { ReactElement, SVGProps } from "react";
+import type { SVGProps } from "react";
 
 const svgBase = { 
   fill: "none", 

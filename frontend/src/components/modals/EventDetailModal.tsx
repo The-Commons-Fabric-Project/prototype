@@ -1,17 +1,27 @@
+import type { ReactElement } from 'react';
 import { type Event, needsVolunteers, requiresRegistration } from '../../api/events'
-import { fmtPlainDate, fmtTime, toDateKey, toTimeKey } from '../../utils/datetime';
-import DetailRow from '../chips/DetailRow';
+import { fmtPlainDate, fmtTime } from '../../utils/datetime';
 import Icon from '../../assets/Icons';
 import Modal, { ModalHeader } from './Modal';
 import Button from '../controls/Button';
 import { useToast } from '../../hooks/useOverlayContext';
 
+type DetailRowProps = {
+  icon: ReturnType<typeof Icon>,
+  text: string | undefined | ReactElement
+}
+
+function DetailRow({ icon, text }: DetailRowProps) {
+  return (
+    <div className="flex gap-2.5 align-items-start text-[14px] text-ink leading-[1.45]">
+      <span className="text-muted mt-px">{icon}</span><span>{text}</span>
+    </div>
+  );
+}
+
 type EventDetailModalProps = {
-  /** event details */
   event: Event;
-  /** The publishing organization's name, resolved by the parent via useOrgLookup. */
   orgName?: string;
-  /** callback */
   onClose: () => void;
 };
 
@@ -32,10 +42,10 @@ export default function EventDetailModal({
         <div className="flex flex-col gap-2.5 mb-4.5 border-t border-slate-200 pt-4">
           <DetailRow 
             icon={<Icon name="calendar" size={15} />}  
-            text={fmtPlainDate(toDateKey(event.startsAt))} /> 
+            text={fmtPlainDate(event.startsAt)} />
           <DetailRow 
             icon={<Icon name="clock" size={15} />} 
-            text={fmtTime(toTimeKey(event.startsAt))} />
+            text={fmtTime(event.startsAt)} />
           <DetailRow 
             icon={<Icon name="pin" size={15} />} 
             text={event.location ?? "Location to come"} />

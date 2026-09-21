@@ -9,7 +9,7 @@ import Toggle from "../controls/Toggle";
 import Summary from "../chips/Summary";
 
 import { EMAIL_RE } from "../../utils/stringcheck";
-import { fmtTime, fmtPlainDate, fromDateAndTime } from "../../utils/datetime";
+import { fmtTime, fmtPlainDate, fromDateAndTime, localDateTime } from "../../utils/datetime";
 import { useToast } from "../../hooks/useOverlayContext";
 import { useCreateEvent } from "../../hooks/useEvents";
 import { ApiError } from "../../api/client";
@@ -118,6 +118,13 @@ export default function CreateEventModal({
     return Object.keys(e).length === 0;
   };
 
+  // The review step reads the two inputs back as the one instant they will be
+  // published as, so the confirmation shows the same clock the form collected.
+  const startsAt = form.startDate && form.startTime
+    ? localDateTime(form.startDate, form.startTime)
+    : null;
+  const whenSummary = startsAt ? `${fmtPlainDate(startsAt)} · ${fmtTime(startsAt)}` : "";
+
   const inputStyle = (err: EventFormErrors[keyof EventFormErrors]) => `w-full px-[11px] py-[9px] rounded-md text-sm font-sans outline-none ${err ? 'border border-red-500' : 'border border-slate-300'} bg-white text-slate-900`;
 
   return (
@@ -183,7 +190,7 @@ export default function CreateEventModal({
             <div className="bg-paper border border-line rounded-sm p-[16px] mb-[16px]"
             >
               <Summary label="Title" value={form.title} />
-              <Summary label="When" value={`${fmtPlainDate(form.startDate)} · ${fmtTime(form.startTime)}`} />
+              <Summary label="When" value={whenSummary} />
               <Summary label="Where" value={form.location} />
               <Summary label="Host" value={session.fullname} />
               <Summary label="Registration" value={form.registrationRequired ? form.registrationLink : "Not required"} />

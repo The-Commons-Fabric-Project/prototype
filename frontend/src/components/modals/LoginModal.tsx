@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Modal, { ModalHeader } from './Modal';
 import LoginForm, { type LoginFormHeader } from './LoginForm';
 
-export type LoginModalProps = {
+type LoginModalProps = {
   onClose: () => void,
 }
 

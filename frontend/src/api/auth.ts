@@ -11,13 +11,6 @@ import type { components as c } from "./openapi.gen";
  * never sent by the API and so has no field here.
  */
 export type User = c["schemas"]["User"]
-//   id: number;
-//   fullname: string;
-//   email: string;
-//   /** The organization the user publishes under. See hooks/useOrganizations.ts. */
-//   organizationId: number;
-//   /** RFC 3339 timestamp. */
-//   createdAt: string;
 
 export type AuthAttemptStatus = 'unsent' | 'pending' | 'success' | 'fail';
 
@@ -47,10 +40,3 @@ export const logout = () => post<{ ok: boolean }>('/auth/logout');
  * session, the normal answer for a signed-out visitor rather than a failure.
  */
 export const getProfile = () => get<User>('/auth/profile');
-
-/**
- * POST /v1/auth/create-user - registers a user and signs them in. `organizationId`
- * must already exist; the API has no endpoint for creating one.
- */
-export const createUser = (input: { fullname: string; email: string; password: string; organizationId: number }) =>
-  post<User>('/auth/create-user', input);

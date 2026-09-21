@@ -10,12 +10,7 @@ import type { paths } from "./openapi.gen";
 import type { Concat } from "../utils/stringcheck";
 
 type ApiPath = keyof paths & string;
-type Subpath = Concat<"/", `${string}`>; //`/${string}`;
 export type QueryString = Concat<"?", `${string}`>;
-type IsParameterizedPath<P> = P extends `${ApiPath}${Subpath}` ? P : never;
-
-export type ParameterizedApiPath = IsParameterizedPath<ApiPath>;
-
 export type ApiRequestPath = ApiPath | Concat<ApiPath, QueryString>;
 
 /** Path prefix. Also the document's server URL - see backend/src/docs/api/openapi.yaml. */

@@ -3,76 +3,113 @@
 
 /* themes from updated wireframe */
 @theme {
-    --font-display: "Helvetica", Arial, sans-serif;
-    --font-body: "Helvetica", Arial, sans-serif;
-    --font-sans: var(--font-body);
+  --font-display: "Helvetica", Arial, sans-serif;
+  --font-body: "Helvetica", Arial, sans-serif;
+  --font-sans: var(--font-body);
 
-    --color-primary: #2b2b2b; /* not in v3 design sys */
-    --color-ink: #262626;
-    --color-body: #6b6b6b;
-    --color-muted: #8a8a8a;
-    --color-faint: #B8B8B8;
-    --color-line: #D1D1D1;
-    --color-surface: #FAFAFA;
-    --color-surface-alt: #F5F5F5;
-    --color-field: #FFFFFF;
-    --color-track-off: #E8E8E8;
-    --color-paper: #f4f4f4; /* not in v3 design sys */
-    --color-danger: #f50a1e; 
-    --color-accent: #6f49e0;
-    --color-accent-soft: #b297d6;
-    --color-footer: #1E1E1E;
-    --color-footer-line: #333333;
-    --color-footer-text: #B8B8B8;
-    /* --color-overlay: rgba(38,38,38,0.55); */
+  --color-primary: #2b2b2b; /* not in v3 design sys */
+  --color-ink: #262626;
+  --color-body: #6b6b6b;
+  --color-muted: #8a8a8a;
+  --color-faint: #B8B8B8;
+  --color-line: #D1D1D1;
+  --color-surface: #FAFAFA;
+  --color-surface-alt: #F5F5F5;
+  --color-field: #FFFFFF;
+  --color-track-off: #E8E8E8;
+  --color-paper: #f4f4f4; /* not in v3 design sys */
+  --color-danger: #f50a1e; 
+  --color-accent: #6f49e0;
+  --color-accent-soft: #b297d6;
+  --color-footer: #1E1E1E;
+  --color-footer-line: #333333;
+  --color-footer-text: #B8B8B8;
+  /* --color-overlay: rgba(38,38,38,0.55); */
 
-    --color-cf-green: #10c662;
-    --color-cf-blue: #4c6dc5;
-    --color-cf-purple: var(--color-accent);
-    --color-cf-red: #e2526c;
-    --color-cf-orange: #e67539;
-    --color-cf-yellow: #f8e056;
+  /* layout from Figma */
+  --spacing-2xs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl : 48px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-card: 14px;
+  --radius-full: 9999px;
+  --layout-max-width: 1040px;
 
-    /* layout from Figma */
-    --spacing-2xs: 4px;
-    --spacing-xs: 8px;
-    --spacing-sm: 12px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    --spacing-2xl : 48px;
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-card: 14px;
-    --radius-full: 9999px;
-    --layout-max-width: 1040px;
+  --animate-fade: cf-fade .18s ease;
+  --animate-fade-long: cf-fade .3s ease;
+  --animate-pop: cf-pop .2s cubic-bezier(.2,.8,.3,.1);
+  --animate-stagger: cf-stagger .4s ease ${idx * 0.05}s both;
 
-    --animate-fade: cf-fade .18s ease;
-    --animate-fade-long: cf-fade .3s ease;
-    --animate-pop: cf-pop .2s cubic-bezier(.2,.8,.3,.1);
-    --animate-stagger: cf-stagger .4s ease ${idx * 0.05}s both;
+  @keyframes cf-pop { 
+    0% { opacity: 0; transform: scale(0.96) translateY(6px);} 100% { opacity: 1; transform: scale(1) translateY(0);} 
+  }
 
-    @keyframes cf-pop { 
-        0% { opacity: 0; transform: scale(0.96) translateY(6px);} 100% { opacity: 1; transform: scale(1) translateY(0);} 
-    }
+  @keyframes cf-fade { 
+    from { opacity: 0;} 
+    to { opacity: 1;} 
+  }
 
-    @keyframes cf-fade { 
-        from { opacity: 0;} 
-        to { opacity: 1;} 
-    }
+  @keyframes cf-rise { 
+    0% { opacity: 0; transform: translate(-50%, 14px);} 
+    100% { opacity: 1; transform: translate(-50%, 0);} 
+  }
 
-    @keyframes cf-rise { 
-        0% { opacity: 0; transform: translate(-50%, 14px);} 
-        100% { opacity: 1; transform: translate(-50%, 0);} 
-    }
-
-    @keyframes cf-stagger { 
-        from { opacity: 0; transform: translateY(8px);} 
-        to { opacity: 1; transform: translateY(0);} 
-    }
+  @keyframes cf-stagger { 
+    from { opacity: 0; transform: translateY(8px);} 
+    to { opacity: 1; transform: translateY(0);} 
+  }
 }
 
-.cf-card-hover { 
+@theme static {
+  --color-green-c1: #10C662;
+  --color-green-c2: #90DF97;
+  --color-green-tint: #EAF6EC;
+  --color-green-text: #0D9E52;
+  --color-green-stop2: #3ACE73;
+  --color-green-stop3: #64D685;
+
+  --color-blue-c1: #4C6DC5;
+  --color-blue-c2: #94BFFE;
+  --color-blue-tint: #EAF0FB;
+  --color-blue-text: #4C6DC5;
+  --color-blue-stop2: #6488D8;
+  --color-blue-stop3: #7CA3EB;
+
+  --color-purple-c1: #6F49E0;
+  --color-purple-c2: #C6AEE7;
+  --color-purple-tint: #F1EBF8;
+  --color-purple-text: #6F49E0;
+  --color-purple-stop2: #9570C7;
+  --color-purple-stop3: #B297D6;
+
+  --color-red-c1: #E2526C;
+  --color-red-c2: #ED8497;
+  --color-red-tint: #FCEDEF;
+  --color-red-text: #C63A54;
+  --color-red-stop2: #E6637A;
+  --color-red-stop3: #E97388;
+
+  --color-orange-c1: #E67539;
+  --color-orange-c2: #F39A6B;
+  --color-orange-tint: #FBEDE4;
+  --color-orange-text: #C4551F;
+  --color-orange-stop2: #EA814A;
+  --color-orange-stop3: #EF8D5A;
+
+  --color-yellow-c1: #F8E056;
+  --color-yellow-c2: #FFF2A8;
+  --color-yellow-tint: #FDF8E0;
+  --color-yellow-text: #8A6B00;
+  --color-yellow-stop2: #FAE671;
+  --color-yellow-stop3: #FDEC8C;
+}
+
+.cf-card-hover {
   transition: border-color .15s ease, 
     box-shadow .15s ease; 
 }

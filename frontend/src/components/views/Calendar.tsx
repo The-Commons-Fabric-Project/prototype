@@ -6,9 +6,11 @@
 import { useState, useMemo } from 'react'
 import type { Event } from '../../api/events';
 
-import { parseDate, fmtTime, toTimeKey, monthBounds } from '../../utils/datetime';
-import { MONTHS_FULL as MONTH_NAMES, DOW as DAY_HEADERS } from '../../utils/types/dates';
-import { paletteForID } from '../../utils/palette';
+import { addMonths, format, getDate, getDay, getDaysInMonth, isSameMonth, startOfMonth, subMonths } from 'date-fns';
+
+import { fromDateKey, fmtTime, monthBounds } from '../../utils/datetime';
+import { DOW as DAY_HEADERS, type DateKey } from '../../utils/types/dates';
+import { classesForID } from '../../utils/palette';
 
 type CalendarViewProps = {
   events: Event[];
@@ -17,34 +19,32 @@ type CalendarViewProps = {
    * Start of the calendar's own fetch window, "YYYY-MM-DD". Owned by
    * routes/index.tsx and separate from the card grid's range. Falls back to today.
    */
-  rangeStart: string;
+  rangeStart: DateKey;
   /** Asks the route to fetch a new month. Called on every month navigation. */
-  onWindowChange: (start: string, end: string) => void;
+  onWindowChange: (start: DateKey, end: DateKey) => void;
 };
 
 export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: CalendarViewProps) {
   // Seeded from the current window, falling back to today. The month decides which
   // data is fetched, so it cannot be derived from the events.
   
-  const [cursor, setCursor] = useState(() => (rangeStart ? parseDate(rangeStart) : new Date()));
-  const year = cursor.getFullYear(), month = cursor.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  
-  // console.log(rangeStart, parseDate(rangeStart));
+  const [cursor, setCursor] = useState(() => (rangeStart ? fromDateKey(rangeStart) : new Date()));
+  const firstDay = getDay(startOfMonth(cursor));
+  const daysInMonth = getDaysInMonth(cursor);
 
   const byDay = useMemo(() => {
     const map: Event[][] = [];
-    console.log(events[0]);
     events.forEach((e) => {
-      const d = parseDate(e.startsAt);
-      if (d.getFullYear() === year && d.getMonth() === month) {
-        (map[d.getDate()] = map[d.getDate()] || []).push(e);
+      // In the viewer's timezone: getDate/isSameMonth read local fields, which is
+      // the same clock fmtTime renders below, so a cell and its labels agree.
+      if (isSameMonth(e.startsAt, cursor)) {
+        const day = getDate(e.startsAt);
+        (map[day] = map[day] || []).push(e);
       }
     });
-    Object.values(map).forEach((list) => list.sort((a, b) => a.startsAt.localeCompare(b.startsAt)));
+    Object.values(map).forEach((list) => list.sort((a, b) => +a.startsAt - +b.startsAt));
     return map;
-  }, [events, year, month]);
+  }, [events, cursor]);
 
   // Moving the cursor also moves the fetch window.
   const goToMonth = (next: Date) => {
@@ -53,8 +53,8 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
     onWindowChange(start, end);
   };
 
-  const goToPrev = () => { goToMonth(new Date(year, month - 1, 1)) };
-  const goToNext = () => { goToMonth(new Date(year, month + 1, 1)) };
+  const goToPrev = () => { goToMonth(startOfMonth(subMonths(cursor, 1))) };
+  const goToNext = () => { goToMonth(startOfMonth(addMonths(cursor, 1))) };
 
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
@@ -67,7 +67,7 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
     <div className="bg-white border border-line rounded-2xl p-4.5">
       <div className="flex justify-between items-center mb-3.5">
         <h3 className="font-display text-xl font-semibold text-ink m-0">
-          {MONTH_NAMES[month]} {year}
+          {format(cursor, 'MMMM yyyy')}
         </h3>
         <div className="flex gap-2">
           <button
@@ -105,23 +105,17 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
               <>
                 <div className="text-xs font-semibold text-muted mb-1">{day}</div>
                 {(byDay[day] || []).map(e => {
-                  const pal = paletteForID(e.organizationId);
-                  const t = toTimeKey(parseDate(e.startsAt));
+                  const color = classesForID(e.organizationId);
+                  const t = fmtTime(e.startsAt);
                 return (
                   <div key={e.id}>
                       <div
                         onClick={() => onSelect(e)}
-                        title={`${fmtTime(t)} ${e.title}`}
-                        style={{
-                          background: `linear-gradient(90deg,${pal.c1},${pal.c2})`,
-                          height: 5,
-                          borderRadius: 2,
-                          marginBottom: 2,
-                          cursor: "pointer",
-                        }}
+                        title={`${t} ${e.title}`}
+                        className={`h-[5px] rounded-[2px] mb-[2px] cursor-pointer ${color.railX}`}
                       />
-                      <div style={{ fontSize: 8, color: "var(--color-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: 2 }}>
-                        {`${fmtTime(t).replace(":00", "")} ${e.title}`}
+                      <div className="text-[8px] text-muted overflow-hidden text-ellipsis whitespace-nowrap mb-[2px]">
+                        {`${t.replace(":00", "")} ${e.title}`}
                       </div>
                     </div>
                 )})}

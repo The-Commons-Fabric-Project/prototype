@@ -12,10 +12,6 @@ import type { components as c } from "./openapi.gen";
  */
 export type Org = c["schemas"]["Organization"];
 export type OrgTag = c["schemas"]["OrganizationTag"];
-export type OrgId = c["schemas"]["OrganizationId"];
 
 /** GET /v1/organizations - ordered by name, unpaginated. */
 export const listOrganizations = () => get<Org[]>('/organizations');
-
-/** GET /v1/organizations/{organizationId} */
-export const getOrganization = (organizationId: OrgId) => get<Org>(`/organizations/${organizationId}`);

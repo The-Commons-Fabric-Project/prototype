@@ -2,106 +2,78 @@
 export type ColorVariantKey = "green" | "blue" | "purple" | "red" | "orange" | "yellow";
 
 export const COLOR_ORDER: ColorVariantKey[] = ["green", "blue", "purple", "red", "orange", "yellow"];
-export const NUMCOLORS: number = COLOR_ORDER.length;
+const NUMCOLORS: number = COLOR_ORDER.length;
 
-export type CFColorVariable = `--color-cf-${ColorVariantKey}`;
-
-/** Palette for various components of a color variant */
-export interface ColorVariantPalette {
-  /** Primary rail / border color */
-  c1: string;
-  /** Secondary gradient stop */
-  c2: string;
-  /** Pale surface tint (logo plate, timeblock fill) */
-  tint: string;
-  /** AA-safe text color on neutral surfaces */
-  text: string;
-  /** Four-stop ramp for modal top bars */
-  stops: [string, string, string, string];
+/** Tailwind classes for the parts of a component that carry a variant's color. */
+export interface ColorVariantClasses {
+  /** Card left edges. */
+  railY: string;
+  /** Horizontal rail, left to right. Used in the calendarCalendar. */
+  railX: string;
+  /** Logo platecolored top edge and initials. */
+  plate: string;
+  /** Tag chip: pale fill, AA-safe text, solid border. */
+  chip: string;
+  /** Flat primary fill. Header stripe. */
+  fill: string;
 }
 
-export const PALETTE: Record<ColorVariantKey, ColorVariantPalette> = {
-  green:  { 
-    c1:"#10C662", 
-    c2:"#90DF97", 
-    tint:"#EAF6EC", 
-    text:"#0D9E52", 
-    stops:["#10C662",
-      "#3ACE73",
-      "#64D685",
-      "#90DF97"] },
-  blue:   { 
-    c1:"#4C6DC5", 
-    c2:"#94BFFE", 
-    tint:"#EAF0FB", 
-    text:"#4C6DC5", 
-    stops:["#4C6DC5",
-      "#6488D8",
-      "#7CA3EB",
-      "#94BFFE"] },
-  purple: { 
-    c1:"#6F49E0", 
-    c2:"#C6AEE7", 
-    tint:"#F1EBF8", 
-    text:"#6F49E0", 
-    stops:["#6F49E0",
-      "#9570C7",
-      "#B297D6",
-      "#C6AEE7"] },
-  red:    { 
-    c1:"#E2526C", 
-    c2:"#ED8497", 
-    tint:"#FCEDEF", 
-    text:"#C63A54", 
-    stops:["#E2526C",
-      "#E6637A",
-      "#E97388",
-      "#ED8497"] },
-  orange: { 
-    c1:"#E67539", 
-    c2:"#F39A6B", 
-    tint:"#FBEDE4", 
-    text:"#C4551F", 
-    stops:["#E67539",
-      "#EA814A",
-      "#EF8D5A",
-      "#F39A6B"] },
-  yellow: { 
-    c1:"#F8E056", 
-    c2:"#FFF2A8", 
-    tint:"#FDF8E0", 
-    text:"#8A6B00", 
-    stops:["#F8E056",
-      "#FAE671",
-      "#FDEC8C",
-      "#FFF2A8"] },
+/**
+ * Written out per variant rather than built from a template, because Tailwind
+ * only emits a utility it can find as a literal string in the source. The
+ * `--color-<key>-*` variables in index.css remain the single source of truth for
+ * the actual color values; these are just the utilities that reference them.
+ */
+export const COLOR_CLASSES: Record<ColorVariantKey, ColorVariantClasses> = {
+  green: {
+    railY: "bg-linear-to-b from-green-c1 to-green-c2",
+    railX: "bg-linear-to-r from-green-c1 to-green-c2",
+    plate: "bg-linear-to-b from-green-tint to-surface-alt border-t-[3px] border-green-c1 text-green-c1",
+    chip: "bg-green-tint text-green-text border border-green-c1",
+    fill: "bg-green-c1",
+  },
+  blue: {
+    railY: "bg-linear-to-b from-blue-c1 to-blue-c2",
+    railX: "bg-linear-to-r from-blue-c1 to-blue-c2",
+    plate: "bg-linear-to-b from-blue-tint to-surface-alt border-t-[3px] border-blue-c1 text-blue-c1",
+    chip: "bg-blue-tint text-blue-text border border-blue-c1",
+    fill: "bg-blue-c1",
+  },
+  purple: {
+    railY: "bg-linear-to-b from-purple-c1 to-purple-c2",
+    railX: "bg-linear-to-r from-purple-c1 to-purple-c2",
+    plate: "bg-linear-to-b from-purple-tint to-surface-alt border-t-[3px] border-purple-c1 text-purple-c1",
+    chip: "bg-purple-tint text-purple-text border border-purple-c1",
+    fill: "bg-purple-c1",
+  },
+  red: {
+    railY: "bg-linear-to-b from-red-c1 to-red-c2",
+    railX: "bg-linear-to-r from-red-c1 to-red-c2",
+    plate: "bg-linear-to-b from-red-tint to-surface-alt border-t-[3px] border-red-c1 text-red-c1",
+    chip: "bg-red-tint text-red-text border border-red-c1",
+    fill: "bg-red-c1",
+  },
+  orange: {
+    railY: "bg-linear-to-b from-orange-c1 to-orange-c2",
+    railX: "bg-linear-to-r from-orange-c1 to-orange-c2",
+    plate: "bg-linear-to-b from-orange-tint to-surface-alt border-t-[3px] border-orange-c1 text-orange-c1",
+    chip: "bg-orange-tint text-orange-text border border-orange-c1",
+    fill: "bg-orange-c1",
+  },
+  yellow: {
+    railY: "bg-linear-to-b from-yellow-c1 to-yellow-c2",
+    railX: "bg-linear-to-r from-yellow-c1 to-yellow-c2",
+    plate: "bg-linear-to-b from-yellow-tint to-surface-alt border-t-[3px] border-yellow-c1 text-yellow-c1",
+    chip: "bg-yellow-tint text-yellow-text border border-yellow-c1",
+    fill: "bg-yellow-c1",
+  },
 };
 
-export function colorKey(idx: number): ColorVariantKey {
+function colorKey(idx: number): ColorVariantKey {
   return COLOR_ORDER[idx % COLOR_ORDER.length];
 }
-/**
- * 
- * @param idx 
- * @returns 
- */
-export function paletteForID(id: number): ColorVariantPalette {
-  const idx = id % NUMCOLORS;
-  return PALETTE[colorKey(idx < 0 ? 0 : idx)];
-}
 
-/**
- * 
- * @param dir Direction of gradient in degrees "##deg"
- * @param from Starting color hex
- * @param to Ending color hex
- * @returns CSS property string
- */
-export function linearGradient(dir: string, from: string, to: string): string {
-  return `linear-gradient(${dir},${from},${to})`;
-}
-export function accentGradient(accent: ColorVariantKey): string {
-  const pal = PALETTE[accent];
-  return linearGradient("135deg", pal.c1, pal.stops[2]);
-  //  return `linear-gradient(135deg,${pal.c1},${pal.stops[2]})`;
+export function classesForID(id: number): ColorVariantClasses {
+  const idx = id % NUMCOLORS;
+  return COLOR_CLASSES[colorKey(idx < 0 ? 0 : idx)];
 }

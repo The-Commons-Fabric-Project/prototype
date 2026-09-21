@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 
 function blankInput(){ return (
   <input 
-    type='text' className='border border-bg-subtle rounded-md'
+    type='text' className='border border-line rounded-md'
     placeholder="placeholder"  
   />
 )}

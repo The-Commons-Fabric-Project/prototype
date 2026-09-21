@@ -1,5 +1,6 @@
 import { useMemo, type Dispatch, type SetStateAction } from 'react'
-import type { Event } from '../../utils/types/events'
+import type { Event } from '../../api/events'
+import type { DateKey } from '../../utils/types/dates'
 import EventCard from '../cards/EventCard'
 import FilterBar from '../nav/FilterBar';
 
@@ -12,10 +13,10 @@ type EventCardGridProps = {
    * The grid's own fetch window, owned by routes/index.tsx. Separate from the
    * calendar's, which tracks a month independently of this filter.
    */
-  rangeStart: string;
-  rangeEnd: string;
-  setRangeStart: Dispatch<SetStateAction<string>>;
-  setRangeEnd: Dispatch<SetStateAction<string>>;
+  rangeStart: DateKey;
+  rangeEnd: DateKey;
+  setRangeStart: Dispatch<SetStateAction<DateKey>>;
+  setRangeEnd: Dispatch<SetStateAction<DateKey>>;
 };
 
 export default function EventCardGrid({
@@ -33,7 +34,7 @@ export default function EventCardGrid({
   // still running belongs in the results - and a client-side `startsAt <
   // rangeStart` test would throw exactly those away.
   const gridEvents = useMemo(
-    () => [...events].sort((a, b) => a.startsAt.localeCompare(b.startsAt)),
+    () => [...events].sort((a, b) => +a.startsAt - +b.startsAt),
     [events],
   );
 

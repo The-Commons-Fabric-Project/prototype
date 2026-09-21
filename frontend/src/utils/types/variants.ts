@@ -1,21 +1,13 @@
-import { accentGradient, type ColorVariantKey } from "../palette";
+import { type ColorVariantKey } from "../palette";
 
 // reference: https://blog.logrocket.com/building-reusable-react-components-using-tailwind-css/#testing-badge-component
 const ButtonVariant = {
   0: 'primary',
-  1: 'secondary', // ghost
-  2: 'tertiary', // subtle
-  3: 'disabled', // danger
+  1: 'ghost', // secondary
+  2: 'subtle', // tertiary
+  3: 'danger', // disabled
   4: 'link' // TODO: get rid of this
 } as const;
-
-export const BUTTON_VARIANT_MAPS: Record<ButtonVariant, string> = {
-  primary: `bg-[${accentGradient("purple")}] text-white border-accent`,
-  secondary: "bg-white text-ink border-line",
-  tertiary: "bg-accentSoft text-ink border-line",
-  disabled: "bg-white text-danger border-line",
-  link: "bg-transparent text-bg-subtle underline"
-}
 
 export type ButtonVariant = (typeof ButtonVariant)[keyof typeof ButtonVariant];
 

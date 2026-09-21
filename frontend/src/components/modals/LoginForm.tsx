@@ -6,7 +6,7 @@ import type { ModalHeaderProps } from "./Modal";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useToast } from "../../hooks/useOverlayContext";
-import type { AuthAttemptStatus } from "../../api/users";
+import type { AuthAttemptStatus } from "../../api/auth";
 
 function inputStyle (err: boolean): InputVariant {
   return `${err ? "error" : "default"}`;
@@ -20,7 +20,7 @@ function inputStyle (err: boolean): InputVariant {
  */
 export type LoginFormHeader = Pick<ModalHeaderProps, "title" | "subtitle">;
 
-export type LoginFormProps = {
+type LoginFormProps = {
   onClose: () => void,
   onChangeMode: (header: LoginFormHeader) => void,
 }
@@ -72,21 +72,16 @@ export default function LoginForm({
     setPrevStatus(s);
   }
 
-  // handle when auth service successfully verifies the user
-  // useEffect(() => {
-  //   // console.log("Login form effect!");
-    
-  // }, [status])
   if (status !== prevStatus) handleStatus(status);
 
-  const baseInputStyles = "px-3 py-2 border border-bg-subtle rounded-md w-full";
+  const baseInputStyles = "px-3 py-2 border border-line rounded-md w-full";
 
   return (
     <form onSubmit={handleSubmit} className="py-2 px-6">
       {/* A seeded account from backend/prisma/seed/dev-organizations-seed.json - these
           are real credentials against a seeded dev database, not a mock. Run
           `npm run db:seed -w backend` if they do not work. */}
-      <div className="bg-accent-primary-soft text-shadow-text-primary rounded-md text-xs font-normal tracking-[0.8px] px-3 py-2 mb-4">
+      <div className="bg-accent-soft text-ink rounded-md text-xs font-normal tracking-[0.8px] px-3 py-2 mb-4">
         Demo hint: use <strong>jordan.lefebvre@ottawacivictech.example</strong> / <strong>devpassword123</strong>
       </div>
       <Field label="Email" error={err ? " " : ""}>
@@ -98,10 +93,7 @@ export default function LoginForm({
         <input type="password" className={`${baseInputStyles} ${inputStyle(!!err)}`} value={creds.password}
           onChange={(e) => { setCreds({ ...creds, password: e.target.value }); setErr(""); }} placeholder="Your password" />
       </Field>
-      <Button type="submit" onClick={() => {
-        // auth.login(creds.email, creds.password);
-        // onSubmit({ username: creds.email, password: creds.password});
-      }} label="Log in"/>
+      <Button type="submit" onClick={() => {}} label="Log in"/>
       
     </form>
   );

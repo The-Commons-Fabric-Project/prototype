@@ -4,14 +4,13 @@ import type { Org } from '../api/organizations'
 import type { Event } from '../api/events'
 import { useEvents } from '../hooks/useEvents'
 import { useOrganizations } from '../hooks/useOrganizations'
-import { parseDate, toDateKey, toTimeKey } from '../utils/datetime'
 import { fmtTime } from '../utils/datetime'
 
 import EventDetailModal from '../components/modals/EventDetailModal'
 import OrgCard, { OrgTag } from '../components/cards/OrgCard'
 import DateChip from '../components/chips/DateChip'
 import Icon from '../assets/Icons'
-import { paletteForID } from '../utils/palette'
+import { classesForID } from '../utils/palette'
 import { orgInitials } from '../utils/stringcheck';
 
 export const Route = createFileRoute('/directory')({
@@ -19,21 +18,20 @@ export const Route = createFileRoute('/directory')({
 })
 
 function EventRow({ event, onClick }: { event: Event; onClick: () => void }) {
-  const start = parseDate(event.startsAt);
-  const end = parseDate(event.endsAt);
+  const start = event.startsAt;
   return (
     <div
       onClick={onClick}
       className="flex gap-3.5 items-center bg-white border border-line rounded-xl p-3.5 cursor-pointer hover:shadow-[0_4px_12px_rgba(65,65,66,0.08)] active:scale-[0.99]"
       style={{ transition: 'box-shadow .18s ease, transform .08s ease' }}
     >
-      <DateChip date={toDateKey(start)} large={false}/>
+      <DateChip date={start} large={false}/>
       <div className="flex-1 min-w-0">
         <h4 className="font-display text-[16px] font-semibold text-ink m-0 leading-[1.2]">
           {event.title}
         </h4>
         <p className="text-[12.5px] text-muted m-0 mt-1 font-body">
-          {fmtTime(toTimeKey(start))} · {event.location}
+          {fmtTime(start)} · {event.location}
         </p>
       </div>
     </div>
@@ -53,7 +51,7 @@ function ProfileView({
   // table has no organization name to match on - it has an id - and two
   // organizations are free to share a name.
   const { data: orgEvents = [], isLoading } = useEvents({ organizationId: org.id });
-  const pal = paletteForID(org.id);
+  const color = classesForID(org.id);
 
   return (
     <div style={{ animation: 'cf-fade .3s ease' }}>
@@ -68,20 +66,7 @@ function ProfileView({
       {/* Org header card */}
       <div className="bg-white border border-line rounded-2xl p-7 mb-6 flex gap-6 items-start flex-wrap">
         <div
-                className = "rounded-md"
-                style={{
-                  width: 60,
-                  height: 60,
-                  flexShrink: 0,
-                  background: `linear-gradient(180deg,${pal.tint},var(--color-surface-alt))`,
-                  borderTop: `3px solid ${pal.c1}`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: pal.c1,
-                  fontSize: 16,
-                  fontWeight: 700
-                }}
+                className={`rounded-md size-15 shrink-0 flex items-center justify-center text-base font-bold ${color.plate}`}
               >
                 {orgInitials(org.name)}
               </div>

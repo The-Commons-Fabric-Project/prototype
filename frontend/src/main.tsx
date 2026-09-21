@@ -11,7 +11,6 @@ import { OverlayProvider, type OverlayState } from './hooks/useOverlayContext'
 
 import type { AuthState } from './api/auth'
 
-// const router = createRouter({ routeTree })
 
 // ref: https://tanstack.com/router/v1/docs/how-to/setup-authentication#1-set-up-router-context
 
