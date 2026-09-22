@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 
-import { classesForID, COLOR_ORDER, colorKey } from "../../utils/palette";
+import { classesForID, colorKey } from "../../utils/palette";
 import Button from "../controls/Button";
 import type { Org } from "../../api/organizations";
 
@@ -17,11 +17,9 @@ interface FilterDropdownProps {
   onApply: (ids: number[]) => void;
 }
 
-const ALL_STRIPE = "linear-gradient(90deg,#10C662,#4C6DC5,#6F49E0,#E2526C,#E67539,#F8E056)";
-
 export function FilterDropdown({ orgs, appliedIds, onApply }: FilterDropdownProps) {
   const [open, setOpen] = useState(false);
-  const [pending, setPending] = useState<number[]>(appliedIds);
+  const [pending, setPending] = useState<number[]>(orgs ? orgs.map(o=>o.id) : []);
 
   const dirty: boolean = [...pending].sort().join() !== [...appliedIds].sort().join();
   const allSelected = appliedIds.length === orgs.length;
@@ -40,7 +38,7 @@ export function FilterDropdown({ orgs, appliedIds, onApply }: FilterDropdownProp
         className={`text-ink border-${open ? "ink" : "line"} inline-flex items-center gap-2`}
       >
         <span className={"h-1 w-3 rounded-xs"}
-        style = {{background: appliedIds.length !== 0 ? `linear-gradient(90deg,${appliedIds.sort().map(i=>`var(--color-${colorKey(i-1)}-c1)`)}`: "var(--color-purple-c1)"}}/>
+        style = {{background: appliedIds.length !== 0 ? `linear-gradient(90deg,${appliedIds.sort().map(i=>`var(--color-${colorKey(i-1)}-c1)`)})`: "var(--color-purple-c1)"}}/>
         {allSelected ? "All organizations" : `${appliedIds.length} of ${orgs.length} orgs`}
         <span className="text-muted text-[9px]">
           {open ? "▲" : "▼"}
@@ -57,8 +55,8 @@ export function FilterDropdown({ orgs, appliedIds, onApply }: FilterDropdownProp
             >All</button>
           </div>
           <div className="flex flex-col gap-0.5 mb-3 max-h-57.5 overflow-y-auto">
-            {orgs.map((o, i) => {
-              const pal = classesForID(i);
+            {orgs.map((o) => {
+              const pal = classesForID(o.id);
               const checked = pending.includes(o.id);
 
               return (
@@ -66,7 +64,7 @@ export function FilterDropdown({ orgs, appliedIds, onApply }: FilterDropdownProp
                   <input type="checkbox" checked={checked}
                     onChange={() => {
                       console.log("checkbox event");
-                      setPending(checked ? pending.filter(i => i !== o.id) : [...pending, o.id]);
+                      setPending(checked ? pending.filter(x => x !== o.id) : [...pending, o.id]);
                     }}
                     className="pointer mt-px w-3.25 h-3.25 shrink-0 accent-accent"
                   ></input>

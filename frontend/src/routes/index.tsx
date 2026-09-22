@@ -69,10 +69,12 @@ function Index() {
         
         </div>
 
-        <FilterDropdown orgs={orgs ?? []} appliedIds={selectedOrgs} onApply={(ids) => {
-          setSelectedOrgs(ids);
-          toast("Organization filter applied.");
-        }} />
+        { orgs && (
+          <FilterDropdown orgs={orgs ?? []} appliedIds={selectedOrgs} onApply={(ids) => {
+            setSelectedOrgs(ids);
+            toast("Organization filter applied.");
+          }} />
+        )}
 
         {/* If signed in, display create event button */}
         {user && (
