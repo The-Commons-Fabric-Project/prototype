@@ -7,10 +7,9 @@ import { type ColorVariantKey } from "../palette";
 // reference: https://blog.logrocket.com/building-reusable-react-components-using-tailwind-css/#testing-badge-component
 const ButtonVariant = {
   0: 'primary',
-  1: 'secondary', // secondary, formerly "ghost" in v2
-  2: 'tertiary', // tertiary, formerly "subtle"
-  3: 'disabled', // disabled, formerly "danger"
-  // 4: 'link' // TODO: get rid of this
+  1: 'secondary', // formerly "ghost" in v2
+  2: 'tertiary', // formerly "subtle"
+  3: 'disabled', // formerly "danger"
 } as const;
 
 export type ButtonVariant = (typeof ButtonVariant)[keyof typeof ButtonVariant];

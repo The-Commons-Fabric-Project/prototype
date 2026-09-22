@@ -15,5 +15,3 @@ export function orgInitials(name: string): string {
     .join("")
     .slice(0, 4);
 }
-
-
