@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 
-import { classesForID, COLOR_ORDER, NUMCOLORS } from "../../utils/palette";
+import { classesForID, COLOR_ORDER, colorKey } from "../../utils/palette";
 import Button from "../controls/Button";
 import type { Org } from "../../api/organizations";
 
@@ -18,27 +18,19 @@ interface FilterDropdownProps {
 }
 
 const ALL_STRIPE = "linear-gradient(90deg,#10C662,#4C6DC5,#6F49E0,#E2526C,#E67539,#F8E056)";
-//`bg-linear-[90deg,${COLOR_ORDER.map(c => `${c}-c1`)}]`
-
-
-function selectedStripe(ids: number[]): string {
-  let stripe = "linear-gradient(90deg";
-  for (const i of ids) {
-    stripe += `,var(color-${COLOR_ORDER[ids[i]]}-c1)`
-  }
-  return stripe + ")";
-}
 
 export function FilterDropdown({ orgs, appliedIds, onApply }: FilterDropdownProps) {
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState<number[]>(appliedIds);
 
+  const dirty: boolean = [...pending].sort().join() !== [...appliedIds].sort().join();
   const allSelected = appliedIds.length === orgs.length;
 
   const toggle = () => {
     if (!open) setPending(appliedIds);
     setOpen(!open);
   }
+
 
   return (
     <div className="relative">
@@ -48,7 +40,7 @@ export function FilterDropdown({ orgs, appliedIds, onApply }: FilterDropdownProp
         className={`text-ink border-${open ? "ink" : "line"} inline-flex items-center gap-2`}
       >
         <span className={"h-1 w-3 rounded-xs"}
-        style = {{background: `${allSelected ? ALL_STRIPE : selectedStripe(appliedIds)}`}}/>
+        style = {{background: appliedIds.length !== 0 ? `linear-gradient(90deg,${appliedIds.sort().map(i=>`var(--color-${colorKey(i-1)}-c1)`)}`: "var(--color-purple-c1)"}}/>
         {allSelected ? "All organizations" : `${appliedIds.length} of ${orgs.length} orgs`}
         <span className="text-muted text-[9px]">
           {open ? "▲" : "▼"}
@@ -73,6 +65,7 @@ export function FilterDropdown({ orgs, appliedIds, onApply }: FilterDropdownProp
                 <label key={o.id} className="flex items-start gap-2.25 px-1.5 py-1 rounded-sm cursor-pointer">
                   <input type="checkbox" checked={checked}
                     onChange={() => {
+                      console.log("checkbox event");
                       setPending(checked ? pending.filter(i => i !== o.id) : [...pending, o.id]);
                     }}
                     className="pointer mt-px w-3.25 h-3.25 shrink-0 accent-accent"
@@ -83,6 +76,15 @@ export function FilterDropdown({ orgs, appliedIds, onApply }: FilterDropdownProp
               )
             })}
           </div>
+          
+          <Button variant={dirty ? "primary" : "disabled"} onClick={() => {
+            onApply(pending);
+            setOpen(false);
+          }}>Apply</Button>
+
+          <p className="text-xs text-muted mt-2.25">{allSelected
+              ? "Showing all organizations."
+              : `Showing ${appliedIds.length} of ${orgs.length} organizations.`}</p>
         </div>
       )}
     </div>

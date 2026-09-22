@@ -69,7 +69,7 @@ export const COLOR_CLASSES: Record<ColorVariantKey, ColorVariantClasses> = {
   },
 };
 
-function colorKey(idx: number): ColorVariantKey {
+export function colorKey(idx: number): ColorVariantKey {
   return COLOR_ORDER[idx % COLOR_ORDER.length];
 }
 
