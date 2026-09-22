@@ -33,6 +33,11 @@ function Index() {
   const { user } = useAuth();
   const { modal, setModal } = useModal();
 
+  const visibleOrgs = events ? [...new Set(events?.map(e => e.organizationId))].map(o => {
+    const name = orgName(o) ? orgName(o) as string : '';
+    return { id: o, name: name}
+  }) : [];
+
   // TODO: add routes for individual events, follow https://www.notanumber.in/blog/render-modal-on-a-route-with-the-parent-in-background-in-tanstack-router
 
   return (
@@ -81,8 +86,11 @@ function Index() {
         ) : (
           <CalendarView
             events={events ?? []}
+            visibleOrgs={visibleOrgs}
+            span={"month"}
             onSelect={setSelectedEvent}
             rangeStart={calendarWindow.start}
+            showLegend={true}
             onWindowChange={(start, end) => setCalendarWindow({ start, end })}
           />
         )}

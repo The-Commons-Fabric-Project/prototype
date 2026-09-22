@@ -19,7 +19,7 @@ import { LegendBar } from '../nav/LegendBar';
 
 type CalendarViewProps = {
   events: Event[];
-  visibleOrgs: Org[];
+  visibleOrgs: Pick<Org, "id" | "name">[];
   /** timespan visible on the calendar -> which grid is visible */
   span: CalendarView; // day | week | month
   onSelect: (event: Event) => void;

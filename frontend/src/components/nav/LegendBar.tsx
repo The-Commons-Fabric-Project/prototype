@@ -9,7 +9,7 @@ import { orgInitials } from "../../utils/stringcheck";
  */
 
 interface LegendBarProps {
-  visible: Org[];
+  visible: Pick<Org, "id" | "name">[];
   /** in case we add interactivity when user clicks on the legend */
   onSelect: (target: Org) => void;
 }
