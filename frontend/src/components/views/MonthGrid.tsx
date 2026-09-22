@@ -10,7 +10,7 @@ interface MonthGridProps {
   month: number;
   events: Event[];
   maxPerDay: number;
-  onSelect: (id: number) => void;
+  onSelect: (e: Event) => void;
 }
 
 export function MonthGrid({ year, month, events, maxPerDay, onSelect }: MonthGridProps) {
@@ -34,10 +34,10 @@ export function MonthGrid({ year, month, events, maxPerDay, onSelect }: MonthGri
   while (cells.length % 7 !== 0) cells.push(null);
 
   return (
-    <div className="grid grid-cols-7 gap-1.5">
+    <div className="grid grid-cols-7 gap-px bg-line border border-line">
       {DAY_HEADERS.map(d => (
-        <div key={d} className="text-center text-xs font-bold text-muted tracking-[0.5px] pb-1 tracking">
-          {d}
+        <div key={d} className="text-center text-xs font-bold text-muted bg-surface-alt tracking-[0.5px] pb-1 tracking">
+          {d.toUpperCase()}
         </div>
       ))}
 
@@ -48,22 +48,22 @@ export function MonthGrid({ year, month, events, maxPerDay, onSelect }: MonthGri
         return (
           <div
             key={i}
-            className={`min-h-19 min-w-0 rounded-md p-1.5 border ${
+            className={`min-h-19 min-w-0 p-1  ${
               day === null
-                ? 'border-transparent bg-transparent'
-                : 'border-line bg-paper'
+                ? 'bg-surface-alt'
+                : 'bg-surface'
             }`}
           >
             {day !== null && (
               <>
-                <div className="text-xs font-semibold text-muted mb-1">{day}</div>
+                <div className={`text-xs ${dayEvents.length ? "font-bold text-ink" : "font-semibold text-muted"} mb-1`}>{day}</div>
                 {shown.map(e => {
                   const color = classesForID(e.organizationId);
                   const t = fmtTime(e.startsAt);
                   return (
                     <div key={e.id}>
                       <div
-                        onClick={() => onSelect(e.id)}
+                        onClick={() => onSelect(e)}
                         title={`${t} ${e.title}`}
                         className={`h-1.25 rounded-xs mb-0.5 cursor-pointer ${color.railX}`}
                       />
