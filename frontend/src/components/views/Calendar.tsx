@@ -1,30 +1,40 @@
 /**
+ * CalendarView component
+ * 
+ * Shell for everything that displays in "calendar" view (as opposed to "card" view) = main child is the grid view (month, week, day) with nav buttons and filters surrounding it
+ * 
  * Built from the design team's HTML rather than react-big-calendar, which was
  * harder to theme. Revisit if we need Google Calendar/Outlook integration.
  */
 
 import { useState } from 'react'
-import type { Event } from '../../api/events';
-
 import { addMonths, format, startOfMonth, subMonths } from 'date-fns';
-
+import type { Event } from '../../api/events';
+import type { Org } from '../../api/organizations';
 import { fromDateKey, monthBounds } from '../../utils/datetime';
 import { type DateKey } from '../../utils/types/dates';
 import { MonthGrid } from './MonthGrid';
+import type { CalendarView } from '../../utils/types/views';
+import { LegendBar } from '../nav/LegendBar';
 
 type CalendarViewProps = {
   events: Event[];
+  visibleOrgs: Org[];
+  /** timespan visible on the calendar -> which grid is visible */
+  span: CalendarView; // day | week | month
   onSelect: (event: Event) => void;
+
   /**
    * Start of the calendar's own fetch window, "YYYY-MM-DD". Owned by
    * routes/index.tsx and separate from the card grid's range. Falls back to today.
    */
   rangeStart: DateKey;
-  /** Asks the route to fetch a new month. Called on every month navigation. */
+  /** Asks the route to fetch a new month/week/day depending on the span. Called on every month navigation (? make sure this is efficient). */
+  showLegend: boolean;
   onWindowChange: (start: DateKey, end: DateKey) => void;
 };
 
-export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: CalendarViewProps) {
+export function CalendarView({ events, visibleOrgs, showLegend, onSelect, rangeStart, onWindowChange }: CalendarViewProps) {
   // Seeded from the current window, falling back to today. The month decides which
   // data is fetched, so it cannot be derived from the events.
   
@@ -40,7 +50,7 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
   const goToPrev = () => { goToMonth(startOfMonth(subMonths(cursor, 1))) };
   const goToNext = () => { goToMonth(startOfMonth(addMonths(cursor, 1))) };
 
-  const arrowButtonStyles = "cf-press font-semibold text-sm px-3 py-1.5 rounded-md cursor-pointer border border-line leading-tight tracking-tight bg-transparent text-primary";
+  const arrowButtonStyles = "cf-press font-semibold text-sm px-3 py-1.5 rounded-md cursor-pointer border border-line leading-tight tracking-tight bg-transparent text-ink";
 
   return (
     <div className="bg-white border border-line rounded-2xl p-4.5">
@@ -49,6 +59,7 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
           {format(cursor, 'MMMM yyyy')}
         </h3>
         <div className="flex gap-2">
+          {/* FilterDropdown for orgs next to nav buttons */}
           <button
             className={arrowButtonStyles}
             onClick={goToPrev}
@@ -64,8 +75,13 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
         </div>
       </div>
 
-{/* TODO: add day/week views, make maxPerDay a const config value somewhere else */}
+      {/* TODO: add day/week views, make maxPerDay a const config value somewhere else */}
       <MonthGrid year={cursor.getFullYear()} month={cursor.getMonth()} events={events} maxPerDay={3} onSelect={onSelect} />
+
+      {/* OrgLegend below */}
+      {showLegend && (
+        <LegendBar visible={visibleOrgs} onSelect={()=>{}}/>
+      )}
     </div>
   )
 }

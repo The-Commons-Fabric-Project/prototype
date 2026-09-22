@@ -21,10 +21,13 @@ export interface Organization {
   website: string;
 }
 
+// TODO: add when implementing recurring events
 export type RepeatFrequency = "weekly" | "biweekly" | "monthly";
 
-// TODO: check against API spec
-// start date and start time are separate fields, but in API they're combined in startsAt.
+/** 
+ * maps to "Event" in API spec but DOES NOT MATCH, DO NOT USE THIS INTERFACE
+  - start date and start time are separate fields, but in API they're combined in startsAt.
+ */ 
 export interface CalendarEvent {
   id: number;
   title: string;

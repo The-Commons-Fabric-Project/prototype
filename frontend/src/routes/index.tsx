@@ -13,9 +13,10 @@ import EventDetailModal from '../components/modals/EventDetailModal';
 import { monthBounds, toDateKey } from '../utils/datetime';
 import type { DateKey } from '../utils/types/dates';
 import type { Event } from '../api/events';
+import type { EventsView } from '../utils/types/views';
 
 function Index() {
-  const [view, setView] = useState<'cards' | 'calendar'>('calendar')
+  const [view, setView] = useState<EventsView>('calendar')
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const [gridStart, setGridStart] = useState<DateKey>("");
