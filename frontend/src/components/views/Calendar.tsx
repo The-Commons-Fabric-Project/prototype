@@ -14,7 +14,7 @@ import type { Org } from '../../api/organizations';
 import { fromDateKey, monthBounds } from '../../utils/datetime';
 import { type DateKey } from '../../utils/types/dates';
 import { MonthGrid } from './MonthGrid';
-import type { CalendarView } from '../../utils/types/views';
+import { CALENDAR_MAX_PER_DAY as maxPerDay, type CalendarView } from '../../utils/types/views';
 import { LegendBar } from '../nav/LegendBar';
 
 type CalendarViewProps = {
@@ -74,8 +74,8 @@ export function CalendarView({ events, visibleOrgs, showLegend, onSelect, rangeS
         </div>
       </div>
 
-      {/* TODO: add day/week views, make maxPerDay a const config value somewhere else */}
-      <MonthGrid year={cursor.getFullYear()} month={cursor.getMonth()} events={events} maxPerDay={3} onSelect={onSelect} />
+      {/* TODO: add day/week views */}
+      <MonthGrid year={cursor.getFullYear()} month={cursor.getMonth()} events={events} maxPerDay={maxPerDay} onSelect={onSelect} />
 
       {/* OrgLegend below */}
       {showLegend && (

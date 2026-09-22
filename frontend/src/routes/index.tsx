@@ -6,8 +6,8 @@ import EventCardGrid from '../components/views/EventCardGrid'
 import { CalendarView } from '../components/views/Calendar'
 import { useAuth } from '../hooks/useAuth'
 import { useEvents } from '../hooks/useEvents'
-import { useOrgLookup } from '../hooks/useOrganizations'
-import { useModal } from '../hooks/useOverlayContext';
+import { useOrganizations, useOrgLookup } from '../hooks/useOrganizations'
+import { useModal, useToast } from '../hooks/useOverlayContext';
 import CreateEventModal from '../components/modals/CreateEventModal';
 import EventDetailModal from '../components/modals/EventDetailModal';
 import { monthBounds, toDateKey } from '../utils/datetime';
@@ -15,9 +15,12 @@ import type { DateKey } from '../utils/types/dates';
 import type { Event } from '../api/events';
 import type { EventsView } from '../utils/types/views';
 import { FilterDropdown } from '../components/nav/FilterDropdown';
-import { accentGradient } from '../utils/palette';
 
 function Index() {
+  const { data: orgs } = useOrganizations();
+  const [selectedOrgs, setSelectedOrgs] = useState<number[]>(orgs ? orgs.map(o => o.id) : []);
+  const orgName = useOrgLookup();
+
   const [view, setView] = useState<EventsView>('calendar')
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
@@ -30,10 +33,10 @@ function Index() {
     : { startDate: calendarWindow.start, endDate: calendarWindow.end };
 
   const { data: events, isLoading, error } = useEvents(activeWindow);
-  const orgName = useOrgLookup();
 
   const { user } = useAuth();
   const { modal, setModal } = useModal();
+  const { toast } = useToast();
 
   const visibleOrgs = events ? [...new Set(events?.map(e => e.organizationId))].map(o => {
     const name = orgName(o) ? orgName(o) as string : '';
@@ -66,7 +69,10 @@ function Index() {
         
         </div>
 
-        <FilterDropdown appliedIds={[0, 1, 2, 3, 4, 5]} total={6} onApply={(ids) => null} />
+        <FilterDropdown orgs={orgs ?? []} appliedIds={selectedOrgs} onApply={(ids) => {
+          setSelectedOrgs(ids);
+          toast("Organization filter applied.");
+        }} />
 
         {/* If signed in, display create event button */}
         {user && (

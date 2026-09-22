@@ -36,7 +36,7 @@ export function MonthGrid({ year, month, events, maxPerDay, onSelect }: MonthGri
   return (
     <div className="grid grid-cols-7 gap-px bg-line border border-line">
       {DAY_HEADERS.map(d => (
-        <div key={d} className="text-center text-xs font-bold text-muted bg-surface-alt tracking-[0.5px] pb-1 tracking">
+        <div key={d} className="text-center text-xs font-bold text-muted bg-surface-alt tracking-[0.5px] py-1 tracking items-center">
           {d.toUpperCase()}
         </div>
       ))}
