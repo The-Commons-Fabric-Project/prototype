@@ -13,7 +13,7 @@ interface MonthGridProps {
   onSelect: (id: number) => void;
 }
 
-export function MonthGrid({ year, month, events, onSelect }: MonthGridProps) {
+export function MonthGrid({ year, month, events, maxPerDay, onSelect }: MonthGridProps) {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -26,10 +26,13 @@ export function MonthGrid({ year, month, events, onSelect }: MonthGridProps) {
     byDay.set(day, [...(byDay.get(day) ?? []), e]);
   });
   byDay.forEach((l) => l.sort((a, b) => +a.startsAt - +b.startsAt));
+
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ];
+  while (cells.length % 7 !== 0) cells.push(null);
+
   return (
     <div className="grid grid-cols-7 gap-1.5">
       {DAY_HEADERS.map(d => (
@@ -38,37 +41,46 @@ export function MonthGrid({ year, month, events, onSelect }: MonthGridProps) {
         </div>
       ))}
 
-      {cells.map((day, i) => (
-        <div
-          key={i}
-          className={`min-h-19 min-w-0 rounded-md p-1.5 border ${
-            day === null
-              ? 'border-transparent bg-transparent'
-              : 'border-line bg-paper'
-          }`}
-        >
-          {day !== null && (
-            <>
-              <div className="text-xs font-semibold text-muted mb-1">{day}</div>
-              {(byDay.get(day) ?? []).map(e => {
-                const color = classesForID(e.organizationId);
-                const t = fmtTime(e.startsAt);
-              return (
-                <div key={e.id}>
-                    <div
-                      onClick={() => onSelect(e.id)}
-                      title={`${t} ${e.title}`}
-                      className={`h-[5px] rounded-[2px] mb-[2px] cursor-pointer ${color.railX}`}
-                    />
-                    <div className="text-[8px] text-muted overflow-hidden text-ellipsis whitespace-nowrap mb-[2px]">
-                      {`${t.replace(":00", "")} ${e.title}`}
+      {cells.map((day, i) => {
+        const dayEvents = day ? byDay.get(day) ?? [] : [];
+        const shown = dayEvents.slice(0, maxPerDay);
+      
+        return (
+          <div
+            key={i}
+            className={`min-h-19 min-w-0 rounded-md p-1.5 border ${
+              day === null
+                ? 'border-transparent bg-transparent'
+                : 'border-line bg-paper'
+            }`}
+          >
+            {day !== null && (
+              <>
+                <div className="text-xs font-semibold text-muted mb-1">{day}</div>
+                {shown.map(e => {
+                  const color = classesForID(e.organizationId);
+                  const t = fmtTime(e.startsAt);
+                  return (
+                    <div key={e.id}>
+                      <div
+                        onClick={() => onSelect(e.id)}
+                        title={`${t} ${e.title}`}
+                        className={`h-1.25 rounded-xs mb-0.5 cursor-pointer ${color.railX}`}
+                      />
+                      <div className="text-[8px] text-muted overflow-hidden text-ellipsis whitespace-nowrap mb-0.5">
+                        {`${t.replace(":00", "")} ${e.title}`}
+                      </div>
                     </div>
+                  )})}
+                {dayEvents.length > maxPerDay && (
+                  <div className="text-[8px] text-muted font-bold">
+                    {`+${dayEvents.length - maxPerDay} more`}
                   </div>
-              )})}
-            </>
-          )}
-        </div>
-      ))}
+                )}
+              </>
+            )}
+          </div>
+        )})}
     </div>
   );
 }

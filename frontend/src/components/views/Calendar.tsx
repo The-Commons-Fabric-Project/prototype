@@ -11,10 +11,11 @@ import { addMonths, format, getDate, getDay, getDaysInMonth, isSameMonth, startO
 import { fromDateKey, fmtTime, monthBounds } from '../../utils/datetime';
 import { DOW as DAY_HEADERS, type DateKey } from '../../utils/types/dates';
 import { classesForID } from '../../utils/palette';
+import { MonthGrid } from './MonthGrid';
 
 type CalendarViewProps = {
   events: Event[];
-  onSelect: (event: Event) => void;
+  onSelect: (id: number) => void;
   /**
    * Start of the calendar's own fetch window, "YYYY-MM-DD". Owned by
    * routes/index.tsx and separate from the card grid's range. Falls back to today.
@@ -85,6 +86,11 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
         </div>
       </div>
 
+      <MonthGrid year={cursor.getFullYear()} month={cursor.getMonth()} events={events} maxPerDay={3} onSelect={onSelect} />
+    </div>
+  )
+}
+{/* 
       <div className="grid grid-cols-7 gap-px bg-line border border-line">
         {DAY_HEADERS.map(d => (
           <div key={d} className="text-center text-[11px] font-bold text-muted bg-surface-alt tracking-[0.06em] px-1.25 tracking">
@@ -124,4 +130,4 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
       </div>
     </div>
   );
-}
+} */}
