@@ -3,14 +3,13 @@
  * harder to theme. Revisit if we need Google Calendar/Outlook integration.
  */
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import type { Event } from '../../api/events';
 
-import { addMonths, format, getDate, getDay, getDaysInMonth, isSameMonth, startOfMonth, subMonths } from 'date-fns';
+import { addMonths, format, startOfMonth, subMonths } from 'date-fns';
 
-import { fromDateKey, fmtTime, monthBounds } from '../../utils/datetime';
-import { DOW as DAY_HEADERS, type DateKey } from '../../utils/types/dates';
-import { classesForID } from '../../utils/palette';
+import { fromDateKey, monthBounds } from '../../utils/datetime';
+import { type DateKey } from '../../utils/types/dates';
 import { MonthGrid } from './MonthGrid';
 
 type CalendarViewProps = {
@@ -65,6 +64,7 @@ export function CalendarView({ events, onSelect, rangeStart, onWindowChange }: C
         </div>
       </div>
 
+{/* TODO: add day/week views, make maxPerDay a const config value somewhere else */}
       <MonthGrid year={cursor.getFullYear()} month={cursor.getMonth()} events={events} maxPerDay={3} onSelect={onSelect} />
     </div>
   )
