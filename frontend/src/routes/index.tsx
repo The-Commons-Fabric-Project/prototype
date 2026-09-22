@@ -14,6 +14,8 @@ import { monthBounds, toDateKey } from '../utils/datetime';
 import type { DateKey } from '../utils/types/dates';
 import type { Event } from '../api/events';
 import type { EventsView } from '../utils/types/views';
+import { FilterDropdown } from '../components/nav/FilterDropdown';
+import { accentGradient } from '../utils/palette';
 
 function Index() {
   const [view, setView] = useState<EventsView>('calendar')
@@ -48,21 +50,23 @@ function Index() {
       </p>
 
       <div className="w-full flex centered justify-between items-center mt-6">
-      <div className="inline-flex bg-white border border-line p-1.25 rounded-md">
+      <div className="inline-flex bg-white border border-line p-1.25 rounded-full">
         <button
           onClick={() => setView('calendar')}
-          className={`text-[13px] rounded-lg font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
+          className={`text-[13px] rounded-full font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? `bg-accent text-white` : 'bg-transparent text-muted'}`}
         >
           Calendar
         </button>
         <button
           onClick={() => setView('cards')}
-          className={`text-[13px] rounded-lg font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? 'bg-primary text-white' : 'bg-transparent text-muted'}`}
+          className={`text-[13px] rounded-full font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? `bg-accent text-white` : 'bg-transparent text-muted'}`}
         >
           Card grid
         </button>
         
         </div>
+
+        <FilterDropdown appliedIds={[0, 1, 2, 3, 4, 5]} total={6} onApply={(ids) => null} />
 
         {/* If signed in, display create event button */}
         {user && (

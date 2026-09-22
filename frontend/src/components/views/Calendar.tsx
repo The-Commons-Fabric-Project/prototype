@@ -59,7 +59,6 @@ export function CalendarView({ events, visibleOrgs, showLegend, onSelect, rangeS
           {format(cursor, 'MMMM yyyy')}
         </h3>
         <div className="flex gap-2">
-          {/* FilterDropdown for orgs next to nav buttons */}
           <button
             className={arrowButtonStyles}
             onClick={goToPrev}

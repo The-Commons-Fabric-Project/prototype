@@ -8,11 +8,11 @@ export const CALENDAR_MAX_PER_DAY = 3;
  * any new modals added, just add them here
  */
 
-const Modals = {
+const ModalOption = {
   0: "login", // LoginModal,
   1: "create_account", // CreateAccountModal,
   2: "event_detail", // EventDetailModal,
   3: "create_event", // CreateEventModal,
 } as const;
 
-export type ModalOption = (typeof Modals)[keyof typeof Modals] | undefined;
+export type ModalOption = (typeof ModalOption)[keyof typeof ModalOption] | undefined;

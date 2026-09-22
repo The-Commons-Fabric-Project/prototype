@@ -2,7 +2,7 @@
 export type ColorVariantKey = "green" | "blue" | "purple" | "red" | "orange" | "yellow";
 
 export const COLOR_ORDER: ColorVariantKey[] = ["green", "blue", "purple", "red", "orange", "yellow"];
-const NUMCOLORS: number = COLOR_ORDER.length;
+export const NUMCOLORS: number = COLOR_ORDER.length;
 
 /** Tailwind classes for the parts of a component that carry a variant's color. */
 export interface ColorVariantClasses {
@@ -79,5 +79,5 @@ export function classesForID(id: number): ColorVariantClasses {
 }
 
 export function accentGradient(color: ColorVariantKey = "purple"): string {
-  return `bg-linear-135 from-${color}-c1 to-${color}-stop3`
+  return `bg-linear-135 from-${color}-c1 to-${color}-c2`
 }

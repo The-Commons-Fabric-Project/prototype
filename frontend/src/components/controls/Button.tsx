@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 import type { ButtonVariant } from "../../utils/types/variants";
 import { accentGradient } from "../../utils/palette";
 
@@ -19,7 +19,7 @@ type ButtonProps = Partial<ButtonHTMLAttributes<HTMLButtonElement>> & {
   /** what do when button */
   onClick: () => void;
   /** child elements; for a button, usually just the display text */
-  children?: React.ReactElement[] | string;
+  children?: ReactNode | ReactNode[] | string;
   /** additional Tailwind classes to pass to button element*/
   className?: string;
 };
@@ -35,7 +35,7 @@ export default function Button({
  }: ButtonProps) {
   const baseClasses = "font-sans font-semibold text-sm py-2.25 px-4.5 rounded-md cursor-pointer leading-tight";
   const classes = `${baseClasses} ${VARIANT_MAPS[variant]} ${className || ''}`
-  const text = `${label ? label: ''}${children ? children : ''}`.toString().toUpperCase();
+  const text = `${label ? label: ''}${typeof children === "string" ? children : ''}`.toString().toUpperCase();
   return (
     <button 
       aria-label={label ? label : children?.toString() }
@@ -43,7 +43,7 @@ export default function Button({
       className={`${classes} cf-press`}
       {...props}
     >
-      {text}
+      {typeof children === "string" ? text : children}
     </button>
   );
 }
