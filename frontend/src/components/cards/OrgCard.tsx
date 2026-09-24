@@ -10,7 +10,7 @@ type OrgCardProps = {
 }
 
 /** Current design doesn't use organization tags, so this is a placeholder method for styling them/indexing their color */
-function OrgTag({ tag }: { tag: OrgTag }) {
+export function OrgTagChip({ tag }: { tag: OrgTag }) {
   const idx = tag.charCodeAt(0)+tag.charCodeAt(1);
   return ( <Tag key={tag} variant={colorKey(idx)}>{tag}</Tag>
   )
@@ -33,7 +33,7 @@ export default function OrgCard({ org, onClick, idx }: OrgCardProps) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex gap-2 flex-wrap mb-2.5">
-          {(org.tags ?? []).map((t) => <OrgTag tag={t}/>)}
+          {(org.tags ?? []).map((t) => <OrgTagChip tag={t}/>)}
         </div>
         <h3 className="font-sans text-lg font-bold text-gray-900 mb-1 leading-tight">{org.name}</h3>
         <p className="text-sm text-gray-500 leading-relaxed">{org.blurb}</p>

@@ -7,7 +7,7 @@ import { useOrganizations } from '../hooks/useOrganizations'
 import { fmtTime } from '../utils/datetime'
 
 import EventDetailModal from '../components/modals/EventDetailModal'
-import OrgCard, { OrgTag } from '../components/cards/OrgCard'
+import OrgCard, { OrgTagChip } from '../components/cards/OrgCard'
 import DateChip from '../components/_chips/DateChip'
 import Icon from '../assets/Icons'
 import { classesForID } from '../utils/palette'
@@ -72,7 +72,7 @@ function ProfileView({
               </div>
         <div className="flex-1 min-w-65">
           <div className="flex gap-2 flex-wrap mb-3">
-            {(org.tags ?? []).map((t) => <OrgTag key={t}>{t}</OrgTag>)}
+            {(org.tags ?? []).map((t) => <OrgTagChip key={t}>{t}</OrgTagChip>)}
           </div>
           <h1 className="font-display text-3xl font-semibold text-ink m-0 mb-3 leading-[1.15]">
             {org.name}
