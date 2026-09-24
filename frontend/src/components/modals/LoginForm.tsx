@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Button from "../controls/Button";
-import Field from "../controls/Field";
+import Button from "../_controls/Button";
+import Field from "../_controls/Field";
 import type { TextInputVariant as InputVariant } from "../../utils/types/variants";
 import type { ModalHeaderProps } from "./Modal";
 

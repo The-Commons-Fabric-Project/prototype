@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
-import Button from '../components/controls/Button';
+import Button from '../components/_controls/Button';
 import EventCardGrid from '../components/views/EventCardGrid'
 import { CalendarView } from '../components/views/Calendar'
 import { useAuth } from '../hooks/useAuth'
@@ -19,7 +19,6 @@ import { FilterDropdown } from '../components/nav/FilterDropdown';
 function Index() {
   const { data: orgs } = useOrganizations();
   const [selectedOrgs, setSelectedOrgs] = useState<number[]>(orgs ? orgs.map(o => o.id) : []);
-  const orgName = useOrgLookup();
 
   const [view, setView] = useState<EventsView>('calendar')
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -34,10 +33,12 @@ function Index() {
 
   const { data: events, isLoading, error } = useEvents(activeWindow);
 
+  const orgName = useOrgLookup();
   const { user } = useAuth();
   const { modal, setModal } = useModal();
   const { toast } = useToast();
 
+  /** organizations with events currently visible on calendar */
   const visibleOrgs = events ? [...new Set(events?.map(e => e.organizationId))].map(o => {
     const name = orgName(o) ? orgName(o) as string : '';
     return { id: o, name: name}
@@ -53,20 +54,19 @@ function Index() {
       </p>
 
       <div className="w-full flex centered justify-between items-center mt-6">
-      <div className="inline-flex bg-white border border-line p-1.25 rounded-full">
-        <button
-          onClick={() => setView('calendar')}
-          className={`text-[13px] rounded-full font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? `bg-accent text-white` : 'bg-transparent text-muted'}`}
-        >
-          Calendar
-        </button>
-        <button
-          onClick={() => setView('cards')}
-          className={`text-[13px] rounded-full font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? `bg-accent text-white` : 'bg-transparent text-muted'}`}
-        >
-          Card grid
-        </button>
-        
+        <div className="inline-flex bg-white border border-line p-1.25 rounded-full">
+          <button
+            onClick={() => setView('calendar')}
+            className={`text-[13px] rounded-full font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'calendar' ? `bg-accent text-white` : 'bg-transparent text-muted'}`}
+          >
+            Calendar
+          </button>
+          <button
+            onClick={() => setView('cards')}
+            className={`text-[13px] rounded-full font-semibold px-4 py-1.75 capitalize transition-colors cursor-pointer border-0 ${view === 'cards' ? `bg-accent text-white` : 'bg-transparent text-muted'}`}
+          >
+            Card grid
+          </button>
         </div>
 
         { orgs && (
@@ -82,6 +82,7 @@ function Index() {
         )}
       </div>
 
+      {/* MAIN VIEW PANEL: CALENDAR OR CARDS  */}
       <div className="w-full pt-6">
         {error ? (
           <div className="text-muted">Could not load events. {error.message}</div>

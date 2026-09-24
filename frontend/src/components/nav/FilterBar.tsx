@@ -1,5 +1,5 @@
 import { type ChangeEventHandler, type Dispatch, type SetStateAction } from "react"
-import Button from "../controls/Button";
+import Button from "../_controls/Button";
 
 type FilterBarProps = {
   matches: number,

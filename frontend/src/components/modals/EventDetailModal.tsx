@@ -3,7 +3,7 @@ import { type Event, needsVolunteers, requiresRegistration } from '../../api/eve
 import { fmtPlainDate, fmtTime } from '../../utils/datetime';
 import Icon from '../../assets/Icons';
 import Modal, { ModalHeader } from './Modal';
-import Button from '../controls/Button';
+import Button from '../_controls/Button';
 import { useToast } from '../../hooks/useOverlayContext';
 
 type DetailRowProps = {

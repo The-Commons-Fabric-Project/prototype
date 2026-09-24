@@ -10,9 +10,9 @@
 import { useState } from "react";
 import { EMAIL_RE } from "../../utils/stringcheck";
 import Modal, { ModalHeader } from "./Modal";
-import Field from "../controls/Field";
-import Button from "../controls/Button";
-import Summary from "../chips/Summary";
+import Field from "../_controls/Field";
+import Button from "../_controls/Button";
+import Summary from "../_chips/Summary";
 
 import { useToast } from "../../hooks/useOverlayContext";
 import { addUser } from "../../mocks/auth";

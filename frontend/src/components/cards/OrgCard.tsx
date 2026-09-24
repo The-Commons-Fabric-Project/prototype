@@ -21,10 +21,10 @@ export default function OrgCard({ org, onClick, idx }: OrgCardProps) {
   return (
     <div
       onClick={onClick}
-      className="cf-card-hover bg-white border border-gray-200 rounded-md p-5 cursor-pointer flex gap-4 items-start"
+      className="cf-card-hover bg-white border border-gray-200 rounded-lg p-5 cursor-pointer flex gap-4 items-start"
       style={{ animation: `cf-stagger .35s ease ${idx * 0.04}s both` }}
     >
-      <span className={`w-[3px] self-stretch shrink-0 ${color.railY}`} />
+      <span className={`w-0.75 self-stretch shrink-0 ${color.railY}`} />
       {/* Logo plate: org initials until a real logo is supplied. */}
       <div
         className={`rounded-md size-15 shrink-0 flex items-center justify-center text-base font-bold ${color.plate}`}

@@ -26,7 +26,7 @@
   --color-footer-text: #B8B8B8;
   --color-overlay: rgba(38,38,38,0.55);
 
-  /* layout from Figma */
+  /* layout from Figma/design system */
   --spacing-2xs: 4px;
   --spacing-xs: 8px;
   --spacing-sm: 12px;
@@ -39,6 +39,7 @@
   --radius-lg: 12px;
   --radius-card: 14px;
   --radius-full: 9999px;
+  --radius-pill: var(--radius-full);
   --layout-max-width: 1040px;
 
   --animate-fade: cf-fade .18s ease;

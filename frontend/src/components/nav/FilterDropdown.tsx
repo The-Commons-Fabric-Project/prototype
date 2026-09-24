@@ -5,7 +5,7 @@
 import { useState } from "react";
 
 import { classesForID, colorKey } from "../../utils/palette";
-import Button from "../controls/Button";
+import Button from "../_controls/Button";
 import type { Org } from "../../api/organizations";
 
 interface FilterDropdownProps {

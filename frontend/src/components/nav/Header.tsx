@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react'
 import { Link, useRouterState } from '@tanstack/react-router'
 
 import CommonsFabricLogo from '../../assets/CommonsFabricLogo'
-import Button from '../controls/Button';
+import Button from '../_controls/Button';
 
 import LoginModal from '../modals/LoginModal';
 import { useAuth } from '../../hooks/useAuth';
-import { useModal } from '../../hooks/useOverlayContext';
+import { useModal, useToast } from '../../hooks/useOverlayContext';
 import CreateAccountModal from '../modals/CreateAccountModal';
 
 import { COLOR_CLASSES, COLOR_ORDER } from '../../utils/palette'
+import Toast from '../modals/Toast';
 
 // ref: https://github.com/david4473/Reciped/blob/main/src/components/Header.tsx
 
@@ -26,6 +27,7 @@ export default function Header() {
   const path = location.pathname;
   
   const { modal, setModal } = useModal();
+  const {toastMsg} = useToast();
 
   useEffect(() => {
     const handleScroll = () => setHidden(window.scrollY > 200)
@@ -110,7 +112,7 @@ export default function Header() {
     {/* BUG (minor) showLogin never gets set back to false after authenticating */}
     {/* { (showLogin) ? (<LoginModal onClose={closeLogin} />) : ""} */}
     {renderModal()}
-   
+    <Toast message={toastMsg}/>
     </>
   )
 }

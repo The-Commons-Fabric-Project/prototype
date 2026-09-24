@@ -8,7 +8,7 @@ import { fmtTime } from '../utils/datetime'
 
 import EventDetailModal from '../components/modals/EventDetailModal'
 import OrgCard, { OrgTag } from '../components/cards/OrgCard'
-import DateChip from '../components/chips/DateChip'
+import DateChip from '../components/_chips/DateChip'
 import Icon from '../assets/Icons'
 import { classesForID } from '../utils/palette'
 import { orgInitials } from '../utils/stringcheck';

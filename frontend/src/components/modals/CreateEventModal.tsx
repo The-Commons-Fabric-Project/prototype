@@ -3,10 +3,10 @@
 import { useState } from "react";
 
 import Modal, { ModalHeader } from "./Modal";
-import Field from "../controls/Field";
-import Button from "../controls/Button";
-import Toggle from "../controls/Toggle";
-import Summary from "../chips/Summary";
+import Field from "../_controls/Field";
+import Button from "../_controls/Button";
+import Toggle from "../_controls/Toggle";
+import Summary from "../_chips/Summary";
 
 import { EMAIL_RE } from "../../utils/stringcheck";
 import { fmtTime, fmtPlainDate, fromDateAndTime, localDateTime } from "../../utils/datetime";

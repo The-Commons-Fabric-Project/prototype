@@ -1,7 +1,7 @@
 import { type Event, needsVolunteers, requiresRegistration } from '../../api/events'
 import { fmtMonthDate, fmtPlainDate, fmtTime } from '../../utils/datetime';
 
-import Tag from '../chips/Tag';
+import Tag from '../_chips/Tag';
 import Icon from '../../assets/Icons';
 import { classesForID } from '../../utils/palette';
 
@@ -18,7 +18,7 @@ export default function EventCard({ event, orgName, onClick, idx }: EventCardPro
   return (
     <div onClick={onClick} className={`cf-card-hover bg-white border border-slate-200 rounded-lg cursor-pointer flex flex-row p-4.5 gap-2.5 animate-[cf-stagger_0.35s_ease_both]`} style={{ animationDelay: `${idx * 0.04}s` }}>
 
-      <span className={`w-[3px] self-stretch shrink-0 ${color.railY}`} />
+      <span className={`w-0.75 self-stretch shrink-0 ${color.railY}`} />
       
       <div className="min-w-0 flex flex-1 flex-col gap-2">
         {(requiresRegistration(event) || needsVolunteers(event)) && (
