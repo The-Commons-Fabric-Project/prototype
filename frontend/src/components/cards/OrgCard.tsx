@@ -1,6 +1,7 @@
-import type {Org as Organization} from '../../api/organizations';
-import { type ColorVariantClasses, classesForID } from '../../utils/palette';
+import type {Org as Organization, OrgTag } from '../../api/organizations';
+import { type ColorVariantClasses, classesForID, colorKey } from '../../utils/palette';
 import { orgInitials } from '../../utils/stringcheck';
+import Tag from '../_chips/Tag';
 
 type OrgCardProps = {
   org: Organization,
@@ -8,11 +9,10 @@ type OrgCardProps = {
   idx: number,
 }
 
-export function OrgTag({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-block py-0.75 px-2.25 rounded-full text-[10.5px] font-bold tracking-[0.8px] uppercase bg-line text-primary font-body">
-      {children}
-    </span>
+/** Current design doesn't use organization tags, so this is a placeholder method for styling them/indexing their color */
+function OrgTag({ tag }: { tag: OrgTag }) {
+  const idx = tag.charCodeAt(0)+tag.charCodeAt(1);
+  return ( <Tag key={tag} variant={colorKey(idx)}>{tag}</Tag>
   )
 }
 
@@ -33,8 +33,8 @@ export default function OrgCard({ org, onClick, idx }: OrgCardProps) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex gap-2 flex-wrap mb-2.5">
-        {(org.tags ?? []).map((t) => <OrgTag key={t}>{t}</OrgTag>)}
-      </div>
+          {(org.tags ?? []).map((t) => <OrgTag tag={t}/>)}
+        </div>
         <h3 className="font-sans text-lg font-bold text-gray-900 mb-1 leading-tight">{org.name}</h3>
         <p className="text-sm text-gray-500 leading-relaxed">{org.blurb}</p>
       </div>

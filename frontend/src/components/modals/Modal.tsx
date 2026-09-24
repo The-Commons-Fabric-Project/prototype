@@ -39,12 +39,18 @@ export type ModalHeaderProps = {
   subtitle: string | undefined,
 }
 
+export function CloseButton({ onClose }: {onClose: () => void}) {
+  return (
+    <button onClick={onClose} aria-label="Close"    
+        className="cf-press absolute top-4 right-4 w-7 h-7 rounded-md border border-gray-200 bg-white cursor-pointer text-gray-500 text-[16px] leading-none flex items-center justify-center"
+    >×</button>
+  )
+}
+
 export function ModalHeader({ title, onClose, subtitle }: ModalHeaderProps) {
   return (
     <div className="relative border-b border-gray-200 pt-5 px-6 pb-4">
-      <button onClick={onClose} aria-label="Close"    
-        className="cf-press absolute top-4 right-4 w-7 h-7 rounded-md border border-gray-200 bg-white cursor-pointer text-gray-500 text-[16px] leading-none flex items-center justify-center"
-      >×</button>
+      <CloseButton onClose={onClose}/>
       <h2 
         className="font-bold text-[20px] text-slate-900 m-0 pr-8">{title}</h2>
       {subtitle && 

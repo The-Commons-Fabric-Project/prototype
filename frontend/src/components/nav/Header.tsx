@@ -109,8 +109,6 @@ export default function Header() {
         </div>
       </div>
     </header>
-    {/* BUG (minor) showLogin never gets set back to false after authenticating */}
-    {/* { (showLogin) ? (<LoginModal onClose={closeLogin} />) : ""} */}
     {renderModal()}
     <Toast message={toastMsg}/>
     </>

@@ -1,5 +1,7 @@
 /** Main color families */
 export type ColorVariantKey = "green" | "blue" | "purple" | "red" | "orange" | "yellow";
+export type ColorFamilyMember = "c1" | "c2" | "tint" | "text" | `stop${number}`;
+export type ColorVariable = `${ColorVariantKey}-${ColorFamilyMember}`;
 
 export const COLOR_ORDER: ColorVariantKey[] = ["green", "blue", "purple", "red", "orange", "yellow"];
 export const NUMCOLORS: number = COLOR_ORDER.length;
@@ -78,6 +80,17 @@ export function classesForID(id: number): ColorVariantClasses {
   return COLOR_CLASSES[colorKey(idx < 0 ? 0 : idx)];
 }
 
-export function accentGradient(color: ColorVariantKey = "purple"): string {
-  return `bg-linear-135 from-${color}-c1 to-${color}-c2`
+export function accentGradient(color: ColorVariantKey | number = "purple"): string {
+  const c = (typeof color === "number") ? colorKey(color) : color;
+  return `bg-linear-135 from-${c}-c1 to-${c}-c2`
+}
+
+export function accentStops(color: ColorVariantKey | number): ColorVariable[] {
+  const c = (typeof color === "number") ? colorKey(color) : color;
+  return [
+    `${c}-c1`,
+    `${c}-stop2`,
+    `${c}-stop3`,
+    `${c}-c2`
+  ]
 }

@@ -2,9 +2,11 @@ import type { ReactElement } from 'react';
 import { type Event, needsVolunteers, requiresRegistration } from '../../api/events'
 import { fmtPlainDate, fmtTime } from '../../utils/datetime';
 import Icon from '../../assets/Icons';
-import Modal, { ModalHeader } from './Modal';
+import Modal, { CloseButton } from './Modal';
 import Button from '../_controls/Button';
 import { useToast } from '../../hooks/useOverlayContext';
+import { accentStops, colorKey } from '../../utils/palette';
+import { useOrgLookup } from '../../hooks/useOrganizations';
 
 type DetailRowProps = {
   icon: ReturnType<typeof Icon>,
@@ -30,16 +32,32 @@ export default function EventDetailModal({
   event, orgName, onClose
 }: EventDetailModalProps) {
   const { toast } = useToast();
+  const accent = colorKey(event.organizationId);
+  const stops = accentStops(event.organizationId);
 
   return (
-    <Modal onClose={onClose} width={520}>
-      <ModalHeader 
+    <Modal onClose={onClose} width={500}>
+      {/* top edge decoration with gradient stops */}
+      <div className='flex gap-0.5'>
+        {stops.map((c, i) => (
+          <span key={i} className={`flex-1 h-0.75`}
+            style={{ background: `var(--color-${c})`}}
+          /> // IDK why this doesn't work in Tailwind classes
+        ))}
+      </div>
+      <CloseButton onClose={onClose}/>
+      {/* <ModalHeader 
         title={event.title} 
         onClose={onClose}
-        subtitle={orgName} />
-      <div className="px-6 pt-6 pb-6">
-        {event.description && <p className="text-[14.5px] text-slate-900 leading-[1.6] mb-4">{event.description}</p>}
-        <div className="flex flex-col gap-2.5 mb-4.5 border-t border-slate-200 pt-4">
+        subtitle={orgName} /> */}
+      <div className="pt-5.5 pr-11 pb-0 pl-[24px]">
+        <h2 className="font-bold text-ink m-0 leading-tight">{event.title}</h2>
+        <p className="text-[11px] font-bold mt-1.5 tracking-[0.04em] uppercase"
+        style={{ color: `var(--color-${accent}-text)`}}>{orgName}</p>
+      </div>
+      <div className="pt-4.5 pb-[24px] px-[24px]">
+        {event.description && <p className="text-[13.5px] text-ink leading-[1.6] mb-4">{event.description}</p>}
+        <div className="flex flex-col gap-2.5 mb-4.5 border-t border-line pt-4">
           <DetailRow 
             icon={<Icon name="calendar" size={15} />}  
             text={fmtPlainDate(event.startsAt)} />
